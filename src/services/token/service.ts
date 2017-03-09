@@ -1,9 +1,8 @@
-import { Service, Endpoint } from "../service";
+import { Service, Endpoint } from "../../service";
 
-// TODO: unify with the JWT stuff
 
 /**
- * Definition for token service.
+ * HTTP interface definition for the token service.
  */
 export class TokenService extends Service {
 

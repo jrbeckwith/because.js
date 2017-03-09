@@ -1,13 +1,9 @@
 import { Data, pairs } from "./data";
 import { MutableTable } from "./table";
 import { Headers } from "./headers";
-import {
-    Method,
-    URI,
-    URL,
-    Body,
-    Request,
-} from "./request";
+import { Log } from "./log";
+import { Method, URI, URL, Body } from "./http";
+import { Request } from "./request";
 
 
 interface Args {
@@ -27,11 +23,6 @@ export class ServiceError extends Error {
 }
 
 
-export interface ServiceConstructor {
-    new (): Service;
-}
-
-
 /**
  * Instances are abstract and use relative URIs.
  */
@@ -39,6 +30,7 @@ export class Service {
     protected table: EndpointTable;
     protected endpoints: EndpointData;
     private _headers: Headers;
+    protected log: Log;
 
     constructor (endpoints?: EndpointData, headers?: Headers) {
         endpoints = endpoints || this.endpoints || {};
@@ -69,8 +61,11 @@ export class Service {
     url(base: URL, endpoint_name: string, args?: Args): URL {
         const endpoint = this.endpoint(endpoint_name);
         if (!endpoint) {
-            console.log("table", this.table.length, this.table);
-            throw new Error(`no endpoint named ${endpoint_name}`);
+            const keys = this.table.keys().join(", ") || "no endpoints!";
+            throw new Error(
+                `no endpoint named ${endpoint_name}.
+                available endpoints for this service: ${keys}`,
+            );
         }
         return endpoint.url(base, args) as URL;
     }

@@ -1,9 +1,14 @@
+import { URI } from "./http";
+import { Response } from "./response";
 import { Service } from "./service";
 import { Client } from "./client";
 import { Transfer } from "./transfer";
 import { Host } from "./host";
-import { Request, Method, Body } from "./request";
+import { Method, Body } from "./http";
+import { Request } from "./request";
 import { Query } from "./query";
+import { Log } from "./log";
+import { Frontend } from "./frontend";
 
 /**
  * Frontend for a specific service.
@@ -14,25 +19,20 @@ import { Query } from "./query";
  */
 export class ServiceFrontend {
     public service: Service;
-    private _client: Client;
-    // private _base: URL;
+    protected _frontend: Frontend;
     public host: Host;
+    protected log: Log;
 
     /**
-     * @param client    Client to send requests with.
-     * @param base      Absolute URL to construct URLs with.
-     * @param headers   Base headers to use in all requests.
+     * @param service   Service instance to wrap.
+     * @param frontend  Frontend to send requests with.
+     * @param host      Description of host to send requests to.
      */
     constructor (
-        service: Service, client: Client, host: Host,
+        service: Service, frontend: Frontend, host: Host,
     ) {
         this.service = service;
-        this._client = client;
-        // Validate that base is absolute
-        // if (!base.startsWith("http://") || !base.startsWith("https://")) {
-        //     throw new Error("base URL must start with an http scheme");
-        // }
-        // this._base = base;
+        this._frontend = frontend;
         this.host = host;
     }
 
@@ -40,10 +40,11 @@ export class ServiceFrontend {
     // these can be validated abstractly
 
     request(
-        endpoint: string,
         method: Method,
+        endpoint: URI,
         query?: Query,
         body?: Body,
+        // headers?: Headers,
     ): Request {
         // TODO: check method validity
 
@@ -51,8 +52,8 @@ export class ServiceFrontend {
 
         // TODO: check query validity
 
-        const url = this.service.url(this.host.url, endpoint);
-        const headers = this.service.headers(endpoint);
+        const url = this.service.url(this.host.url, endpoint as string);
+        const headers = this.service.headers(endpoint as string);
         const request = new Request(
             method,
             url as string,
@@ -63,7 +64,19 @@ export class ServiceFrontend {
         return request;
     }
 
-    send(
+    // request(endpoint: Endpoint, method: Method, args?: {}) {
+    //     return new Request(
+    //         <string> method,
+    //         <string> endpoint.url(this.base, args || {}),
+    //     );
+    // }
+
+    send(request: Request): Transfer {
+        console.log("sending request", request);
+        return this._frontend.send(request);
+    }
+
+    old_send(
         method: Method,
         endpoint: string,
         query?: Query,
@@ -71,48 +84,37 @@ export class ServiceFrontend {
         headers?: Headers,
     ): Transfer {
         const request = this.request(
-            endpoint,
             method as Method,
+            endpoint,
             query,
             body as Body,
         );
-        return this._client.send(request);
+        return this._frontend.send(request);
     }
 
-    get(endpoint: string, query?: Query, headers?: Headers) {
-        return this.send(
-            "GET",
+    async get(endpoint: string, query?: Query) {
+        const request = this.request(
+            "GET" as Method,
             endpoint,
             query,
             "",
-            headers,
         );
+        return await this.send(request);
     }
 
-    post(endpoint: string, query?: Query, body?: Body, headers?: Headers) {
-        return this.send(
-            "POST",
+    async post(endpoint: string, query?: Query, body?: Body) {
+        const request = this.request(
+            "POST" as Method,
             endpoint,
             query,
             body,
-            headers,
         );
+        this.send(request);
     }
-
-    // get base() {
-    //     return this._base;
-    // }
-
-    // request(endpoint: Endpoint, method: Method, args?: {}) {
-    //     return new Request(
-    //         <string> method,
-    //         <string> endpoint.url(this.base, args || {}),
-    //     );
-    // }
 }
 
 
-interface ServiceFrontendConstructor {
+export interface ServiceFrontendConstructor {
 
     new (
         service: Service,
@@ -122,3 +124,9 @@ interface ServiceFrontendConstructor {
 }
 
 
+export interface FrontendClass {
+    new (
+        frontend: Frontend,
+        host: Host,
+    ): ServiceFrontend;
+}

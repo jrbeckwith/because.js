@@ -1,4 +1,5 @@
-import { Service, Endpoint } from "../service";
+import { Response } from "../../response";
+import { Service, Endpoint } from "../../service";
 import { GeocodeData, Geocode } from "./geocode";
 
 
@@ -10,11 +11,11 @@ export class GeocodingService extends Service {
         const endpoints = {
 
             "forward": new Endpoint(
-                "/geocode/{service}/address/{address}",
+                "/"
             ),
 
             "reverse": new Endpoint(
-                "/geocode/{service}/address/x/{x}/y/{y}",
+                "/"
             ),
 
             // TODO

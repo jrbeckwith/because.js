@@ -1,11 +1,11 @@
-import { URL } from "./request";
+import { URL } from "./http";
 import { Host } from "./host";
 
 
 // Shortcut
 export {
-    Host
-}
+    Host,
+};
 
 
 export const urls: {[env: string]: URL} = {

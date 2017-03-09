@@ -1,30 +1,31 @@
-import { Response, parse_response } from "./response";
-import { Point } from "./point";
-import { Data, pairs } from "./data";
-import { Table, MutableTable } from "./table";
-import { TokenData, JWT, response_to_jwt } from "./token";
+// General utilities
+import { pairs } from "./data";
+import { Log } from "./log";
+
+// Base
+import { InvalidObject } from "./errors";
+
+// HTTP request/response processing
+import { Host } from "./host";
+import { Method, URI, URL, Body } from "./http";
+import { Username, Password, LoginError } from "./auth";
+import { Request } from "./request";
 import { Query } from "./query";
 import { Headers } from "./headers";
 import { Client } from "./client";
 import { Transfer } from "./transfer";
-import { Logger } from "./logger";
-import { Service, Endpoint } from "./service";
-import { Route, parse_route } from "./route";
-import { Host } from "./host";
-import { BasemapService } from "./services/basemaps";
-import { GeocodingService } from "./services/geocoding";
-import { RoutingService } from "./services/routing";
-import { SearchService } from "./services/search";
-import { TokenService } from "./services/tokens";
-import { ServiceFrontend } from "./service_frontend";
-import {
-    Method,
-    URI,
-    URL,
-    Body,
-    Request,
-} from "./request";
 
+// We always use the token service for login
+import { JWT } from "./services/token/jwt";
+import { TokenFrontend } from "./services/token/frontend";
+
+// We may also use other services
+import { FrontendClass } from "./service_frontend";
+import { RoutingFrontend } from "./services/routing/frontend";
+import { BasemapFrontend } from "./services/basemap/frontend";
+import { GeocodingFrontend } from "./services/geocoding/frontend";
+
+// TODO: provide hook that is called when an automated login would be best?
 
 // TODO: BrowserFrontend, NodeFrontend. I guess. to select Client?
 // blegh not great.
@@ -32,23 +33,14 @@ import {
 // TODO: base URL registry and take env name instead of taking base.
 // TODO: load it from yaml.
 
-class BecauseError extends Error {
-}
-
-class LoginError extends BecauseError {
-}
-
-class ParseError extends BecauseError {
-    response: Response;
-
-    constructor (message: string, response: Response) {
-        super(message);
-        this.response = response;
-    }
-}
-
-
 // TODO: allow definition of default routing and geocode providers?
+
+// TODO: take some sort of arg specifying which things you want enabled maybe?
+// no that's not helpful at runtime. hm. so take an arg allowing you to pass
+// things to use, and then don't default to including them all.
+
+class Provider extends String {
+}
 
 /**
  * The nice interface for getting things done, top level of API for endusers.
@@ -56,150 +48,146 @@ class ParseError extends BecauseError {
  * URL or having to know what a base URL is.
  */
 export class Frontend {
-    client: Client;
-    host: Host;
-    // base: URL;
-    protected log: Logger;
-    jwt: JWT | undefined;
+    // jwt is exposed so that users don't have to directly handle results from
+    // login() to get at things like roles when needed. Almost any
+    // use case is likely to need access to this at some point, it shouldn't
+    // require a lot of adaptation on the part of the user to get at it.
+    public jwt: JWT | undefined;
 
-    services: {[name: string]: Service} = {
-        "tokens": new TokenService(),
-        "basemaps": new BasemapService(),
-        "geocoding": new GeocodingService(),
-        "routing": new RoutingService(),
-    };
+    // an instance's logger should generally only reflect the "voice" of that
+    // particular instance. This is enforced by making it private to the class
+    // and whatever the class shares the logger with.
+    protected log: Log;
 
+    tokens?: TokenFrontend;
+    basemaps?: BasemapFrontend;
+    geocoding?: GeocodingFrontend;
+    routing?: RoutingFrontend;
 
-    frontends: {[index: string]: ServiceFrontend};
-
-    debug: boolean;
-
-    constructor (client: Client, host: Host, debug?: boolean) {
+    constructor (
+        public classes: {[name: string]: FrontendClass},
+        private client: Client,
+        public host: Host,
+        public debug?: boolean,
+    ) {
+        if (!classes) {
+            throw new InvalidObject(
+                "must pass an object mapping frontend classes",
+            );
+        }
+        if (!client) {
+            throw new InvalidObject(
+                "must pass a client",
+            );
+        }
+        if (!host || !(host instanceof Host)) {
+            throw new InvalidObject(
+                "must pass a Host instance",
+            );
+        }
         this.client = client;
         this.host = host;
         this.debug = debug || false;
         this.jwt = undefined;
-        this.log = new Logger("because");
+        this.log = new Log("because");
 
-        // Instantiate ServiceFrontend for each service
-        this.frontends = {};
-        for (const pair of pairs(this.services)) {
-            const [name, service] = pair;
-            const frontend = new ServiceFrontend(
-                service,
-                this.client,
-                this.host,
-            );
-            this.frontends[name] = frontend;
+        // Always get a TokenFrontend
+        this.tokens = new TokenFrontend(this, host);
+
+        // Use the passed ServiceFrontends
+        for (const pair of pairs(classes)) {
+            const name: string = pair[0];
+            const cls: FrontendClass = pair[1];
+            const frontend = new cls(this, this.host);
+            // TODO: has to be a better way
+            if (frontend instanceof TokenFrontend) {
+                this.tokens = frontend;
+            }
+            else if (frontend instanceof BasemapFrontend) {
+                this.basemaps = frontend;
+            }
+            else if (frontend instanceof GeocodingFrontend) {
+                this.geocoding = frontend;
+            }
+            else if (frontend instanceof RoutingFrontend) {
+                this.routing = frontend;
+            }
+        }
+
+    }
+
+    /**
+     * Construct a request with the appropriate User-Agent and Auth headers.
+     */
+    request(
+        method: Method,
+        uri: URI,
+        query?: Query,
+        body?: Body,
+        headers?: Headers,
+    ): Request {
+        headers = headers ? headers.copy() : new Headers();
+        this.enrich_headers(headers);
+        const url = `${this.host.url}/${uri}`;
+        return new Request(method, url, query, body, headers);
+    }
+
+    private enrich_headers(headers: Headers) {
+        headers.set("User-Agent", "Because");
+        headers.set("Accept", "application/json");
+        if (this.jwt) {
+            headers.set("Authorization", `Bearer ${this.jwt.token}`);
         }
     }
 
     /**
-     * Get a token and cache it on this instance.
+     * Get a token and cache it on this instance for reuse.
+     *
+     * This should normally be preferred to ensure that tokens are locally
+     * cached, avoid redundant HTTP requests, and provide better ease-of-use.
      */
-    async login(username: string, password: string) {
-        // These are for JS consumers, ts should normally prevent this
-        if (!username) {
-            throw new LoginError("username is required");
+    async login(username: Username, password: Password) {
+        const frontend: TokenFrontend | undefined = this.tokens;
+        let jwt: JWT | undefined = undefined;
+        if (frontend) {
+            jwt = await frontend.get_token(username, password);
+            this.jwt = jwt;
         }
-        if (!password) {
-            throw new LoginError("password is required");
+        else {
+            this.log.error("cannot login without token service loaded");
         }
-        const query = new Query({"username": username, "password": password});
-        const response = await this.frontends.tokens.get("token", query);
-        const jwt = response_to_jwt(response);
-        this.jwt = jwt;
         return jwt;
     }
 
-    send(method: Method, url: URL, query: Query, body: Body, headers?: Headers) {
-        // TODO: augment with header if present
-        let rheaders = headers;
-        if (this.jwt) {
-            rheaders = headers ? headers.copy() : new Headers();
-            rheaders.set("User-Agent", "Because");
-            rheaders.set("Accept", "application/json");
-            rheaders.set("Authorization", `Bearer ${this.jwt.token}`);
-        }
-        this.log.debug({"headers": rheaders});
-        const request = new Request(method, url, query, body, rheaders);
-        this.log.debug({"request": request});
+    /**
+     * Encapsulate this.client.send.
+     *
+     * If other methods use this method instead of directly calling
+     * this.client.send, then this instance can uniformly enforce policy around
+     * requests, like logging and 403 handling.
+     */
+    send(request: Request): Transfer {
+        this.enrich_headers(request.headers);
+        this.log.debug("about to send", {"request": request});
+        console.log("Frontend will send", request);
         const transfer = this.client.send(request);
-        this.log.debug({"transfer": transfer});
         return transfer;
     }
 
     /**
-     * Shortcut for getting a route.
+     * Assert that we have a token to log in with.
+     *
+     * Methods on this class can simplify their implementation by awaiting this
+     * to ensure they do not issue any requests without having a token to send.
+     *
+     * In the future this may be changed to automatically accomplish login if
+     * there is a way to do that.
      */
-    async route(addresses: Address[], service?: string) {
+    private async need_login() {
         if (!this.jwt || !this.jwt.token) {
             throw new Error("not logged in");
         }
-        service = service || "mapbox";
-        const routable_count = 2;
-        if (addresses.length < routable_count) {
-            // Not enough to route with
-            return undefined;
-        }
-        this.log.debug({"addresses": addresses});
-        const joined = addresses.join("|");
-        this.log.debug({"joined": joined});
-        const query = new Query({
-            "waypoints": joined || "",
-        });
-        const url = `${this.host.url}/route/${service}/`;
-        this.log.debug({"url": url});
-        const response = await this.send("GET", url, query, "");
-        this.log.debug({"response": response});
-        return parse_route(response);
+        return;
     }
 
-    async route_addresses(...addresses: Address[]) {
-        // // TODO: what if nothing is passed?
-        // const endpoint = this.endpoints.waypoints;
-        // const args = {
-        // };
-        // const url = "https://www.example.com";
-        // const request = new Request("GET", url);
-        // const transfer = undefined;
-        // await transfer;
-    }
-
-    // TODO: later.
-    async route_points(...points: Point[]) {
-        // TODO: what if nothing is passed?
-    }
-
-
-    /**
-     * Shortcut for getting a set of geocode candidates.
-     */
-    async geocode() {
-        const service = this.services.geocoding;
-    }
-
-    /**
-     * Shortcut for getting a set of reverse geocode candidates.
-     */
-    async reverse_geocode() {
-        const service = this.services.geocoding;
-    }
-
-    /**
-     * Shortcut for getting a list of basemaps.
-     * TODO: name sucks. could just use because.basemaps.metadata()
-     */
-    async basemap_metadata() {
-        const service = this.services.basemaps;
-
-        const uri = "/basemaps/";
-        const url = this.host.url + uri;
-        const request = new Request(
-            "GET", url,
-        );
-        const transfer = this.client.transfer(request);
-        // TODO: don't just return the transfer, munge it here
-        return transfer;
-    }
 }

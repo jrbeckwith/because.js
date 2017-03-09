@@ -1,17 +1,6 @@
-import { Point } from "./point";
-import { Response, parse_response } from "./response";
-
-/**
- * Point representation used by GeometryData.
- */
-type PointData = [number, number];
-
-
-/**
- * Type wrapper for strings representing "street addresses."
- */
-class Address extends String {
-}
+import { Point, Coordinates } from "../../location";
+import { Response } from "../../response";
+import { parse_route } from "./parse";
 
 
 /**
@@ -19,12 +8,17 @@ class Address extends String {
  */
 class GeometryData {
     type: "LineString";
-    coordinates: PointData[];
+    coordinates: Coordinates[];
 }
 
-type Instructions = string;
-type Distance = number;
-type Duration = number;
+class Instructions extends String {
+}
+
+class Distance extends Number {
+}
+
+class Duration extends Number {
+}
 
 /**
  * Define structure of objects in "steps" array in LegData.
@@ -49,14 +43,15 @@ class LegData {
 /**
  * Define structure of routing service responses.
  */
-class RouteData {
-    id: null;
-    errorCode: number;
-    errorMessage: string;
+export class RouteData {
+    id: undefined;
     distance: number;
     duration: number;
     legs: LegData[];
     geometry: GeometryData;
+
+    errorCode: number;
+    errorMessage: string;
 }
 
 
@@ -76,6 +71,10 @@ export class Route {
         this.distance = distance;
         this.duration = duration;
         this._points = points || [];
+    }
+
+    static parse(response: Response): Route {
+        return parse_route(response);
     }
 
     get legs(): Leg[] {
@@ -99,7 +98,7 @@ export class Route {
     }
 
     get instructions(): Instructions[] {
-        const lines: string[] = [];
+        const lines = [];
         for (const step of this.steps) {
             lines.push(step.instructions);
         }
@@ -138,7 +137,7 @@ export class Leg {
     }
 
     get instructions(): Instructions[] {
-        const lines: string[] = [];
+        const lines = [];
         for (const step of this.steps) {
             lines.push(step.instructions);
         }
@@ -169,38 +168,4 @@ export class Step {
     get points(): Point[] {
         return this._points;
     }
-}
-
-
-export function parse_route(response: Response): Route {
-    // checks: errorCode, errormessage.
-    const data = parse_response<RouteData>(response);
-    // ignores: id
-    // to be used: distance, duration; legs, geometry
-    const legs = [];
-    for (const leg_data of data.legs) {
-        const steps = [];
-        for (const step_data of leg_data.steps) {
-            const points = [];
-            for (const point_data of step_data.geometry.coordinates) {
-                const point = new Point(point_data[0], point_data[1]);
-                points.push(point);
-            }
-            const step = new Step(
-                points,
-                step_data.instructions,
-                step_data.distance,
-                step_data.duration,
-            );
-            steps.push(step);
-        }
-        const leg = new Leg(steps, leg_data.distance, leg_data.duration);
-        legs.push(leg);
-    }
-    const route = new Route(
-        legs,
-        data.distance,
-        data.duration,
-    );
-    return route;
 }
