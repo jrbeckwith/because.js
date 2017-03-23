@@ -22,9 +22,13 @@
       "url": "https://opensource.org/licenses/MIT"
     }
   ],
+  "homepage": "https://github.com/harts-boundless/because.js#readme",
   "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harts-boundless/because.js.git"
   },
   "bugs": {
+    "url": "https://github.com/harts-boundless/because.js/issues"
   },
   "main": "./lib/index.js",
   "browser": "./lib/browser.js",
