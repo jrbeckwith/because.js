@@ -1,0 +1,48 @@
+{
+  "name": "because",
+  "version": "0.0.0",
+  "description": "Convenient access to results from BCS HTTP API services",
+  "keywords": [
+    "bcs",
+    "gis",
+    "routing",
+    "geocoding",
+    "boundless"
+  ],
+  "author": "Boundless",
+  "maintainers": [
+    {
+      "name": "Sasha Hart",
+      "email": "harts@boundlessgeo.com"
+    }
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  ],
+  "repository": {
+  },
+  "bugs": {
+  },
+  "main": "./lib/index.js",
+  "browser": "./lib/browser.js",
+  "directories": {
+    "lib": "lib",
+    "bin": "bin"
+  },
+  "scripts": {
+  },
+  "engines": {
+    "node": "^4.2.6",
+    "npm": "^3.5.2"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "core-js": "2.4.1",
+    "tslint": "4.5.1",
+    "typedoc": "^0.5.9",
+    "typescript": "^2.2.1"
+  }
+}
