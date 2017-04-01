@@ -33,6 +33,7 @@
     "bin": "bin"
   },
   "scripts": {
+    "test": "ts-mocha test/*"
   },
   "engines": {
     "node": "^4.2.6",
@@ -40,9 +41,23 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "@types/chai": "3.4.35",
+    "@types/mocha": "2.2.40",
+    "@types/node": "^7.0.12",
+    "chai": "^3.5.0",
     "core-js": "2.4.1",
-    "tslint": "4.5.1",
+    "es6-promise": "^4.1.0",
+    "istanbul": "0.4.5",
+    "mocha": "^3.2.0",
+    "nyc": "^10.2.0",
+    "ts-loader": "^2.0.3",
+    "ts-mocha": "^1.0.3",
+    "ts-node": "3.0.2",
+    "tslint": "^5.0.0",
     "typedoc": "^0.5.9",
-    "typescript": "^2.2.1"
+    "typedoc-plugin-external-module-name": "^1.0.9",
+    "typescript": "^2.2.1",
+    "uglify-js": "^2.8.20",
+    "webpack": "^2.3.2"
   }
 }

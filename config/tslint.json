@@ -1,0 +1,172 @@
+{
+    "rules": {
+        "curly": true,
+        "prefer-for-of": true,
+        "forin": true,
+        "no-switch-case-fall-through": true,
+        "label-position": true,
+        "no-invalid-this": true,
+        "no-misused-new": true,
+        "no-eval": true,
+        "no-unsafe-finally": true,
+        "no-var-keyword": true,
+        "radix": true,
+        "switch-default": true,
+        "triple-equals": true,
+        "typeof-compare": true,
+        "use-isnan": true,
+        "no-import-side-effect": true,
+
+        "no-unused-expression": true,
+        "no-empty-interface": true,
+        "no-duplicate-super": true,
+        "no-duplicate-variable": true,
+        "no-bitwise": true,
+        "no-null-keyword": true,
+        "no-string-throw": true,
+        "ban-types": [
+            true,
+            ["Object", "Use {} instead."],
+            ["String"]
+        ],
+        "no-any": true,
+        "no-non-null-assertion": true,
+        "prefer-const": true,
+
+        "eofline": true,
+        "indent": [
+            true,
+            "spaces"
+        ],
+        "align": [
+            true,
+            "parameters",
+            "arguments",
+            "statements"
+        ],
+        "linebreak-style": [
+            true,
+            "LF"
+        ],
+        "max-line-length": [
+            true,
+            80
+        ],
+        "no-trailing-whitespace": true,
+        "no-consecutive-blank-lines": [
+            true,
+            2
+        ],
+        "no-angle-bracket-type-assertion": true,
+        "newline-before-return": false,
+        "trailing-comma": [
+            true,
+            {
+                "multiline": "always",
+                "singleline": "never"
+            }
+        ],
+        "comment-format": [
+            true,
+            "check-space"
+        ],
+        "jsdoc-format": true,
+        "import-spacing": true,
+        "typedef-whitespace": [
+            true,
+            {
+                "call-signature": "nospace",
+                "index-signature": "nospace",
+                "parameter": "nospace",
+                "property-declaration": "nospace",
+                "variable-declaration": "nospace"
+            },
+            {
+                "call-signature": "onespace",
+                "index-signature": "onespace",
+                "parameter": "onespace",
+                "property-declaration": "onespace",
+                "variable-declaration": "onespace"
+            }
+        ],
+        "whitespace": [
+            true, 
+            "check-branch",
+            "check-decl",
+            "check-operator",
+            "check-module",
+            "check-separator",
+            "check-type",
+            "check-typecast",
+            "check-preblock"
+        ],
+        "space-before-function-paren": [
+            true,
+            {
+                "anonymous": "never",
+                "named": "never",
+                "asyncArrow": "never",
+                "method": "never",
+                "constructor": "always"
+            }
+        ],
+        "object-literal-key-quotes": [
+            true,
+            "always"
+        ],
+        "quotemark": [
+            true,
+            "double",
+            "avoid-escape"
+        ],
+        "semicolon": [
+            true,
+            "always"
+        ],
+        "one-variable-per-declaration": true,
+        "class-name": true,
+        "no-console": [
+            true,
+            "log",
+            "error"
+        ],
+        "no-debugger": true,
+        "no-var-requires": true,
+        "no-require-imports": true,
+        "no-reference": true,
+        "no-internal-module": true,
+        "no-namespace": true,
+        "no-mergeable-namespace": true,
+        "no-unnecessary-callback-wrapper": true,
+        "no-default-export": true,
+        "adjacent-overload-signatures": true,
+        "only-arrow-functions": [
+            true,
+            "allow-declarations"
+        ],
+        "arrow-parens": [
+            true
+        ],
+        "arrow-return-shorthand": [
+            true
+        ],
+        "prefer-method-signature": true,
+        "interface-over-type-literal": true,
+        "no-inferrable-types": false,
+        "no-unnecessary-initializer": true,
+        "object-literal-shorthand": true,
+        "prefer-template": [
+            true,
+            "allow-single-concat"
+        ],
+
+        "no-arg": true,
+        "no-conditional-assignment": true,
+        "no-construct": true
+
+    },
+    "jsRules": {
+    },
+    "rulesDirectory": [
+    ]
+}

@@ -1,0 +1,15 @@
+{
+    "extends": "./tsconfig.json", 
+    "out": "../doc/build",
+    "compilerOptions": {
+        "target": "es2015",
+        "module": "es2015",
+        "lib": [
+            "es2015",
+            "dom"
+        ]
+    },
+    "include": [
+        "../src/**/*"
+    ]
+}

@@ -1,0 +1,11 @@
+src
+doc
+test
+config
+coverage
+example
+outtakes
+yarn.lock
+tsconfig.json
+tslint.json
+*.md

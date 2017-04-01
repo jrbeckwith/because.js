@@ -1,0 +1,10 @@
+{
+    "all": true,
+    "exclude": [
+        "lib/test",
+        "dist",
+        "config",
+        "doc",
+        "coverage"
+    ]
+}

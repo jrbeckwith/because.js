@@ -1,0 +1,16 @@
+{
+    "extends": "./tslint.json",
+    "rules": {
+         "no-any": true,
+         "no-empty-interface": true,
+         "no-import-side-effect": true,
+         "no-reference": true,
+         "no-var-requires": true,
+         "prefer-for-of": true,
+         "promise-function-async": true,
+         "no-consecutive-blank-lines": [true, 2],
+         "no-use-before-declare": true,
+         "return-undefined": true,
+         "unified-signatures": true
+    }
+}
