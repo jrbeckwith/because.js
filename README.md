@@ -22,8 +22,9 @@ Installing
 These instructions assume you already have signed up with [Boundless
 Connect.](https://connect.boundlessgeo.com/)
 
-You need some kind of Node and npm. Let me know if your version doesn't work
-and I'll mark it as deprecated. :)
+You'll need to [install Node and
+npm](https://docs.npmjs.com/getting-started/installing-node) if you don't have
+them already.
 
 To download the code for use, first clone the repository:
 
