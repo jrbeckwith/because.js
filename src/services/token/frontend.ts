@@ -63,16 +63,18 @@ export class TokenFrontend extends ServiceFrontend {
         // return parse_entitlements(response);
     }
 
-    // https://github.com/boundlessgeo/bcs/blob/master/bcs-token-service/src/main/java/com/boundlessgeo/bcs/data/ApiKeyResponse.java
+    // https://github.com/boundlessgeo/bcs/blob/master/bcs-token-service
+    // /src/main/java/com/boundlessgeo/bcs/data/ApiKeyResponse.java
     // class ApiKeyData {
     //     key: string;
     //     domain: string;
     //     issued: Datetime;
     //     expires: Datetime;
     // }
-    
+
     // ref OAuthTokenResponse in
-    // https://github.com/boundlessgeo/bcs/blob/master/bcs-token-service/src/main/java/com/boundlessgeo/bcs/data/OAuthTokenResponse.java
+    // https://github.com/boundlessgeo/bcs/blob/master/bcs-token-service
+    // /src/main/java/com/boundlessgeo/bcs/data/OAuthTokenResponse.java
     // class OAuthTokenData {
         // access_token: string;
         // token_type: string;
@@ -80,7 +82,8 @@ export class TokenFrontend extends ServiceFrontend {
     // }
 
     // ref TokenRequest in
-    // https://github.com/boundlessgeo/bcs/blob/master/bcs-token-service/src/main/java/com/boundlessgeo/bcs/data/TokenRequest.java
+    // https://github.com/boundlessgeo/bcs/blob/master/bcs-token-service
+    // /src/main/java/com/boundlessgeo/bcs/data/TokenRequest.java
     // class TokenRequest {
         // username: string;
         // password: string;

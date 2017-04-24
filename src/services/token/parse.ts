@@ -10,7 +10,8 @@ class ParseError extends Error {}
  * Structure of JSON body of token responses.
  *
  * See also:
- * https://github.com/boundlessgeo/bcs/blob/master/bcs-token-service/src/main/java/com/boundlessgeo/bcs/data/BCSToken.java
+ * https://github.com/boundlessgeo/bcs/blob/master/bcs-token-service
+ * /src/main/java/com/boundlessgeo/bcs/data/BCSToken.java
  */
 export class TokenData {
     token: string;

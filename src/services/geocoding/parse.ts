@@ -23,5 +23,3 @@ export function parse_geocodes(response: Response): Geocode[] {
         );
     });
 }
-
-

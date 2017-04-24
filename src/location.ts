@@ -18,7 +18,7 @@ export interface Coordinates extends Array<number> {
     1: number;
 }
 
-export function is_coordinates(arg: any): arg is Coordinates {
+export function is_coordinates(arg: Coordinates | Address): arg is Coordinates {
     return (typeof arg === "object" && arg.length === 2);
 }
 

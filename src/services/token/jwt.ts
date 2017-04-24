@@ -91,5 +91,3 @@ export class LazyJWT implements JWT {
     }
 
 }
-
-

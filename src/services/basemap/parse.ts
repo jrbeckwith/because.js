@@ -9,7 +9,6 @@ class ParseError extends Error {}
 
 export function parse_basemaps(response: Response): Basemap[] {
     const records: BasemapData[] = parse_array<BasemapData>(response);
-    console.log("record", records[0]);
     return records.map((record) => {
         return new Basemap(
             // endpoint
