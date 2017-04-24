@@ -57,7 +57,7 @@
     "ts-loader": "^2.0.3",
     "ts-mocha": "^1.0.3",
     "ts-node": "3.0.2",
-    "tslint": "^5.0.0",
+    "tslint": "^5.1.0",
     "typedoc": "^0.5.9",
     "typedoc-plugin-external-module-name": "^1.0.9",
     "typescript": "^2.2.1",
