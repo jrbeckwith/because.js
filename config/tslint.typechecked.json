@@ -7,7 +7,6 @@
          "no-reference": true,
          "no-var-requires": true,
          "prefer-for-of": true,
-         "promise-function-async": true,
          "no-consecutive-blank-lines": [true, 2],
          "no-use-before-declare": true,
          "return-undefined": true,
