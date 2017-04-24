@@ -27,6 +27,10 @@ To download the code for use, first clone the repository:
 
     git clone https://github.com/harts-boundless/because.js.git
 
+When this is cloned, you can find a usable UMD module in `dist/because.js`.
+If you want to make sure you have a fresh bundle reflecting the latest state
+of the original code in `src/` then see the section on "Building" below.
+
 
 Building
 --------
