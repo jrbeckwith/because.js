@@ -12,10 +12,14 @@ interface Args {
 
 
 enum Level {
-    debug = 0,
-    warning = 1,
-    error = 2,
-};
+    debug = 7,
+    info = 6,
+    notice = 5,
+    warning = 4,
+    error = 3,
+    critical = 2,
+    // If you have an emergency, please hang up and dial 911 instead
+}
 
 
 const level_names: {[level: number]: string} = {};
