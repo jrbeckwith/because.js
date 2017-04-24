@@ -45,9 +45,9 @@ Building
 This will create the JS bundle `dist/because.js` and the accompanying sourcemap
 `dist/because.js.map`. 
 
-This is a UMD module. If you don't know or care what that means, you can just
-include it in the normal `<script>` way. This will define a global variable
-`because`.
+This is a [UMD module.](https://github.com/umdjs/umd) If you don't know or care
+what that means, you can just include it in the normal `<script>` way. This
+will define a global variable `because`.
 
 See the `example/` directory for an extended usage example using React and
 ES2015. You don't have to use React or make things as complicated as the
