@@ -26,13 +26,15 @@ You'll need to [install Node and
 npm](https://docs.npmjs.com/getting-started/installing-node) if you don't have
 them already.
 
-To download the code for use, first clone the repository:
+To download the code, clone the repository:
 
     git clone https://github.com/harts-boundless/because.js.git
 
 When this is cloned, you can find a usable UMD module in `dist/because.js`.
-If you want to make sure you have a fresh bundle reflecting the latest state
-of the original code in `src/` then see the section on "Building" below.
+
+However, it may be a little out of date. If you want to make sure you have a
+fresh bundle reflecting the latest state of the original code in `src/` then
+see the section on "Building" below.
 
 
 Building
@@ -47,8 +49,9 @@ This is a UMD module. If you don't know or care what that means, you can just
 include it in the normal `<script>` way. This will define a global variable
 `because`.
 
-See the `example/` directory for a more complicated example using React and
-ES2015.
+See the `example/` directory for an extended usage example using React and
+ES2015. You don't have to use React or make things as complicated as the
+example app, though.
 
 
 Watch
