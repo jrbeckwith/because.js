@@ -13,12 +13,14 @@ made and how HTTP responses are parsed, so that you are just using Javascript
 objects to ask for data which comes in the form of other Javascript objects.
 
 To use these services, you first need credentials, which you can get by signing
-up at Boundless Connect. Consult the docs for this library to see how to use
-your credentials to enable the library to make requests against BCS services.
+up at [Boundless Connect.](https://connect.boundlessgeo.com/)
 
 
 Installing
 -----------
+
+These instructions assume you already have signed up with [Boundless
+Connect.](https://connect.boundlessgeo.com/)
 
 You need some kind of Node and npm. Let me know if your version doesn't work
 and I'll mark it as deprecated. :)
