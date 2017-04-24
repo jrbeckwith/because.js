@@ -34,6 +34,7 @@ export class ServiceFrontend {
         this.service = service;
         this._frontend = frontend;
         this.host = host;
+        this.log = new Log("ServiceFrontend");
     }
 
     // TODO: instead of query, take args
