@@ -11,11 +11,11 @@ export class GeocodingService extends Service {
         const endpoints = {
 
             "forward": new Endpoint(
-                "/"
+                "/",
             ),
 
             "reverse": new Endpoint(
-                "/"
+                "/",
             ),
 
             // TODO

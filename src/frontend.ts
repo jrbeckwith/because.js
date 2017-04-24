@@ -148,7 +148,7 @@ export class Frontend {
      */
     async login(username: Username, password: Password) {
         const frontend: TokenFrontend | undefined = this.tokens;
-        let jwt: JWT | undefined = undefined;
+        let jwt: JWT | undefined;
         if (frontend) {
             jwt = await frontend.get_token(username, password);
             this.jwt = jwt;
@@ -169,7 +169,6 @@ export class Frontend {
     send(request: Request): Transfer {
         this.enrich_headers(request.headers);
         this.log.debug("about to send", {"request": request});
-        console.log("Frontend will send", request);
         const transfer = this.client.send(request);
         return transfer;
     }
@@ -187,7 +186,7 @@ export class Frontend {
         if (!this.jwt || !this.jwt.token) {
             throw new Error("not logged in");
         }
-        return;
+        return this.jwt;
     }
 
 }

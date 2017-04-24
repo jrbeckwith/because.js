@@ -56,7 +56,9 @@ export class GeocodingFrontend extends ServiceFrontend {
         const query = new Query({});
         const request = this.request("GET", "reverse", query);
         // TODO
-        request._url = request._url + `geocode/${provider}/address/x/${x}/y/${y}`;
+        request._url = (
+            request._url + `geocode/${provider}/address/x/${x}/y/${y}`
+        );
         const response = await this.send(request);
         this.log.debug("reverse_geocode", {"response": response});
         return parse_geocodes(response);

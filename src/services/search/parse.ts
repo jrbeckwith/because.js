@@ -10,7 +10,6 @@ import {
 
 export function parse_search_results(response: Response): SearchResult[] {
     const result = parse_response<SearchResultEnvelope>(response);
-    console.log("result", result);
     return result.features.map((feature: SearchResultData) => {
         return new SearchResult(
             feature.properties.title,
