@@ -18,7 +18,7 @@ DOC_THEME_FILES:=$(shell find doc/theme -type f)
 # that happen to be named 'all'.
 # Here we run the tests before building other output.
 .PHONY: all
-all: node_modules test es2015 distfiles doc/build
+all: node_modules test distfiles
 
 # node_modules/ holds build dependencies and dependencies to be linked in.
 node_modules: package.json
@@ -28,7 +28,7 @@ node_modules: package.json
 $(TSC): node_modules
 
 .PHONY: distfiles
-distfiles: dist dist/because.amd.js dist/because.system.js dist/because.js dist/because.min.js
+distfiles: dist dist/because.js
 
 # dist/ holds bundled output for direct use in browsers supporting ES5.
 # I guess this rule just makes the directory because it's always going away
