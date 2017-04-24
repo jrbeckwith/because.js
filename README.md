@@ -20,47 +20,37 @@ your credentials to enable the library to make requests against BCS services.
 Installing
 -----------
 
+You need some kind of Node and npm. Let me know if your version doesn't work
+and I'll mark it as deprecated. :)
+
 To download the code for use, first clone the repository:
 
     git clone https://github.com/harts-boundless/because.js.git
 
-Normally you would next want to install dependencies in `node_modules` with
 
-    npm install
+Building
+--------
 
-If the library is eventually published via `npm`, then it may also be installed
-using `npm install` like any other `npm` package.
+`make dist/because.js`
 
+This will create the JS bundle `dist/because.js` and the accompanying sourcemap
+`dist/because.js.map`. 
 
-Compiling
----------
+This is a UMD module. If you don't know or care what that means, you can just
+include it in the normal `<script>` way. This will define a global variable
+`because`.
 
-This project is compiled with the Typescript compiler, `tsc`. Options for `tsc`
-are in `tsconfig.json`. This directs `tsc` to look for Typescript `.ts` files
-under `src/` and to put compiled `.js` output under `lib/`.
-
-Assuming a prior npm install, you should be able to compile with:
-
-    npm run compile
-
-This also performs type checks, but code is not "done" unless it also passes
-style checks and tests.
+See the `examples/` directory for a more complicated example using React and
+ES2015.
 
 
 Running Tests
 -------------
 
-Test files can be found under `test/`. Tests are run with `mocha` and use
-`chai` assertions. After `npm install`, run `mocha` with
-
-    npm run test
+`make test`
 
 
 Style Checking
 --------------
 
-`tslint` is used to check a little more rigorously than `tsc`. Its
-configuration is `tsconfig.json`. After `npm install`, run `tslint` with
-
-    npm run lint
-
+`make lint`
