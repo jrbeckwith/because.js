@@ -40,8 +40,15 @@ This is a UMD module. If you don't know or care what that means, you can just
 include it in the normal `<script>` way. This will define a global variable
 `because`.
 
-See the `examples/` directory for a more complicated example using React and
+See the `example/` directory for a more complicated example using React and
 ES2015.
+
+
+Watch
+-----
+
+`make watch` watches for changes and triggers rebuilds of `dist/because.js`.
+This is useful if you are making edits to the library in `src/`.
 
 
 Running Tests
@@ -54,3 +61,10 @@ Style Checking
 --------------
 
 `make lint`
+
+
+Example Code
+------------
+
+Some rough React+ES2015 code is in `example/`.
+See `example/README.md` for simple instructions.
