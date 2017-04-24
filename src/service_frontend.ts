@@ -73,7 +73,7 @@ export class ServiceFrontend {
     // }
 
     send(request: Request): Transfer {
-        console.log("sending request", request);
+        this.log.debug("send", {"request": request});
         return this._frontend.send(request);
     }
 
