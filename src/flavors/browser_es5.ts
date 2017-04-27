@@ -52,13 +52,18 @@ export class BrowserTransfer extends TransferBase {
     }
 
     public async promise(): Promise<Response> {
+        const headers = (
+            this.request.headers
+            ? this.request.headers.pairs()
+            : []
+        );
         // Mark that we're working for benefit of callers holding transfer.
         this.started = true;
         // Get the XHR rolling.
         this.xhr.start(
             this.request.method,
             this.request.url,
-            this.request.headers ? this.request.headers.pairs() : [],
+            headers,
         );
         await this.xhr.promise();
         return this.response;

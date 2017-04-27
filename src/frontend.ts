@@ -32,28 +32,63 @@ class Provider extends String {
 
 
 /**
- * The nice interface for getting things done, top level of API for endusers.
- * Should take user-level config, e.g. OPTIONAL env = "dev" and not a long base
- * URL or having to know what a base URL is.
+ * Base for top-level facade objects to give API users a friendly entry point.
  */
 export class Frontend {
-    // jwt is exposed so that users don't have to directly handle results from
-    // login() to get at things like roles when needed. Almost any
-    // use case is likely to need access to this at some point, it shouldn't
-    // require a lot of adaptation on the part of the user to get at it.
+    /**
+     * jwt is either undefined in the case that there has not been a login, or
+     * it is a JWT instance representing the result.
+     *
+     * This is publicly exposed from the Frontend so that users don't have to
+     * directly handle results from login() to know whether they are logged in,
+     * what roles they have, etc. So many use cases are liable to need access
+     * to this that it shouldn't require much effort from the user to get it.
+     */
     public jwt: JWT | undefined;
 
-    // an instance's logger should generally only reflect the "voice" of that
-    // particular instance. This is enforced by making it private to the class
-    // and whatever the class shares the logger with.
+    /**
+     * Log instance used internally by the Frontend instance.
+     */
     protected log: Log;
 
-    tokens?: TokenFrontend;
+    /**
+     * Implements the token service wrapper.
+     */
+    tokens: TokenFrontend;
+
+    /**
+     * Implements the basemap service wrapper.
+     *
+     * Should be undefined if this service is not going to be used.
+     */
     basemaps?: BasemapFrontend;
+
+    /**
+     * Implements the geocoding service wrapper.
+     *
+     * Should be undefined if this service is not going to be used.
+     */
     geocoding?: GeocodingFrontend;
+
+    /**
+     * Implements the routing service wrapper.
+     *
+     * Should be undefined if this service is not going to be used.
+     */
     routing?: RoutingFrontend;
+
+    /**
+     * Implements the search service wrapper.
+     *
+     * Should be undefined if this service is not going to be used.
+     */
     search?: SearchFrontend;
 
+    /**
+     * Headers to be added to every outgoing request from the Frontend.
+     *
+     * Particular instances of Frontend may override this.
+     */
     default_headers = new Headers({
         "User-Agent": "Because",
         "Accept": "application/json",
@@ -125,23 +160,33 @@ export class Frontend {
      * Construct a request with the appropriate User-Agent and Auth headers.
      */
     request(
+        // HTTP method
         method: Method,
+        // HTTP relative URI
         uri: URI,
+        // URL query parameters
         query?: Query,
+        // Request body data
         body?: Body,
+        // HTTP request headers
         headers?: Headers,
     ): Request {
-        headers = headers ? headers.copy() : new Headers();
-        this.enrich_headers(headers);
+        headers = this.enriched_headers(headers);
         const url = `${this.host.url}/${uri}`;
         return new Request(method, url, query, body, headers);
     }
 
-    private enrich_headers(headers: Headers) {
-        headers.update(this.default_headers);
+    private enriched_headers(headers?: Headers): Headers {
+        const enriched: Headers = (
+            headers
+            ? headers.updated(this.default_headers)
+            : this.default_headers.copy()
+        );
         if (this.jwt) {
-            headers.set("Authorization", `Bearer ${this.jwt.token}`);
+            enriched.set("Authorization", `Bearer ${this.jwt.token}`);
         }
+        return enriched;
+
     }
 
     /**
@@ -171,7 +216,7 @@ export class Frontend {
      * requests, like logging and 403 handling.
      */
     send(request: Request): Transfer {
-        this.enrich_headers(request.headers);
+        const headers = this.enriched_headers(request.headers);
         this.log.debug("about to send", {"request": request});
         const transfer = this.client.send(request);
         return transfer;

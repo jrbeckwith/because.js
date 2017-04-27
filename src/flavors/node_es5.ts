@@ -16,6 +16,7 @@ import * as net from "net";
  * Transfer implementation for node_es5.
  */
 export class NodeTransfer extends TransferBase {
+
     private chunks: string[] = [];
     private node_request: http.ClientRequest;
 

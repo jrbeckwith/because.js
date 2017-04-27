@@ -128,23 +128,24 @@ export class Table<V> {
     map(callback: PairCallback<V>): Table<V> {
         return new Table(map(this._data, callback));
     }
+
 }
 
 
 export class MutableTable<V> extends Table<V> {
 
     /**
-     */
-    get(key: string): V {
-        return this._data[key];
-    }
-
-    /**
+     * Allow keys to be set.
+     *
+     * For when you can't just build up the whole thing at once.
      */
     set(key: string, value: V): void {
         this._data[key] = value;
     }
 
+    /**
+     * Ensure that a copy of a MutableTable is also mutable.
+     */
     copy(): MutableTable<V> {
         return new MutableTable(copy(this._data));
     }
