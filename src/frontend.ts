@@ -14,6 +14,7 @@ import { Query } from "./query";
 import { Headers } from "./headers";
 import { Client } from "./client";
 import { Transfer } from "./transfer";
+import { ServiceFrontend } from "./service_frontend";
 
 // We always use the token service for login
 import { JWT } from "./services/token/jwt";
@@ -24,6 +25,7 @@ import { FrontendClass } from "./service_frontend";
 import { RoutingFrontend } from "./services/routing/frontend";
 import { BasemapFrontend } from "./services/basemap/frontend";
 import { GeocodingFrontend } from "./services/geocoding/frontend";
+import { SearchFrontend } from "./services/search/frontend";
 
 class Provider extends String {
 }
@@ -50,6 +52,7 @@ export class Frontend {
     basemaps?: BasemapFrontend;
     geocoding?: GeocodingFrontend;
     routing?: RoutingFrontend;
+    search?: SearchFrontend;
 
     constructor (
         public classes: {[name: string]: FrontendClass},
