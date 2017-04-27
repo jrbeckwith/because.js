@@ -60,6 +60,14 @@ export interface TransferConstructor {
 }
 
 export class TransferBase implements Transfer {
+
+    // Work around:
+    // "Property '[Symbol.toStringTag]' is missing in type 'BrowserTransfer'."
+    // This workaround requires tsconfig.json to include "es2015" under "lib"
+    // under "compilerOptions". or else you will get:
+    // "Property 'toStringTag' does not exist on type 'SymbolConstructor'."
+    readonly [Symbol.toStringTag]: "Promise";
+
     request: Request;
     response: Response;
     error: Error | Event;
