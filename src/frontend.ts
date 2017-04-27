@@ -85,25 +85,35 @@ export class Frontend {
         this.tokens = new TokenFrontend(this, host);
 
         // Use the passed ServiceFrontends
+        this.add_service_frontends(classes);
+    }
+
+    private add_service_frontends(classes: {[name: string]: FrontendClass}) {
         for (const pair of pairs(classes)) {
             const name: string = pair[0];
             const cls: FrontendClass = pair[1];
             const frontend = new cls(this, this.host);
-            // TODO: has to be a better way
-            if (frontend instanceof TokenFrontend) {
-                this.tokens = frontend;
-            }
-            else if (frontend instanceof BasemapFrontend) {
-                this.basemaps = frontend;
-            }
-            else if (frontend instanceof GeocodingFrontend) {
-                this.geocoding = frontend;
-            }
-            else if (frontend instanceof RoutingFrontend) {
-                this.routing = frontend;
-            }
+            this.add_service_frontend(frontend);
         }
+    }
 
+    private add_service_frontend(frontend: ServiceFrontend) {
+        // TODO: has to be a better way
+        if (frontend instanceof TokenFrontend) {
+            this.tokens = frontend;
+        }
+        else if (frontend instanceof BasemapFrontend) {
+            this.basemaps = frontend;
+        }
+        else if (frontend instanceof GeocodingFrontend) {
+            this.geocoding = frontend;
+        }
+        else if (frontend instanceof RoutingFrontend) {
+            this.routing = frontend;
+        }
+        else if (frontend instanceof SearchFrontend) {
+            this.search = frontend;
+        }
     }
 
     /**
