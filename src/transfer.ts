@@ -98,8 +98,6 @@ export class TransferBase implements Transfer {
         this.aborted = false;
         // fulfilled
         this.finished = false;
-        // TODO: we need a non-aborted way of saying things didn't work out
-        // e.g. for timeouts, or for errors
     }
 
     start(): void {
@@ -117,8 +115,6 @@ export class TransferBase implements Transfer {
 
     /**
      * Returns a promise, to support a Promises/A+ interface.
-     *
-     * TODO: can this also reasonably take a callback for finish notification?
      */
     public async promise(
         // on_fulfill?: OnFulfill<void>, // (response: Response) => void,

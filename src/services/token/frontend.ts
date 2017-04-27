@@ -16,26 +16,8 @@ export class TokenFrontend extends ServiceFrontend {
         super(service, frontend, host);
     }
 
-    // {
-    //     let rheaders = headers;
-    //     if (this.jwt) {
-    //         rheaders = headers ? headers.copy() : new Headers();
-    //         rheaders.set("User-Agent", "Because");
-    //         rheaders.set("Accept", "application/json");
-    //         rheaders.set("Authorization", `Bearer ${this.jwt.token}`);
-    //     }
-    //     this.log.debug({"headers": rheaders});
-    //     const request = new Request(method, url, query, body, rheaders);
-    //     this.log.debug({"request": request});
-    //     const transfer = this.client.send(request);
-    //     this.log.debug({"transfer": transfer});
-    //     return transfer;
-    // }
-
     /**
      * Get a token and return it without other side effects.
-     *
-     * TODO: move this to the servicefrontend.
      */
     async get_token(username: Username, password: Password) {
         // If Javascript consumers pass null values, don't propagate them.
@@ -55,6 +37,9 @@ export class TokenFrontend extends ServiceFrontend {
         return response_to_jwt(response);
     }
 
+    /**
+     * (We usually already have the roles...)
+     */
     async get_roles() {
         // TODO
         // const uri = "/token/entitlements";

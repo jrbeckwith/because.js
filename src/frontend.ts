@@ -25,22 +25,9 @@ import { RoutingFrontend } from "./services/routing/frontend";
 import { BasemapFrontend } from "./services/basemap/frontend";
 import { GeocodingFrontend } from "./services/geocoding/frontend";
 
-// TODO: provide hook that is called when an automated login would be best?
-
-// TODO: BrowserFrontend, NodeFrontend. I guess. to select Client?
-// blegh not great.
-
-// TODO: base URL registry and take env name instead of taking base.
-// TODO: load it from yaml.
-
-// TODO: allow definition of default routing and geocode providers?
-
-// TODO: take some sort of arg specifying which things you want enabled maybe?
-// no that's not helpful at runtime. hm. so take an arg allowing you to pass
-// things to use, and then don't default to including them all.
-
 class Provider extends String {
 }
+
 
 /**
  * The nice interface for getting things done, top level of API for endusers.
@@ -91,7 +78,7 @@ export class Frontend {
         this.jwt = undefined;
         this.log = new Log("because");
 
-        // Always get a TokenFrontend
+        // Always get a TokenFrontend so we can log in
         this.tokens = new TokenFrontend(this, host);
 
         // Use the passed ServiceFrontends

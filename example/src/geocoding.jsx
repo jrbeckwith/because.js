@@ -84,7 +84,6 @@ class Geocoding extends Component {
         return (
             <div>
                 <form onSubmit={this.handleSubmit}>
-
                     <label>
                         <div className="inputLabel">
                             <span>Provider</span>
@@ -119,7 +118,7 @@ class Geocoding extends Component {
                     </ul>
                 </div>
             </div>
-       );
+        );
     }
 }
 
