@@ -79,6 +79,9 @@ class ReverseGeocoding extends Component {
                     ),
                     geocodes: geocodes
                 });
+
+                // Just for playing around in the console, not for real apps
+                window.reverse_geocodes = geocodes;
             })
             .catch((error) => {
                 console.log("geocoding: failure", error);

@@ -141,6 +141,9 @@ class Routing extends Component {
                     message: `successfully retrieved a route.`,
                     route: route
                 });
+
+                // Just for playing around in the console, not for real apps
+                window.route = route;
             })
             .catch((error) => {
                 console.log("route: failure", error);
