@@ -1,6 +1,6 @@
 import { assert } from "chai";
 import { arrays_equal, pairs_equal } from "../src/data";
-import { Table } from "../src/table";
+import { Table, MutableTable } from "../src/table";
 
 
 describe("Table", () => {
@@ -69,6 +69,23 @@ describe("Table", () => {
         });
     });
 
+    describe("updated()", () => {
+        it("works in a trivial smoke test", () => {
+            const table1 = new Table({"a": "x", "b": "y"});
+            assert(table1.get("a") === "x");
+            assert(table1.get("b") === "y");
+
+            const table2 = new Table({"b": "z", "c": "q"});
+            assert(table2.get("b") === "z");
+            assert(table2.get("c") === "q");
+
+            const table3 = table2.updated(table1);
+            assert(table3.get("a") === "x");
+            assert(table3.get("b") === "y");
+            assert(table3.get("c") === "q");
+        });
+    });
+
     describe("data()", () => {
         it("works in a trivial smoke test", () => {
             const table = new Table(example);
@@ -103,6 +120,27 @@ describe("Table", () => {
             });
             assert(table2.get("B") === "A");
             assert(table2.get("Y") === "X");
+        });
+    });
+
+});
+
+
+describe("MutableTable", () => {
+    describe("update()", () => {
+        it("works in a trivial smoke test", () => {
+            const patches = new Table({"a": "x", "b": "y"});
+            assert(patches.get("a") === "x");
+            assert(patches.get("b") === "y");
+
+            const mutable = new MutableTable({"b": "z", "c": "q"});
+            assert(mutable.get("b") === "z");
+            assert(mutable.get("c") === "q");
+
+            mutable.update(patches);
+            assert(mutable.get("a") === "x");
+            assert(mutable.get("b") === "y");
+            assert(mutable.get("c") === "q");
         });
     });
 

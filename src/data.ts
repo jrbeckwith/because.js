@@ -276,6 +276,23 @@ export function copy<ValueType>
 
 
 /**
+ * Make a copy of data object with keys in other data object written over.
+ *
+ * @param data      data object to copy and override keys in
+ * @param other     data object from which present keys will override data
+ */
+export function updated<ValueType>
+(data: Data<ValueType>, other: Data<ValueType>): Data<ValueType> {
+    const result = copy(data);
+    for (const property in other) {
+        if (other.hasOwnProperty(property)) {
+            result[property] = other[property];
+        }
+    }
+    return result;
+}
+
+/**
  * Turn pairs of data object into strings delimited by `sep`.
  *
  * @param ValueType     Type of stored values.

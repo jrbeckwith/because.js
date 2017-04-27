@@ -9,6 +9,7 @@ import {
     each,
     map,
     copy,
+    updated,
     as_strings,
     as_string,
     arrays_equal,
@@ -174,6 +175,80 @@ describe("Data", () => {
         });
     });
 
+    describe("updated()", () => {
+        it("makes a new empty object if both args are empty", () => {
+            const first = {};
+            const second = {};
+            const result = updated(first, second);
+            // Definitely empty
+            assert(length(result) === 0);
+            assert(equals(result, {}));
+            // Not a copy of either
+            assert(result !== first);
+            assert(result !== second);
+        });
+
+        it("copies the first if the second is empty", () => {
+            const data = {"a": "b"};
+            const result = updated(data, {});
+            assert(equals(result, data));
+            // It's a copy, not the same object
+            assert(result !== data);
+        });
+
+        it("copies the second if the first is empty", () => {
+            const data = {"a": "b"};
+            const result = updated({}, data);
+            assert(equals(result, data));
+            // It's a copy, not the same object
+            assert(result !== data);
+        });
+
+        it("works as expected in the absence of conflicts", () => {
+            const first = {"a": "b"};
+            const second = {"c": "d"};
+            const result = updated(first, second);
+            assert(result["a"] === "b");
+            assert(result["c"] === "d");
+        });
+
+        it("resolves a conflict in favor of the second", () => {
+            const first = {"a": "b"};
+            const second = {"a": "x"};
+            const result = updated(first, second);
+            assert(result["a"] === "x");
+        });
+
+        // rule out subtle failure of e.g. 'other[property] || this[property]'
+        it("still overrides if key in second has value undefined", () => {
+            const first = {"a": "b"};
+            const second = {"a": undefined};
+            const result = updated(first, second);
+            assert(result["a"] === undefined);
+
+            // it's not just undefined because the key went away
+            const result_keys = keys(result);
+            assert(result_keys.length === 1);
+            assert(result_keys[0] === "a");
+        });
+
+        it("passes a mixed smoke test", () => {
+            const data1: Data<string> = {"a": "x", "b": "y"};
+            const data2: Data<string> = {"b": "z", "c": "q"};
+            const data3: Data<string> = updated(data1, data2);
+            assert(!equals(data1, data3));
+            assert(!equals(data2, data3));
+            const expected: Data<string> = {
+                // Key only in first
+                "a": "x",
+                // Overlapping key, take value from second
+                "b": "z",
+                // Key only in second
+                "c": "q",
+            };
+            assert(equals(data3, expected));
+        });
+    });
 
     describe("as_strings()", () => {
         it("serializes into an array containing the expected pairs", () => {

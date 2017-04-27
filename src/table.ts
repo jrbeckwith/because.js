@@ -9,6 +9,7 @@
 import {
     Data,
     copy,
+    updated,
     keys,
     values,
     pairs,
@@ -67,6 +68,14 @@ export class Table<V> {
      */
     copy(): Table<V> {
         return new Table<V>(copy(this._data));
+    }
+
+    /**
+     * Make a copy of the table with k/v overrides from another table.
+     */
+    updated(other: Table<V>): Table<V> {
+        const data = updated<V>(this._data, other._data);
+        return new Table<V>(data);
     }
 
     /**
@@ -138,5 +147,27 @@ export class MutableTable<V> extends Table<V> {
 
     copy(): MutableTable<V> {
         return new MutableTable(copy(this._data));
+    }
+
+    /**
+     * Make a copy of the table with k/v overrides from another table.
+     */
+    updated(other: Table<V>): MutableTable<V> {
+        // TODO: makes copies, ugh
+        const data = updated<V>(this._data, other.data());
+        // can't really use super.updated(other)
+
+        const result = new MutableTable<V>(data);
+        return result;
+    }
+
+    /**
+     * Set keys from another table.
+     */
+    update(other: Table<V>): void {
+        for (const pair of other.pairs()) {
+            const [key, value] = pair;
+            this.set(key, value);
+        }
     }
 }
