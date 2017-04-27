@@ -31,9 +31,14 @@ class ReverseGeocoding extends Component {
             geocodes: [],
         };
         // Ensure handle* methods have the right `this`
+        this.handleProviderChange = this.handleProviderChange.bind(this);
         this.handleLatChange = this.handleLatChange.bind(this);
         this.handleLonChange = this.handleLonChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleProviderChange(event) {
+        this.setState({provider: event.target.value});
     }
 
     handleLatChange(event) {
@@ -53,8 +58,6 @@ class ReverseGeocoding extends Component {
         let lat = this.state.lat;
         let lon = this.state.lon;
         let provider = this.state.provider;
-
-        // TODO use pulldown for provider
 
         if (!bcs) {
             this.setState({

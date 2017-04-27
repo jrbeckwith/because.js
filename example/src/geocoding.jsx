@@ -30,8 +30,13 @@ class Geocoding extends Component {
             geocodes: [],
         };
         // Ensure handle* methods have the right `this`
+        this.handleProviderChange = this.handleProviderChange.bind(this);
         this.handleAddressChange = this.handleAddressChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleProviderChange(event) {
+        this.setState({provider: event.target.value});
     }
 
     handleAddressChange(event) {
@@ -46,8 +51,6 @@ class Geocoding extends Component {
         let bcs = this.props.bcs;
         let address = this.state.address;
         let provider = this.state.provider;
-
-        // TODO pulldown for provider
 
         if (!bcs) {
             this.setState({
