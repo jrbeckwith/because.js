@@ -23,6 +23,18 @@ function xhr_to_response(xhr: XMLHttpRequest): Response {
 }
 
 
+class XHRError extends Error {
+    event: Event;
+
+    // TODO: translate event information into something presented
+    constructor (message: string, ev: Event) {
+        super();
+        this.message = message;
+        this.event = ev;
+    }
+}
+
+
 /**
  * Wrap an XMLHttpRequest in a promise that can be awaited.
  *
@@ -72,9 +84,7 @@ async function xhr_to_promise(xhr: XMLHttpRequest) {
                 flags.done = true;
 
                 // Export an Error describing the failure
-                // TODO: more specific error type
-                // TODO: translate ev information to Error
-                const error = new Error("XHR failed");
+                const error = new XHRError("XHR failed", ev);
                 reject(error);
             }
         };
