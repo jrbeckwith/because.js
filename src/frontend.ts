@@ -54,6 +54,11 @@ export class Frontend {
     routing?: RoutingFrontend;
     search?: SearchFrontend;
 
+    default_headers = new Headers({
+        "User-Agent": "Because",
+        "Accept": "application/json",
+    });
+
     constructor (
         public classes: {[name: string]: FrontendClass},
         private client: Client,
@@ -133,8 +138,7 @@ export class Frontend {
     }
 
     private enrich_headers(headers: Headers) {
-        headers.set("User-Agent", "Because");
-        headers.set("Accept", "application/json");
+        headers.update(this.default_headers);
         if (this.jwt) {
             headers.set("Authorization", `Bearer ${this.jwt.token}`);
         }
