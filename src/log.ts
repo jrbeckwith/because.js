@@ -28,7 +28,14 @@ level_names[Level.debug] = "debug";
 level_names[Level.warning] = "warning";
 level_names[Level.error] = "error";
 
-
+/**
+ * Define a source of log messages.
+ *
+ * Typical usage would be to have one of these per instance of a class complex
+ * enough to need logging for debug. Normally this would be private to the
+ * class so that it only reflects the "voice" of that particular instance.
+ *
+ */
 export class Log {
     name: string;
 
