@@ -45,7 +45,7 @@ export class Log {
 
     protected emit(level: Level, text: string, args?: Args): void {
         const level_name = level_names[level];
-        const prefix = `${this.name}: ${level_name}:`;
+        const prefix = `${this.name}: ${level_name}: ${text}`;
         for (const pair of pairs(args || {})) {
             const [key, value] = pair;
             // tslint:disable-next-line
