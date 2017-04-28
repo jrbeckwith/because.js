@@ -217,6 +217,8 @@ export class Frontend {
      */
     send(request: Request): Transfer {
         const headers = this.enriched_headers(request.headers);
+        // TODO
+        request.headers = headers;
         this.log.debug("about to send", {"request": request});
         const transfer = this.client.send(request);
         return transfer;
