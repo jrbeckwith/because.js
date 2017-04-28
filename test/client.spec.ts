@@ -2,6 +2,7 @@ import { assert } from "chai";
 import { Data } from "../src/data";
 import { ClientBase } from "../src/client";
 import { Request } from "../src/request";
+import { Headers } from "../src/headers";
 import { Transfer, TransferBase } from "../src/transfer";
 
 
@@ -13,12 +14,12 @@ describe("ClientBase", () => {
         "GET",
         // url
         "http://example.com",
-        // body
-        "",
         // query
         {},
+        // body
+        "",
         // headers
-        {},
+        new Headers({}),
     );
 
     beforeEach(() => {

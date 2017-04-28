@@ -1,6 +1,7 @@
 import { assert } from "chai";
 import { TransferBase } from "../src/transfer";
 import { Request } from "../src/request";
+import { Headers } from "../src/headers";
 
 
 describe("TransferBase", () => {
@@ -14,12 +15,12 @@ describe("TransferBase", () => {
             "GET",
             // url
             "http://example.com",
-            // body
-            "body stuff here",
             // query
             {},
+            // body
+            "body stuff here",
             // headers
-            {},
+            new Headers({}),
         );
         transfer = new TransferBase(request);
     });

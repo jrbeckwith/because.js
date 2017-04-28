@@ -58,7 +58,7 @@ export class Request {
         // bytes to send in body
         body?: Body,
         // Headers: mapping of names to string values
-        headers?: Headers | RequestHeaderData,
+        headers?: Headers,
     ) {
         this.method = method;
         if (url.indexOf("?") > -1) {
@@ -75,12 +75,7 @@ export class Request {
             this.query = new Query(query || {});
         }
 
-        if (headers instanceof Headers) {
-            this.headers = headers;
-        }
-        else {
-            this.headers = new Headers(headers || {});
-        }
+        this.headers = headers || new Headers();
 
         this.body = body || "" as Body;
     }

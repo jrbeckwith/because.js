@@ -11,7 +11,7 @@ describe("Request", () => {
     const method = "GET";
     const url = "http://example.com";
     const query: Data<string> = {};
-    const headers: Data<string> = {};
+    const headers = new Headers({});
     const body = "";
 
     beforeEach(() => {
@@ -73,10 +73,12 @@ describe("Request", () => {
     });
 
     it("exposes query", () => {
+        assert(request.query);
         assert(request.query.equals(new Query()));
     });
 
     it("exposes headers", () => {
+        assert(request.headers);
         assert(request.headers.equals(new Headers()));
     });
 
