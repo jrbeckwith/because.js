@@ -2,6 +2,9 @@
  * Entry point to be used in the browser.
  *
  * This module is referenced by the `"browser"` property in `package.json`.
+ * This hint may be used by tools like browserify, webpack and jspm.
+ * For more information about how some tools may use this property, see
+ * https://github.com/defunctzombie/package-browser-field-spec.
  */
 
 /** This line does nothing but make typedoc render the module comment. */
