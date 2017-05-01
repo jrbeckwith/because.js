@@ -1,11 +1,22 @@
 import React, { Component } from "react";
 
 
-function render_distance(distance) {
+// eslint-disable-next-line
+function render_distance_km(distance) {
     let km = distance / 1000.0;
     return (
         <span className="value distance">
-            {km.toFixed(2)}
+            {km.toFixed(2)}km
+        </span>
+    );
+}
+
+
+function render_distance_mi(distance) {
+    let mi = distance / 1609.34;
+    return (
+        <span className="value distance">
+            {mi.toFixed(2)}mi
         </span>
     );
 }
@@ -34,7 +45,7 @@ function render_step(step, key) {
     return <li key={key} className="step">
         <span className="instructions">{step.instructions}.</span>
         <div className="attributes">
-            {render_distance(step.distance)}
+            {render_distance_mi(step.distance)}
             {render_duration(step.duration)}
         </div>
     </li>;
@@ -48,7 +59,7 @@ function render_leg(leg, key) {
     return <li key={key} className="leg">
         <span>Leg</span>
         <div className="attributes">
-            {render_distance(leg.distance)}
+            {render_distance_mi(leg.distance)}
             {render_duration(leg.duration)}
         </div>
         <ol>
@@ -66,7 +77,7 @@ function render_route(route) {
         <span>Route
         </span>
         <div className="attributes">
-            {render_distance(route.distance)}
+            {render_distance_mi(route.distance)}
             {render_duration(route.duration)}
         </div>
         <ol>

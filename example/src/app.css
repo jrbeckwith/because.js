@@ -29,13 +29,6 @@ div.attributes {
     width: 10em;
 }
 
-.value.distance::after {
-    content: " km";
-}
-
-.value.duration::after {
-}
-
 .roles {
 }
 
