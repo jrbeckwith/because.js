@@ -25,13 +25,15 @@ function render_distance_mi(distance) {
 function render_duration(duration) {
     let minutes = Math.floor(duration / 60);
     let seconds = duration - (minutes * 60);
+    let hours = Math.floor(minutes / 60);
+    minutes -= (hours * 60);
 
+    let hours_text = hours ? hours.toFixed(0) + "h" : "";
     let minutes_text = minutes ? minutes.toFixed(0) + "m" : "";
     let seconds_text = seconds ? seconds.toFixed(0) + "s" : "";
     return (
         <span className="value duration">
-            {minutes_text}
-            {seconds_text}
+            {hours_text} {minutes_text} {seconds_text}
         </span>
     );
 }
