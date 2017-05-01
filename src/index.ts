@@ -24,6 +24,7 @@ import { TokenFrontend } from "./services/token/frontend";
 import { RoutingFrontend } from "./services/routing/frontend";
 import { BasemapFrontend } from "./services/basemap/frontend";
 import { GeocodingFrontend } from "./services/geocoding/frontend";
+import { SearchFrontend } from "./services/search/frontend";
 
 
 /**
@@ -38,6 +39,7 @@ export class Because extends Frontend {
             "routing": RoutingFrontend,
             "geocode": GeocodingFrontend,
             "basemap": BasemapFrontend,
+            "search": SearchFrontend,
         };
         super(classes, new Client(), url, debug);
     }
