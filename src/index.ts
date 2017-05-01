@@ -26,6 +26,9 @@ import { BasemapFrontend } from "./services/basemap/frontend";
 import { GeocodingFrontend } from "./services/geocoding/frontend";
 
 
+/**
+ * Top-level frontend implementation for Node.
+ */
 export class Because extends Frontend {
     constructor (env: string, debug?: boolean) {
         const url = hosts[env || "test"];

@@ -29,6 +29,9 @@ import {
 } from "./flavors/browser_es5";
 
 
+/**
+ * Top-level frontend implementation for the browser.
+ */
 export class Because extends Frontend {
     constructor (env?: string, debug?: boolean) {
         env = env || "test";
