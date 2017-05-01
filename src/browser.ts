@@ -29,7 +29,7 @@ import {
 } from "./flavors/browser_es5";
 
 
-class Because extends Frontend {
+export class Because extends Frontend {
     constructor (env?: string, debug?: boolean) {
         env = env || "test";
         const host: Host = hosts[env];
@@ -49,12 +49,3 @@ class Because extends Frontend {
         super(classes, new Client(), host, debug);
     }
 }
-
-
-export {
-    Client,
-    Request,
-    Headers,
-    Query,
-    Because,
-};

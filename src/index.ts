@@ -26,7 +26,7 @@ import { BasemapFrontend } from "./services/basemap/frontend";
 import { GeocodingFrontend } from "./services/geocoding/frontend";
 
 
-class Because extends Frontend {
+export class Because extends Frontend {
     constructor (env: string, debug?: boolean) {
         const url = hosts[env || "test"];
         const client = new Client();
@@ -39,11 +39,3 @@ class Because extends Frontend {
         super(classes, new Client(), url, debug);
     }
 }
-
-export {
-    Request,
-    Response,
-    Headers,
-    Query,
-    Transfer,
-};

@@ -4,7 +4,8 @@
 
 /** This line does nothing but make typedoc render the module comment. */
 
-import { Request, Response } from "../index";
+import { Request } from "../request";
+import { Response } from "../response";
 import { ClientBase } from "../client";
 import { TransferBase } from "../transfer";
 import { XHR } from "../xhr";
