@@ -1,4 +1,4 @@
-import { Because } from 'because';
+import { Because } from 'becausejs';
 import React, { Component } from 'react';
 import './app.css';
 
