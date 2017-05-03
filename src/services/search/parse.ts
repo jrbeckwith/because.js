@@ -1,11 +1,18 @@
 import { Response } from "../../response";
 import { ParseError } from "../../errors";
-import { parse_response } from "../../parse";
+import {
+    parse_response,
+    parse_array,
+} from "../../parse";
 import {
     SearchResultEnvelope,
     SearchResultData,
     SearchResult,
 } from "./search_result";
+import {
+    SearchCategory,
+    SearchCategoryData,
+} from "./search_category";
 
 
 export function parse_search_results(response: Response): SearchResult[] {
@@ -21,5 +28,13 @@ export function parse_search_results(response: Response): SearchResult[] {
             feature.geometry.coordinates[0],
             feature.geometry.coordinates[1],
         );
+    });
+}
+
+
+export function parse_search_categories(response: Response): SearchCategory[] {
+    const results = parse_array<SearchCategoryData>(response);
+    return results.map((result: SearchCategoryData) => {
+        return result as SearchCategory;
     });
 }

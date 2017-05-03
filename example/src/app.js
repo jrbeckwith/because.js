@@ -6,7 +6,7 @@ import Login from './login';
 import Routing from './routing';
 import Geocoding from './geocoding';
 import ReverseGeocoding from './reverse_geocoding';
-import Search from './search';
+import { Search } from './search';
 
 
 class App extends Component {
