@@ -16,11 +16,19 @@ export const endpoints = {
     // providers: mapzen, mapbox
     // This looks like the same kind of endpoint provided by /routings/...
     "geocoded": new Endpoint(
-        "GET", "/route/{provider}/originx/{originx}/originy/{originy}/destinationx/{destinationx}/destinationy/{destinationy}",
+        "GET",
+        "/route/{provider}\
+        /originx/{originx}\
+        /originy/{originy}\
+        /destinationx/{destinationx}\
+        /destinationy/{destinationy}",
     ),
 
     "address": new Endpoint(
-        "GET", "/route/{provider}/originaddress/{originaddress}/destinationaddress/{destinationaddress}",
+        "GET",
+        "/route/{provider}/\
+        originaddress/{originaddress}\
+        /destinationaddress/{destinationaddress}",
     ),
 
     // Any number of waypoints of mixed type: either address or (x, y) coords.
