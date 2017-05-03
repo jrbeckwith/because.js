@@ -2017,9 +2017,6 @@ var BrowserTransfer = (function (_super) {
                             ? this.request.headers.pairs()
                             : []);
                         this.started = true;
-                        console.log("xhr method", this.request.method),
-                            console.log("xhr url", this.request.url),
-                            console.log("xhr headers", headers);
                         body = this.request.body || "";
                         console.log("xhr body", body);
                         this.xhr.start(this.request.method, this.request.url, headers, body);
