@@ -111,6 +111,7 @@ function xhr_start(
     method: string,
     url: string,
     headers?: [string, string][],
+    body?: string,
 ) {
         xhr.open(method, url, true);
         if (headers) {
@@ -119,7 +120,7 @@ function xhr_start(
                 xhr.setRequestHeader(key, value);
             }
         }
-        xhr.send();
+        xhr.send(body || "");
 }
 
 
@@ -152,8 +153,9 @@ export class XHR {
      */
     public async start(
         method: string, url: string, headers?: [string, string][],
+        body?: string,
     ): Promise<this> {
-        xhr_start(this.xhr, method, url, headers);
+        xhr_start(this.xhr, method, url, headers, body || "");
         return this.promise();
     }
 

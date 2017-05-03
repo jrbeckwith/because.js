@@ -5,7 +5,7 @@
 /** This line does nothing but make typedoc render the module comment. */
 
 import { InvalidObject } from "./errors";
-import { Query, QueryData } from "./query";
+import { Query } from "./query";
 import { Headers, HeaderData } from "./headers";
 import { Method, URI, URL, Body } from "./http";
 
@@ -54,7 +54,7 @@ export class Request {
         // URL for request, not including querystring
         url: URL,
         // Query parameters: mapping of names to string values
-        query?: Query | QueryData,
+        query?: Query,
         // bytes to send in body
         body?: Body,
         // Headers: mapping of names to string values
@@ -67,16 +67,8 @@ export class Request {
             );
         }
         this._url = url as URL;
-
-        if (query instanceof Query) {
-            this.query = query;
-        }
-        else {
-            this.query = new Query(query || {});
-        }
-
+        this.query = query || new Query();
         this.headers = headers || new Headers();
-
         this.body = body || "" as Body;
     }
 

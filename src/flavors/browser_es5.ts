@@ -8,6 +8,7 @@ import { Request } from "../request";
 import { Response } from "../response";
 import { ClientBase } from "../client";
 import { TransferBase } from "../transfer";
+import { Body } from "../http";
 import { XHR } from "../xhr";
 
 
@@ -61,10 +62,13 @@ export class BrowserTransfer extends TransferBase {
         // Mark that we're working for benefit of callers holding transfer.
         this.started = true;
         // Get the XHR rolling.
+        const body = this.request.body || "";
+        console.log("xhr body", body);
         this.xhr.start(
             this.request.method,
             this.request.url,
             headers,
+            body as string,
         );
         await this.xhr.promise();
         return this.response;

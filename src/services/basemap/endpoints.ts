@@ -2,7 +2,13 @@ import { Endpoint } from "../../service";
 
 
 export const endpoints = {
+
     "metadata": new Endpoint(
-        "/basemaps/",
+        // * Trailing slash is needed if security header is not set
+        "GET", "/basemaps/",
+    ),
+
+    "manage": new Endpoint(
+        "GET", "/basemaps/manage",
     ),
 };

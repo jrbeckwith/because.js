@@ -19,8 +19,9 @@ export class BasemapFrontend extends ServiceFrontend {
     async basemaps() {
         // TODO: does this need login?
         // await this.need_login();
-        const uri = `/basemaps/`;
-        const request = this.request("GET", uri);
+
+        const endpoint = this.service.endpoint("metadata");
+        const request = endpoint.request(this.host.url);
         const response = await this.send(request);
         return parse_basemaps(response);
     }

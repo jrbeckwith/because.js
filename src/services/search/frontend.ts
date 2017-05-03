@@ -15,36 +15,33 @@ export class SearchFrontend extends ServiceFrontend {
     }
 
     async search() {
-        const uri = `/search/`;
-        const query = new Query({});
-        const request = this.request("GET", uri, query);
+        const endpoint = this.service.endpoint("search");
+        const request = endpoint.request(this.host.url, {});
         const response = await this.send(request);
         return parse_search_results(response);
     }
 
     async search_data() {
-        const query = new Query({});
-        const uri = "search/data/";
-        const response = await this.send(
-            this.request("GET", uri, query),
-        );
+        const endpoint = this.service.endpoint("search_data");
+        const request = endpoint.request(this.host.url, {});
+        const response = await this.send(request);
         return parse_search_results(response);
     }
 
     async get_search_categories() {
-        const uri = `search/categories/`;
-        const query = new Query({});
-        const request = this.request("GET", uri, query);
+        const endpoint = this.service.endpoint("get_search_categories");
+        const request = endpoint.request(this.host.url, {});
         const response = await this.send(request);
         return response;
     }
 
     async search_in_category(category: string, q: string) {
-        const uri = `search/categories/${category}`;
-        const query = new Query({"q": q});
-        const request = this.request("GET", uri, query);
+        const endpoint = this.service.endpoint("search_in_category");
+        const request = endpoint.request(this.host.url, {
+            "category": category,
+            "q": q,
+        });
         const response = await this.send(request);
         return response;
-        // return parse_search_categories(response);
     }
 }

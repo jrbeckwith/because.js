@@ -2,6 +2,7 @@ import { assert } from "chai";
 import { TransferBase } from "../src/transfer";
 import { Request } from "../src/request";
 import { Headers } from "../src/headers";
+import { Query } from "../src/query";
 
 
 describe("TransferBase", () => {
@@ -16,7 +17,7 @@ describe("TransferBase", () => {
             // url
             "http://example.com",
             // query
-            {},
+            new Query({}),
             // body
             "body stuff here",
             // headers

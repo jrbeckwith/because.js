@@ -3,6 +3,7 @@ import { Data } from "../src/data";
 import { ClientBase } from "../src/client";
 import { Request } from "../src/request";
 import { Headers } from "../src/headers";
+import { Query } from "../src/query";
 import { Transfer, TransferBase } from "../src/transfer";
 
 
@@ -15,7 +16,7 @@ describe("ClientBase", () => {
         // url
         "http://example.com",
         // query
-        {},
+        new Query({}),
         // body
         "",
         // headers

@@ -77,41 +77,6 @@ export class ServiceFrontend {
         return this._frontend.send(request);
     }
 
-    old_send(
-        method: Method,
-        endpoint: string,
-        query?: Query,
-        body?: Body,
-        headers?: Headers,
-    ): Transfer {
-        const request = this.request(
-            method as Method,
-            endpoint,
-            query,
-            body as Body,
-        );
-        return this._frontend.send(request);
-    }
-
-    async get(endpoint: string, query?: Query) {
-        const request = this.request(
-            "GET" as Method,
-            endpoint,
-            query,
-            "",
-        );
-        return await this.send(request);
-    }
-
-    async post(endpoint: string, query?: Query, body?: Body) {
-        const request = this.request(
-            "POST" as Method,
-            endpoint,
-            query,
-            body,
-        );
-        this.send(request);
-    }
 }
 
 

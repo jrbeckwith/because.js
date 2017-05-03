@@ -21,20 +21,23 @@ export class GeocodingFrontend extends ServiceFrontend {
     /**
      * Get a list of possible locations for an address.
      */
-    async geocode(address: Address, provider?: string) {
+    async geocode(
+        address: Address,
+        // vestigial: "boundless" as in bcs-geocoding-boundless role
+        provider?: "mapzen" | "mapbox",
+    ) {
         // TODO
         // await this.need_login();
         provider = provider || "mapbox";
         if (!address) {
             throw new Error("need an address to geocode");
         }
-        const query = new Query({
-        });
 
-        const request = this.request("GET", "forward", query);
-        // TODO
-        const encoded = encodeURIComponent(address as string);
-        request._url = request._url + `geocode/${provider}/address/${encoded}`;
+        const endpoint = this.service.endpoint("forward");
+        const request = endpoint.request(this.host.url, {
+            "provider": provider,
+            "address": encodeURIComponent(address as string),
+        });
         const response = await this.send(request);
         this.log.debug("geocode", {"response": response});
         return parse_geocodes(response);
@@ -50,15 +53,12 @@ export class GeocodingFrontend extends ServiceFrontend {
         if (!coordinates) {
             throw new Error("need coordinates to reverse geocode");
         }
-        const x: number = coordinates[1];
-        const y: number = coordinates[0];
-        provider = provider || "mapbox";
-        const query = new Query({});
-        const request = this.request("GET", "reverse", query);
-        // TODO
-        request._url = (
-            request._url + `geocode/${provider}/address/x/${x}/y/${y}`
-        );
+        const endpoint = this.service.endpoint("reverse");
+        const request = endpoint.request(this.host.url, {
+            "provider": provider || "mapbox",
+            "x": coordinates[1],
+            "y": coordinates[0],
+        });
         const response = await this.send(request);
         this.log.debug("reverse_geocode", {"response": response});
         return parse_geocodes(response);

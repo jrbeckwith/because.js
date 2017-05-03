@@ -27,13 +27,13 @@ export class TokenFrontend extends ServiceFrontend {
         if (!password) {
             throw new LoginError("password is required");
         }
-        // TODO: query construction should happen in the ServiceFrontend or the
-        // Service.
-        const query = new Query({
+
+        const endpoint = this.service.endpoint("get_token");
+        const request = endpoint.request(this.host.url, {
             "username": username as string,
             "password": password as string,
         });
-        const response = await this.get("token", query);
+        const response = await this.send(request);
         return response_to_jwt(response);
     }
 
@@ -41,42 +41,16 @@ export class TokenFrontend extends ServiceFrontend {
      * (We usually already have the roles...)
      */
     async get_roles() {
+        const endpoint = this.service.endpoint("get_roles");
+        const request = endpoint.request(this.host.url, {});
+        const response = await this.send(request);
         // TODO
-        // const uri = "/token/entitlements";
-        // const frontend = this.frontends.tokens;
-        // const response = await frontend.entitlements();
         // return parse_entitlements(response);
+        return response;
     }
-
-    // https://github.com/boundlessgeo/bcs/blob/master/bcs-token-service
-    // /src/main/java/com/boundlessgeo/bcs/data/ApiKeyResponse.java
-    // class ApiKeyData {
-    //     key: string;
-    //     domain: string;
-    //     issued: Datetime;
-    //     expires: Datetime;
-    // }
-
-    // ref OAuthTokenResponse in
-    // https://github.com/boundlessgeo/bcs/blob/master/bcs-token-service
-    // /src/main/java/com/boundlessgeo/bcs/data/OAuthTokenResponse.java
-    // class OAuthTokenData {
-        // access_token: string;
-        // token_type: string;
-        // expires_in: number;
-    // }
-
-    // ref TokenRequest in
-    // https://github.com/boundlessgeo/bcs/blob/master/bcs-token-service
-    // /src/main/java/com/boundlessgeo/bcs/data/TokenRequest.java
-    // class TokenRequest {
-        // username: string;
-        // password: string;
-    // }
 
     async get_apikey() {
         // TODO
-        // const uri = "/token/apikey";
     }
 
     async get_oauth(username: Username, password: Password) {

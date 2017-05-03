@@ -4,10 +4,25 @@ import { Headers } from "./headers";
 import { Log } from "./log";
 import { Method, URI, URL, Body } from "./http";
 import { Request } from "./request";
+import { Query } from "./query";
+import { format } from "./format";
 
 
-interface Args {
-    [key: string]: string ;
+export interface Args {
+    [key: string]: string | number;
+
+}
+
+export interface ArgsToQuery {
+    (args: Args): Query;
+}
+
+export interface ArgsToHeaders {
+    (args: Args): Headers;
+}
+
+export interface ArgsToBody {
+    (args: Args): Body;
 }
 
 
@@ -105,26 +120,137 @@ export class Service {
  * couple to one.
  */
 export class Endpoint {
-    _uri: URI;
-    methods: Method[];
-    headers: Headers;
+    public readonly method: Method;
+    protected readonly _uri: URI;
 
-    constructor (uri: URI, methods?: Method[], headers?: Headers) {
+    readonly query_function: ArgsToQuery;
+    readonly default_query: Query;
+
+    readonly headers_function: ArgsToHeaders;
+    readonly default_headers: Headers;
+
+    readonly body_function: ArgsToBody;
+    readonly default_body: Body;
+
+    constructor (
+        method: Method,
+        uri: URI,
+        query?: Query | ArgsToQuery,
+        headers?: Headers | ArgsToHeaders,
+        body?: string | ArgsToBody,
+    ) {
+        this.method = method;
         this._uri = uri;
-        this.methods = methods || [];
-        this.headers = headers || new Headers();
+
+        if (!query || typeof query === "object") {
+            this.default_query = query || new Query();
+        }
+        else if (typeof query === "function") {
+            this.query_function = query;
+        }
+
+        if (!headers || typeof headers === "object") {
+            this.default_headers = headers || new Headers();
+        }
+        else if (typeof headers === "function") {
+            this.headers_function = headers;
+        }
+
+        if (!body || typeof body === "string") {
+            this.default_body = body || "";
+        }
+        else if (typeof body === "function") {
+            this.body_function = body;
+        }
     }
 
-    uri(args?: Args): URI {
-        // TODO: serialize args somehow
-        return this._uri; // TODO
+    uri(args?: Args, append_query: boolean = false): URI {
+        args = args || {};
+        const string_args: {[key: string]: string} = {};
+        for (const key of Object.keys(args)) {
+            let value = args[key] || "";
+            if (value === undefined) {
+                value = "";
+            }
+            else if (typeof value === "number") {
+                value = value.toString();
+            }
+            else {
+                value = value;
+            }
+            string_args[key] = value;
+        }
+
+        const uri = format(this._uri as string, string_args) as URI;
+
+        // Inline query: can't do this without messing up Request.
+        if (append_query) {
+            const query = this.query(args);
+            const qs: string = query.encoded;
+            if (qs) {
+                return `${uri}?${qs}` as URI;
+            }
+        }
+        return uri;
     }
 
-    url(base: URL, args?: Args): URL {
-        // TODO: base prefix sanity check.
+    url(base: URL, args?: Args, append_query: boolean = false): URL {
+        // Sanity check the passed base prefix
+        if (!/^https?:\/\/.*$/.test(base as string)) {
+            throw new Error(`invalid URL base ${base}`);
+        }
 
         // Compose URI, but ensure we strip any redundant slashes before join
-        const uri = this.uri(args).replace(/^[/]+/g, "");
+        const uri = this.uri(args, append_query).replace(/^[/]+/g, "");
+        base = base.replace(/[/]+$/g, "");
         return `${base}/${uri}` as URL;
     }
+
+    query(args?: Args): Query {
+        let query: Query;
+        if (this.query_function) {
+            query = this.query_function(args || {});
+        }
+        else {
+            query = this.default_query.copy();
+        }
+        return query;
+    }
+
+    headers(args?: Args): Headers {
+        let headers: Headers;
+        if (this.headers_function) {
+            headers = this.headers_function(args || {});
+        }
+        else {
+            headers = this.default_headers.copy();
+        }
+        return headers;
+    }
+
+    body(args?: Args): Body {
+        let body: Body;
+        if (this.body_function) {
+            body = this.body_function(args || {});
+        }
+        else {
+            body = this.default_body;
+        }
+        return body;
+    }
+
+    request(base: URL, args?: Args): Request {
+        const query = this.query(args);
+        const headers = this.headers(args);
+        const body = this.body(args);
+        const request = new Request(
+            this.method,
+            this.url(base, args, false),
+            query,
+            body,
+            headers,
+        );
+        return request;
+    }
+
 }

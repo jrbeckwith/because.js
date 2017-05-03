@@ -6,6 +6,32 @@ import { JWT, LazyJWT } from "./jwt";
 class ParseError extends Error {}
 
 
+// https://github.com/boundlessgeo/bcs/blob/master/bcs-token-service
+// /src/main/java/com/boundlessgeo/bcs/data/ApiKeyResponse.java
+class ApiKeyData {
+    key: string;
+    domain: string;
+    issued: Date;
+    expires: Date;
+}
+
+// ref OAuthTokenResponse in
+// https://github.com/boundlessgeo/bcs/blob/master/bcs-token-service
+// /src/main/java/com/boundlessgeo/bcs/data/OAuthTokenResponse.java
+class OAuthTokenData {
+    access_token: string;
+    token_type: string;
+    expires_in: number;
+}
+
+// ref TokenRequest in
+// https://github.com/boundlessgeo/bcs/blob/master/bcs-token-service
+// /src/main/java/com/boundlessgeo/bcs/data/TokenRequest.java
+class TokenRequest {
+    username: string;
+    password: string;
+}
+
 /**
  * Structure of JSON body of token responses.
  *

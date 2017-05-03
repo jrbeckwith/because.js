@@ -1,4 +1,5 @@
 import { Service, Endpoint } from "../../service";
+import { endpoints } from "./endpoints";
 
 
 /**
@@ -7,13 +8,7 @@ import { Service, Endpoint } from "../../service";
 export class TokenService extends Service {
 
     constructor () {
-        const data = {
-            "token": new Endpoint(
-                "/token/",
-                ["POST"],
-            ),
-        };
-        super(data);
+        super(endpoints);
     }
 
     parse(response: Response) {

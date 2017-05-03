@@ -7,8 +7,8 @@
 
 /** This line does nothing but make typedoc render the module comment. */
 
-import { Data, as_string, map } from "./data";
-import { Table } from "./table";
+import { Data, as_string, copy, map, updated } from "./data";
+import { MutableTable } from "./table";
 
 
 /**
@@ -32,7 +32,7 @@ export interface QueryInterface {
  * Most of the behavior is from [Table](./table.html). What this adds is
  * convenient conversion to a query string.
  */
-export class Query extends Table<string> {
+export class Query extends MutableTable<string> {
     protected readonly _data: QueryData;
 
     /**
@@ -57,6 +57,20 @@ export class Query extends Table<string> {
         const result = encoded ? `${url}?${encoded}` : url ;
         return result;
     }
+
+    copy(): Query {
+        return new Query(copy(this._data));
+    }
+
+    /**
+     * Make a copy of the table with k/v overrides from another table.
+     */
+    updated(other: Query): Query {
+        const data = updated<string>(this._data, other.data());
+        const result = new Query(data);
+        return result;
+    }
+
 }
 
 
@@ -67,8 +81,11 @@ export class Query extends Table<string> {
  * @returns         Data object with keys and values that are encoded as URI
  *                  components.
  */
-export function as_uri_components(data: Data<string>) {
-    return map(data, (key: string, value: string) => {
+export function as_uri_components(data: Data<string | number>) {
+    return map(data, (key: string, value: string | number) => {
+        if (typeof value === "number") {
+            value = value.toString();
+        }
         return [
             encodeURIComponent(key),
             encodeURIComponent(value),
@@ -83,6 +100,6 @@ export function as_uri_components(data: Data<string>) {
  * @param data      Data object to be serialized into a query string.
  * @returns         Query string ready to be appended to a URL (after "?").
  */
-export function as_query_string(data: Data<string>) {
+export function as_query_string(data: Data<string | number>) {
     return as_string(data, "&", "=");
 }

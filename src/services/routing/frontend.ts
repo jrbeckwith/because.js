@@ -27,7 +27,7 @@ export class RoutingFrontend extends ServiceFrontend {
      * @param locations     A list of locations - addresses or points.
      * @param service       The name of a service. Default "mapbox".
      */
-    async route(locations: Location[], provider?: string) {
+    async route(locations: Location[], provider?: "mapbox" | "mapzen") {
         provider = provider || "mapbox";
         if (locations.length < 2) {
             throw new Error("need at least two locations to route");
@@ -52,13 +52,12 @@ export class RoutingFrontend extends ServiceFrontend {
             }
             strings.push(one);
         }
-        const joined = strings.join("|");
-        const query = new Query({
-            "waypoints": joined || "",
+
+        const endpoint = this.service.endpoint("waypoints");
+        const request = endpoint.request(this.host.url, {
+            "provider": provider,
+            "waypoints": strings.join("|") || "",
         });
-        const request = this.request("GET", "waypoints", query);
-        // TODO: fix URL generation, moving it to services
-        request._url = request._url + `${provider}/`;
         const response = await this.send(request);
         return Route.parse(response);
     }

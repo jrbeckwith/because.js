@@ -10,7 +10,7 @@ describe("Request", () => {
     let request: Request;
     const method = "GET";
     const url = "http://example.com";
-    const query: Data<string> = {};
+    const query = new Query({});
     const headers = new Headers({});
     const body = "";
 
@@ -64,8 +64,10 @@ describe("Request", () => {
         });
 
         it("encodes the query string for you", () => {
-            const query = {"a": "b"};
-            const request = new Request(method, url, query, body, headers);
+            const query = new Query({"a": "b"});
+            const request = new Request(
+                method, url, query, body, headers,
+            );
             const expected = "http://example.com?a=b";
             assert(request.url === expected);
         });
