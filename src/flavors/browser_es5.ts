@@ -63,7 +63,6 @@ export class BrowserTransfer extends TransferBase {
         this.started = true;
         // Get the XHR rolling.
         const body = this.request.body || "";
-        console.log("xhr body", body);
         this.xhr.start(
             this.request.method,
             this.request.url,
