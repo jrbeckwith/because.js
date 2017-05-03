@@ -25,9 +25,9 @@ class ReverseGeocoding extends Component {
         super(props);
         this.state = {
             message: "let's geocode! in reverse!",
-            lat: "",
-            lon: "",
-            provider: "mapbox",
+            lat: "0.0",
+            lon: "0.0",
+            provider: "mapzen",
             geocodes: [],
         };
         // Ensure handle* methods have the right `this`
