@@ -7,6 +7,7 @@ import Routing from './routing';
 import Geocoding from './geocoding';
 import ReverseGeocoding from './reverse_geocoding';
 import { Search } from './search';
+import { Basemap } from './basemap';
 
 
 class App extends Component {
@@ -39,6 +40,9 @@ class App extends Component {
 
         <h2>Search</h2>
         <Search bcs={this.state.bcs} />
+
+        <h2>Basemap</h2>
+        <Basemap bcs={this.state.bcs} />
 
       </div>
     );
