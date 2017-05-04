@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 25);
+/******/ 	return __webpack_require__(__webpack_require__.s = 26);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -98,7 +98,7 @@ var table_1 = __webpack_require__(9);
 var headers_1 = __webpack_require__(1);
 var request_1 = __webpack_require__(16);
 var query_1 = __webpack_require__(5);
-var format_1 = __webpack_require__(27);
+var format_1 = __webpack_require__(28);
 var EndpointData = (function (_super) {
     __extends(EndpointData, _super);
     function EndpointData() {
@@ -945,8 +945,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var service_frontend_1 = __webpack_require__(6);
-var service_1 = __webpack_require__(32);
-var parse_1 = __webpack_require__(31);
+var service_1 = __webpack_require__(33);
+var parse_1 = __webpack_require__(32);
 var BasemapFrontend = (function (_super) {
     __extends(BasemapFrontend, _super);
     function BasemapFrontend(frontend, host) {
@@ -961,12 +961,62 @@ var BasemapFrontend = (function (_super) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        endpoint = this.service.endpoint("metadata");
+                        endpoint = this.service.endpoint("basemaps");
                         request = endpoint.request(this.host.url);
                         return [4, this.send(request)];
                     case 1:
                         response = _a.sent();
                         return [2, parse_1.parse_basemaps(response)];
+                }
+            });
+        });
+    };
+    BasemapFrontend.prototype.providers = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var endpoint, request, response;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        endpoint = this.service.endpoint("providers");
+                        request = endpoint.request(this.host.url);
+                        return [4, this.send(request)];
+                    case 1:
+                        response = _a.sent();
+                        return [2, response];
+                }
+            });
+        });
+    };
+    BasemapFrontend.prototype.provider = function (name) {
+        return __awaiter(this, void 0, void 0, function () {
+            var endpoint, request, response;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        endpoint = this.service.endpoint("provider");
+                        request = endpoint.request(this.host.url, {
+                            "provider": name,
+                        });
+                        return [4, this.send(request)];
+                    case 1:
+                        response = _a.sent();
+                        return [2, response];
+                }
+            });
+        });
+    };
+    BasemapFrontend.prototype.manage = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var endpoint, request, response;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        endpoint = this.service.endpoint("manage");
+                        request = endpoint.request(this.host.url);
+                        return [4, this.send(request)];
+                    case 1:
+                        response = _a.sent();
+                        return [2, response];
                 }
             });
         });
@@ -1030,7 +1080,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var log_1 = __webpack_require__(8);
 var service_frontend_1 = __webpack_require__(6);
-var service_1 = __webpack_require__(34);
+var service_1 = __webpack_require__(35);
 var parse_1 = __webpack_require__(19);
 var GeocodingFrontend = (function (_super) {
     __extends(GeocodingFrontend, _super);
@@ -1147,8 +1197,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var service_frontend_1 = __webpack_require__(6);
+var parse_1 = __webpack_require__(20);
 var service_1 = __webpack_require__(37);
-var route_1 = __webpack_require__(20);
+var route_1 = __webpack_require__(21);
 var location_1 = __webpack_require__(7);
 var RoutingFrontend = (function (_super) {
     __extends(RoutingFrontend, _super);
@@ -1158,6 +1209,22 @@ var RoutingFrontend = (function (_super) {
         _this = _super.call(this, service, frontend, host) || this;
         return _this;
     }
+    RoutingFrontend.prototype.get_routings = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var endpoint, request, response;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        endpoint = this.service.endpoint("metadata");
+                        request = endpoint.request(this.host.url, {});
+                        return [4, this.send(request)];
+                    case 1:
+                        response = _a.sent();
+                        return [2, parse_1.parse_routings(response)];
+                }
+            });
+        });
+    };
     RoutingFrontend.prototype.route = function (locations, provider) {
         return __awaiter(this, void 0, void 0, function () {
             var strings, _i, locations_1, loc, one, loc_type, endpoint, request, response;
@@ -1401,7 +1468,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var auth_1 = __webpack_require__(24);
+var auth_1 = __webpack_require__(25);
 var service_frontend_1 = __webpack_require__(6);
 var service_1 = __webpack_require__(45);
 var parse_1 = __webpack_require__(44);
@@ -1740,6 +1807,16 @@ function parse_geocodes(response) {
     });
 }
 exports.parse_geocodes = parse_geocodes;
+var GeocodingData = (function () {
+    function GeocodingData() {
+    }
+    return GeocodingData;
+}());
+function parse_geocodings(response) {
+    var records = parse_1.parse_array(response);
+    return records;
+}
+exports.parse_geocodings = parse_geocodings;
 
 
 /***/ }),
@@ -1759,7 +1836,82 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var parse_1 = __webpack_require__(36);
+var parse_1 = __webpack_require__(4);
+var location_1 = __webpack_require__(7);
+var route_1 = __webpack_require__(21);
+var ParseError = (function (_super) {
+    __extends(ParseError, _super);
+    function ParseError() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return ParseError;
+}(Error));
+var RoutingData = (function () {
+    function RoutingData() {
+    }
+    return RoutingData;
+}());
+var Routing = (function () {
+    function Routing(name, description, endpoint, roles, doc) {
+        this.name = name;
+        this.description = description;
+        this.endpoint = endpoint;
+        this.roles = roles;
+        this.doc = doc;
+    }
+    return Routing;
+}());
+function parse_route(response) {
+    var data = parse_1.parse_response(response);
+    var legs = [];
+    for (var _i = 0, _a = data.legs; _i < _a.length; _i++) {
+        var leg_data = _a[_i];
+        var steps = [];
+        for (var _b = 0, _c = leg_data.steps; _b < _c.length; _b++) {
+            var step_data = _c[_b];
+            var points = [];
+            for (var _d = 0, _e = step_data.geometry.coordinates; _d < _e.length; _d++) {
+                var point_data = _e[_d];
+                var point = new location_1.Point(point_data[0], point_data[1]);
+                points.push(point);
+            }
+            var step = new route_1.Step(points, step_data.instructions, step_data.distance, step_data.duration);
+            steps.push(step);
+        }
+        var leg = new route_1.Leg(steps, leg_data.distance, leg_data.duration);
+        legs.push(leg);
+    }
+    var route = new route_1.Route(legs, data.distance, data.duration);
+    return route;
+}
+exports.parse_route = parse_route;
+function parse_routings(response) {
+    var records = parse_1.parse_array(response);
+    return records.map(function (record) {
+        return new Routing(record.name, record.description, record.endpoint, record.accessList, record.apidoc);
+    });
+}
+exports.parse_routings = parse_routings;
+
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var parse_1 = __webpack_require__(20);
 var GeometryData = (function () {
     function GeometryData() {
     }
@@ -1923,7 +2075,7 @@ exports.Step = Step;
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1974,7 +2126,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var client_1 = __webpack_require__(26);
+var client_1 = __webpack_require__(27);
 var transfer_1 = __webpack_require__(46);
 var xhr_1 = __webpack_require__(47);
 var BrowserTransfer = (function (_super) {
@@ -2075,7 +2227,7 @@ exports.BrowserClient = BrowserClient;
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2255,7 +2407,7 @@ exports.Frontend = Frontend;
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2278,7 +2430,7 @@ exports.hosts = {
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2328,7 +2480,7 @@ exports.LoginError = LoginError;
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2344,14 +2496,14 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var frontend_1 = __webpack_require__(22);
-var hosts_1 = __webpack_require__(23);
+var frontend_1 = __webpack_require__(23);
+var hosts_1 = __webpack_require__(24);
 var frontend_2 = __webpack_require__(14);
 var frontend_3 = __webpack_require__(12);
 var frontend_4 = __webpack_require__(10);
 var frontend_5 = __webpack_require__(11);
 var frontend_6 = __webpack_require__(13);
-var browser_es5_1 = __webpack_require__(21);
+var browser_es5_1 = __webpack_require__(22);
 var Because = (function (_super) {
     __extends(Because, _super);
     function Because(env, debug) {
@@ -2380,7 +2532,7 @@ exports.Because = Because;
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2405,7 +2557,7 @@ exports.ClientBase = ClientBase;
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2421,7 +2573,7 @@ exports.format = format;
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2483,7 +2635,7 @@ exports.Progress = Progress;
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2514,7 +2666,7 @@ exports.Basemap = Basemap;
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2522,44 +2674,11 @@ exports.Basemap = Basemap;
 Object.defineProperty(exports, "__esModule", { value: true });
 var service_1 = __webpack_require__(0);
 exports.endpoints = {
-    "metadata": new service_1.Endpoint("GET", "/basemaps/"),
+    "basemaps": new service_1.Endpoint("GET", "/basemaps/"),
+    "providers": new service_1.Endpoint("GET", "/basemaps/providers"),
+    "provider": new service_1.Endpoint("GET", "/basemaps/providers/{provider}"),
     "manage": new service_1.Endpoint("GET", "/basemaps/manage"),
 };
-
-
-/***/ }),
-/* 31 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var parse_1 = __webpack_require__(4);
-var basemap_1 = __webpack_require__(29);
-var ParseError = (function (_super) {
-    __extends(ParseError, _super);
-    function ParseError() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return ParseError;
-}(Error));
-function parse_basemaps(response) {
-    var records = parse_1.parse_array(response);
-    return records.map(function (record) {
-        return new basemap_1.Basemap(record.endpoint, record.standard, record.tileFormat, record.name, record.provider, record.attribution, record.accessList, record.description, record.thumbnail, record.styleUrl);
-    });
-}
-exports.parse_basemaps = parse_basemaps;
 
 
 /***/ }),
@@ -2579,8 +2698,43 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+var parse_1 = __webpack_require__(4);
+var basemap_1 = __webpack_require__(30);
+var ParseError = (function (_super) {
+    __extends(ParseError, _super);
+    function ParseError() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return ParseError;
+}(Error));
+function parse_basemaps(response) {
+    var records = parse_1.parse_array(response);
+    return records.map(function (record) {
+        return new basemap_1.Basemap(record.endpoint, record.standard, record.tileFormat, record.name, record.provider, record.attribution, record.accessList, record.description, record.thumbnail, record.styleUrl);
+    });
+}
+exports.parse_basemaps = parse_basemaps;
+
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
 var service_1 = __webpack_require__(0);
-var endpoints_1 = __webpack_require__(30);
+var endpoints_1 = __webpack_require__(31);
 var BasemapService = (function (_super) {
     __extends(BasemapService, _super);
     function BasemapService() {
@@ -2594,7 +2748,7 @@ exports.BasemapService = BasemapService;
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2602,6 +2756,7 @@ exports.BasemapService = BasemapService;
 Object.defineProperty(exports, "__esModule", { value: true });
 var service_1 = __webpack_require__(0);
 exports.endpoints = {
+    "metadata": new service_1.Endpoint("GET", "/geocodings"),
     "forward": new service_1.Endpoint("GET", "/geocode/{provider}/address/{address}"),
     "reverse": new service_1.Endpoint("GET", "/geocode/{provider}/address/x/{x}/y/{y}"),
     "batch": new service_1.Endpoint("GET", "/geocode/{provider}/batch"),
@@ -2610,7 +2765,7 @@ exports.endpoints = {
 
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2628,7 +2783,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var service_1 = __webpack_require__(0);
 var geocode_1 = __webpack_require__(18);
-var endpoints_1 = __webpack_require__(33);
+var endpoints_1 = __webpack_require__(34);
 var GeocodingService = (function (_super) {
     __extends(GeocodingService, _super);
     function GeocodingService() {
@@ -2643,7 +2798,7 @@ exports.GeocodingService = GeocodingService;
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2686,59 +2841,6 @@ exports.endpoints = {
 
 
 /***/ }),
-/* 36 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var parse_1 = __webpack_require__(4);
-var location_1 = __webpack_require__(7);
-var route_1 = __webpack_require__(20);
-var ParseError = (function (_super) {
-    __extends(ParseError, _super);
-    function ParseError() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return ParseError;
-}(Error));
-function parse_route(response) {
-    var data = parse_1.parse_response(response);
-    var legs = [];
-    for (var _i = 0, _a = data.legs; _i < _a.length; _i++) {
-        var leg_data = _a[_i];
-        var steps = [];
-        for (var _b = 0, _c = leg_data.steps; _b < _c.length; _b++) {
-            var step_data = _c[_b];
-            var points = [];
-            for (var _d = 0, _e = step_data.geometry.coordinates; _d < _e.length; _d++) {
-                var point_data = _e[_d];
-                var point = new location_1.Point(point_data[0], point_data[1]);
-                points.push(point);
-            }
-            var step = new route_1.Step(points, step_data.instructions, step_data.distance, step_data.duration);
-            steps.push(step);
-        }
-        var leg = new route_1.Leg(steps, leg_data.distance, leg_data.duration);
-        legs.push(leg);
-    }
-    var route = new route_1.Route(legs, data.distance, data.duration);
-    return route;
-}
-exports.parse_route = parse_route;
-
-
-/***/ }),
 /* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2756,7 +2858,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var service_1 = __webpack_require__(0);
-var endpoints_1 = __webpack_require__(35);
+var endpoints_1 = __webpack_require__(36);
 var RoutingServiceError = (function (_super) {
     __extends(RoutingServiceError, _super);
     function RoutingServiceError() {
@@ -2789,15 +2891,6 @@ var SearchArgs = (function () {
     }
     return SearchArgs;
 }());
-var DEFAULT_CATEGORIES = [
-    "LC",
-    "DOC",
-    "VID",
-    "BLOG",
-    "QA",
-    "DIS",
-    "PLUG",
-];
 exports.endpoints = {
     "search": new service_1.Endpoint("GET", "/search/", function (args) {
         return new query_1.Query({
@@ -2807,7 +2900,22 @@ exports.endpoints = {
             "si": (args.starting_page || 0).toString(),
         });
     }),
-    "search_data": new service_1.Endpoint("GET", "/search/data/"),
+    "search_open": new service_1.Endpoint("GET", "/search/open", function (args) {
+        return new query_1.Query({
+            "q": (args.text || "").toString(),
+            "cat": (args.categories || "ALL").toString(),
+            "c": (args.results_per_page || 20).toString(),
+            "si": (args.starting_page || 0).toString(),
+        });
+    }),
+    "search_data": new service_1.Endpoint("GET", "/search/data/", function (args) {
+        return new query_1.Query({
+            "startPeriod": args.start.toString(),
+            "endPeriod": args.end.toString(),
+            "searchBounds": args.bounds.toString(),
+            "terms": args.terms.toString(),
+        });
+    }),
     "categories": new service_1.Endpoint("GET", "/search/categories/"),
     "search_in_category": new service_1.Endpoint("GET", "/search/categories/{category}", function (args) {
         var q = args.q;
@@ -2952,6 +3060,13 @@ exports.endpoints = {
         return JSON.stringify({
             "username": args.username.toString(),
             "password": args.password.toString(),
+        });
+    }),
+    "get_oauth_token": new service_1.Endpoint("POST", "/token/oauth", undefined, undefined, function (args) {
+        return JSON.stringify({
+            "grant_type": "password",
+            "username": args.username,
+            "password": args.password,
         });
     }),
     "get_roles": new service_1.Endpoint("GET", "/token/entitlements"),
@@ -3242,7 +3357,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var response_1 = __webpack_require__(17);
-var progress_1 = __webpack_require__(28);
+var progress_1 = __webpack_require__(29);
 var TransferBase = (function () {
     function TransferBase(request, timeout) {
         this.request = request;
