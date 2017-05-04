@@ -20,7 +20,7 @@ export const endpoints = {
     ),
 
     "get_oauth_token": new Endpoint(
-        "POST": "/token/oauth",
+        "POST", "/token/oauth",
         undefined,
         undefined,
         (args) => {
