@@ -105,6 +105,7 @@ class Routing extends Component {
         this.handleStartChange = this.handleStartChange.bind(this);
         this.handleEndChange = this.handleEndChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.refreshRoutings = this.refreshRoutings.bind(this);
     }
 
     handleProviderChange(event) {
@@ -165,6 +166,17 @@ class Routing extends Component {
         }
     }
 
+    refreshRoutings() {
+        let bcs = this.props.bcs;
+        let promise = bcs.routing.get_routings();
+        promise.then((result) => {
+            console.log("refreshRoutings result", result);
+            // this.setState({
+            //     routing: result,
+            // });
+        });
+    }
+
     render() {
         return <div>
             <form onSubmit={this.handleSubmit}>
@@ -203,6 +215,11 @@ class Routing extends Component {
                 <br/>
                 <input type="submit" value="Submit" />
             </form>
+
+            <button onClick={this.refreshRoutings}>
+                Refresh Routing Services
+            </button>
+
             <div>
                 Status: {this.state.message}
             </div>
