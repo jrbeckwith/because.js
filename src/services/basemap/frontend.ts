@@ -20,9 +20,35 @@ export class BasemapFrontend extends ServiceFrontend {
         // TODO: does this need login?
         // await this.need_login();
 
-        const endpoint = this.service.endpoint("metadata");
+        const endpoint = this.service.endpoint("basemaps");
         const request = endpoint.request(this.host.url);
         const response = await this.send(request);
         return parse_basemaps(response);
+    }
+
+    async providers() {
+        const endpoint = this.service.endpoint("providers");
+        const request = endpoint.request(this.host.url);
+        const response = await this.send(request);
+        // TODO
+        return response;
+    }
+
+    async provider(name: string) {
+        const endpoint = this.service.endpoint("provider");
+        const request = endpoint.request(this.host.url, {
+            "provider": name,
+        });
+        const response = await this.send(request);
+        // TODO
+        return response;
+    }
+
+    async manage() {
+        const endpoint = this.service.endpoint("manage");
+        const request = endpoint.request(this.host.url);
+        const response = await this.send(request);
+        // TODO
+        return response;
     }
 }
