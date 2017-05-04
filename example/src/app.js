@@ -10,12 +10,15 @@ import { Search } from './search';
 
 
 class App extends Component {
-  constructor (props) {
+    constructor (props) {
         super(props);
         this.state = {
             bcs: new Because('test', true)  // env='test', debug=true
         };
-  }
+
+        // Make bcs object available to play with in console
+        window.bcs = this.state.bcs;
+    }
 
   render() {
     return (
