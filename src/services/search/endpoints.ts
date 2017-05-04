@@ -10,24 +10,13 @@ class SearchArgs {
 }
 
 
-// These should normally be pulled from the search endpoint
-const DEFAULT_CATEGORIES = [
-    "LC",
-    "DOC",
-    "VID",
-    "BLOG",
-    "QA",
-    "DIS",
-    "PLUG",
-];
-
-
 // bcs/bcs-search-service/README.md
 export const endpoints = {
 
+    // bcs-search-service/src/main/java/com/boundlessgeo/bcs/services/
+    // NativeSearchService.java
     "search": new Endpoint(
-        "GET",
-        "/search/",
+        "GET", "/search/",
         // TODO: not really happy with the untyped interface here... :/
         (args) => {
             return new Query({
@@ -39,15 +28,40 @@ export const endpoints = {
         },
     ),
 
+    // bcs/bcs-search-service/src/main/java/com/boundlessgeo/bcs/services/
+    // OpenSearchService.java
+    "search_open": new Endpoint(
+        "GET", "/search/open",
+        (args) => {
+            return new Query({
+                "q": (args.text || "").toString(),
+                "cat": (args.categories || "ALL").toString(),
+                "c": (args.results_per_page || 20).toString(),
+                "si": (args.starting_page || 0).toString(),
+            });
+        },
+    ),
+
+    // bcs/bcs-search-service/src/main/java/com/boundlessgeo/bcs/services/
+    // DataSearchService.java
+    // bcs/bcs-search-service/src/main/java/com/boundlessgeo/bcs/data/
+    // SpatialDataQuery.java
     "search_data": new Endpoint(
-        "GET",
-        "/search/data/",
+        "GET", "/search/data/",
+        // assuming this takes GET, probably query parameters
+        (args) => {
+            return new Query({
+                "startPeriod": args.start.toString(),
+                "endPeriod": args.end.toString(),
+                "searchBounds": args.bounds.toString(),
+                "terms": args.terms.toString(),
+            });
+        },
     ),
 
     // NativeSearchServiceTest.java nativeSearchCategory()
     "categories": new Endpoint(
-        "GET",
-        "/search/categories/",
+        "GET", "/search/categories/",
     ),
 
     // TODO: really no point in using this, is there?
