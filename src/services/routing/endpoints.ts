@@ -3,12 +3,6 @@ import { Query } from "../../query";
 
 
 export const endpoints = {
-    // JSON list
-    //  name: string
-    //  description: string
-    //  endpoint: string - has originx originy destinationx destinationy in it.
-    //  accessList: List[string]
-    //  apidoc: URL
     "metadata": new Endpoint(
         "GET", "/routings/",
     ),

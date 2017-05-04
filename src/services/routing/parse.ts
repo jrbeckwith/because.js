@@ -1,10 +1,33 @@
 import { Response } from "../../response";
-import { parse_response } from "../../parse";
+import { parse_response, parse_array } from "../../parse";
 import { Point } from "../../location";
+import { URL } from "../../http";
 import { Route, RouteData, Leg, Step } from "./route";
 
 
 class ParseError extends Error {}
+
+
+// These records provide endpoints which require (x,y) for origin and dest.
+class RoutingData {
+    name: string;
+    description: string;
+    //  endpoint: string - has originx originy destinationx destinationy in it.
+    endpoint: string;
+    accessList: string[];
+    apidoc: URL;
+}
+
+class Routing {
+    constructor (
+        public name: string,
+        public description: string,
+        public endpoint: string,
+        public roles: string[],
+        public doc: URL,
+    ) {
+    }
+}
 
 
 export function parse_route(response: Response): Route {
@@ -38,4 +61,17 @@ export function parse_route(response: Response): Route {
         data.duration,
     );
     return route;
+}
+
+export function parse_routings(response: Response): Routing[] {
+    const records = parse_array<RoutingData>(response);
+    return records.map((record) => {
+        return new Routing(
+            record.name,
+            record.description,
+            record.endpoint,
+            record.accessList,
+            record.apidoc as URL,
+        );
+    });
 }

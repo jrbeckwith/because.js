@@ -2,6 +2,7 @@ import { Frontend } from "../../frontend";
 import { Host } from "../../host";
 import { Query } from "../../query";
 import { ServiceFrontend } from "../../service_frontend";
+import { parse_routings } from "./parse";
 import { RoutingService } from "./service";
 import { Route } from "./route";
 
@@ -14,6 +15,13 @@ export class RoutingFrontend extends ServiceFrontend {
     constructor (frontend: Frontend, host: Host) {
         const service = new RoutingService();
         super(service, frontend, host);
+    }
+
+    async get_routings() {
+        const endpoint = this.service.endpoint("metadata");
+        const request = endpoint.request(this.host.url, {});
+        const response = await this.send(request);
+        return parse_routings(response);
     }
 
     /**
