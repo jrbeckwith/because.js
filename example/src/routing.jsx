@@ -1,24 +1,22 @@
 import React, { Component } from "react";
+import TextField from 'material-ui/TextField';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
+import Snackbar from 'material-ui/Snackbar';
+import RaisedButton from 'material-ui/RaisedButton';
+import {List, ListItem} from 'material-ui/List';
+import Subheader from 'material-ui/Subheader';
+import { textFieldStyle } from './styles';
 
 
 // eslint-disable-next-line
 function render_distance_km(distance) {
-    let km = distance / 1000.0;
-    return (
-        <span className="value distance">
-            {km.toFixed(2)}km
-        </span>
-    );
+    return (distance / 1000.0).toFixed(2) + " km";
 }
 
 
 function render_distance_mi(distance) {
-    let mi = distance / 1609.34;
-    return (
-        <span className="value distance">
-            {mi.toFixed(2)}mi
-        </span>
-    );
+    return (distance / 1609.34).toFixed(2) + " mi";
 }
 
 
@@ -44,13 +42,22 @@ function render_step(step, key) {
         return undefined;
     }
 
-    return <li key={key} className="step">
-        <span className="instructions">{step.instructions}.</span>
+    return <ListItem
+        disabled={true}
+        key={key}
+        className="step"
+    >
+        <span className="instructions">{step.instructions}</span>
         <div className="attributes">
-            {render_distance_mi(step.distance)}
-            {render_duration(step.duration)}
+            {step.distance ?
+                <span>
+                {render_distance_mi(step.distance)}
+                {render_duration(step.duration)}
+                </span>
+                : null
+            }
         </div>
-    </li>;
+    </ListItem>;
 }
 
 
@@ -58,16 +65,28 @@ function render_leg(leg, key) {
     if (!leg) {
         return undefined;
     }
-    return <li key={key} className="leg">
-        <span>Leg</span>
-        <div className="attributes">
-            {render_distance_mi(leg.distance)}
-            {render_duration(leg.duration)}
-        </div>
-        <ol>
-            {leg.steps.map(render_step)}
-        </ol>
-    </li>;
+    let distance = render_distance_mi(leg.distance);
+    let duration = render_duration(leg.duration);
+    let index = key + 1;
+    return <ListItem
+        key={key}
+        style={{
+        }}
+        primaryText={
+            <span style={{
+                marginRight: "1.5em",
+            }}>
+            Leg {index}:&nbsp;{distance},&nbsp;{duration}
+            </span>
+        }
+        initiallyOpen={true}
+        primaryTogglesNestedList={true}
+        className="leg"
+        nestedItems={
+            leg.steps.map(render_step)
+        }
+    >
+    </ListItem>;
 }
 
 
@@ -76,48 +95,67 @@ function render_route(route) {
         return undefined;
     }
     return <div className="route">
-        <span>Route
-        </span>
-        <div className="attributes">
-            {render_distance_mi(route.distance)}
-            {render_duration(route.duration)}
-        </div>
-        <ol>
+        <List style={{
+        }}>
             {route.legs.map(render_leg)}
-        </ol>
+        </List>
     </div>;
 }
 
 
-class Routing extends Component {
+export default class Routing extends Component {
     constructor (props) {
         super(props);
         this.state = {
+            state: "waiting",
             message: "let's route!",
             route: "",
-            provider: "mapbox",
+            provider: "mapzen",
             start: "roma",
             end: "milano",
+            errors: {
+                "start": "",
+                "end": "",
+            },
+            query: undefined,
             // start: "1530 davis rd, lawrence, ks",
             // end: "1600 pennsylvania ave., washington, dc",
         };
         // Ensure handle* methods have the right `this`
+        this.handleProviderChange = this.handleProviderChange.bind(this);
         this.handleStartChange = this.handleStartChange.bind(this);
         this.handleEndChange = this.handleEndChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.refreshRoutings = this.refreshRoutings.bind(this);
     }
 
-    handleProviderChange(event) {
-        this.setState({provider: event.target.value});
+    handleProviderChange(event, bleh, blargh) {
+        var provider = event.target.value || blargh;
+        this.setState({
+            provider: provider
+        });
     }
 
     handleStartChange(event) {
-        this.setState({start: event.target.value});
+        var start = event.target.value;
+        this.setState({
+            start: start,
+            errors: {
+                start: start ? "" : "start required",
+                end: "",
+            },
+        });
     }
 
     handleEndChange(event) {
-        this.setState({end: event.target.value});
+        var end = event.target.value;
+        this.setState({
+            end: end,
+            errors: {
+                end: end ? "" : "end required",
+                start: "",
+            },
+        });
     }
 
     handleSubmit(event) {
@@ -146,13 +184,20 @@ class Routing extends Component {
             this.setState({message: "submit valid provider."});
         }
         else {
-            this.setState({message: "routing..."});
             let waypoints = [start, end];
             let promise = bcs.routing.route(waypoints, provider);
+            this.setState({
+                state: "started",
+                query: {
+                    provider: provider,
+                    start: start,
+                    end: end,
+                }
+            });
             promise.then((route) => {
                 console.log("route: success", route);
                 this.setState({
-                    message: `successfully retrieved a route.`,
+                    state: "done",
                     route: route
                 });
 
@@ -178,57 +223,103 @@ class Routing extends Component {
     }
 
     render() {
-        return <div>
-            <form onSubmit={this.handleSubmit}>
-                <label>
-                    <div className="input_label_div">
-                        <span>Provider</span>
+        var query_repr = (
+            this.state.route
+            ? `from "${this.state.query.start}" to "${this.state.query.end}"`
+            : ""
+        );
+        return (
+            <div style={{
+                display: "flex",
+                flexDirection: "row",
+            }}>
+            <form onSubmit={this.handleSubmit} style={{
+                display: "flex",
+                flexDirection: "column",
+            }}>
+                {this.props.message && 
+                    <div className="message">
+                        {this.props.message}
                     </div>
-                    <select
+                }
+
+                <label>
+
+                    <SelectField
+                        autoWidth={false}
+                        floatingLabelText="Provider"
                         value={this.state.provider}
                         onChange={this.handleProviderChange}
                     >
-                        <option value="mapbox">Mapbox</option>
-                        <option value="mapzen">Mapzen</option>
-                    </select>
+                        <MenuItem value="mapbox" primaryText="Mapbox" />
+                        <MenuItem value="mapzen" primaryText="Mapzen" />
+                    </SelectField>
+
                 </label>
                 <br/>
                 <label>
-                    <div className="input_label_div">
-                        <span>Start</span>
-                    </div>
-                    <input className="address" type="text"
+
+                    <TextField
+                        type="text"
+                        name="start"
+                        style={textFieldStyle}
+                        errorText={this.state.errors.start}
+                        floatingLabelText="Starting Address"
+                        floatingLabelFixed={true}
+                        hintText="Starting Address"
                         value={this.state.start}
                         onChange={this.handleStartChange}
                     />
+
                 </label>
                 <br/>
                 <label>
-                    <div className="input_label_div">
-                        <span>End</span>
-                    </div>
-                    <input className="address" type="text"
+
+                    <TextField
+                        type="text"
+                        name="end"
+                        style={textFieldStyle}
+                        errorText={this.state.errors.end}
+                        floatingLabelText="End Address"
+                        floatingLabelFixed={true}
+                        hintText="End Address"
                         value={this.state.end}
                         onChange={this.handleEndChange}
                     />
+
                 </label>
                 <br/>
-                <input type="submit" value="Submit" />
+                <RaisedButton
+                    secondary={true}
+                    type="submit"
+                    label="Get Route" 
+                />
             </form>
 
-            <button onClick={this.refreshRoutings}>
-                Refresh Routing Services
-            </button>
+            <Snackbar
+                open={this.state.state === "started"}
+                message={"Routing..."}
+                autoHideDuration={4000}
+            />
+            <Snackbar
+                open={this.state.state === "done"}
+                message={"Retrieved route"}
+                autoHideDuration={4000}
+            />
 
             <div>
-                Status: {this.state.message}
-            </div>
-            <div>
+                {query_repr && 
+                <Subheader>
+                    Route {query_repr}
+                </Subheader>
+                }
                 {render_route(this.state.route)}
             </div>
-        </div>;
+        </div>
+        );
     }
+            // <button onClick={this.refreshRoutings}>
+            //     Refresh Routing Services
+            // </button>
+
 }
-
-
-export default Routing;

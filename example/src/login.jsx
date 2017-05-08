@@ -1,13 +1,37 @@
 import React, { Component } from "react";
+import TextField from 'material-ui/TextField';
+import {List, ListItem} from 'material-ui/List';
+import Subheader from 'material-ui/Subheader';
+import Snackbar from 'material-ui/Snackbar';
+import RaisedButton from 'material-ui/RaisedButton';
+import { textFieldStyle } from './styles';
 
 
-class Login extends Component {
+function dedupe(items) {
+    var seen = {};
+    var result = [];
+    for (let item of items) {
+        if (!seen[item]) {
+            result.push(item);
+        }
+        seen[item] = true;
+    }
+    return result;
+}
+
+
+export default class Login extends Component {
     constructor (props) {
         super(props);
         this.state = {
-            message: "not logged in.",
+            state: "waiting",
+            jwt: "",
             username: "",
             password: "",
+            errors: {
+                "username": "",
+                "password": "",
+            }
         };
         // Ensure handle* methods have the right `this`
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -17,12 +41,24 @@ class Login extends Component {
 
     handleUsernameChange(event) {
         let username = event.target.value;
-        this.setState({username: username});
+        this.setState({
+            username: username,
+            errors: {
+                username: username ? "" : "username is required",
+                password: this.state.errors.password,
+            }
+        });
     }
 
     handlePasswordChange(event) {
         let password = event.target.value;
-        this.setState({password: password});
+        this.setState({
+            password: password,
+            errors: {
+                password: password ? "" : "password is required",
+                username: this.state.errors.username,
+            }
+        });
     }
 
     handleSubmit(event) {
@@ -37,12 +73,16 @@ class Login extends Component {
             this.setState({message: "submit valid username and password."});
         }
         else {
-            this.setState({message: "logging in..."});
             let bcs = this.props.bcs;
+            this.setState({
+                state: "started",
+            });
             let promise = bcs.login(username, password);
             promise
             .then((jwt) => {
-                this.setState({message: `logged in as ${jwt.email}.`});
+                this.setState({
+                    state: "done",
+                });
                 console.log("login: success", jwt);
 
                 // This is only for playing around in the console.
@@ -66,53 +106,92 @@ class Login extends Component {
     render() {
         let bcs = this.props.bcs;
         let roles = bcs.jwt ? bcs.jwt.roles : [];
-        let roleList = roles.map((role) => <li key={role}>{role}</li>);
+        let roleList = dedupe(roles).map(
+            (role) => {
+                return <ListItem
+                    disabled={true}
+                    key={role}
+                >
+                    {role}
+                </ListItem>;
+            }
+        );
         return (
-            <div>
-                <form onSubmit={this.handleSubmit}>
-                    <label>
-                        <div className="inputLabel">
-                            <span>Username</span>
+            <div style={{
+                display: "flex",
+                flexDirection: "row",
+            }}>
+                <form onSubmit={this.handleSubmit} style={{
+                    display: "flex",
+                    flexDirection: "column",
+                }}>
+                    {this.props.message && 
+                        <div className="message">
+                           {this.props.message}
                         </div>
-                        <input
+                    }
+
+                    <label>
+                        <TextField
                             type="text"
                             name="username"
+                            style={textFieldStyle}
+                            errorText={this.state.errors.username}
+                            floatingLabelText="Boundless Connect Username"
+                            floatingLabelFixed={true}
+                            hintText="Connect Username"
                             value={this.state.username}
                             onChange={this.handleUsernameChange}
                         />
                     </label>
                     <br/>
                     <label>
-                        <div className="inputLabel">
-                            <span>Password</span>
-                        </div>
-                        <input
+
+                        <TextField
                             type="password"
                             name="password"
+                            style={textFieldStyle}
+                            errorText={this.state.errors.password}
+                            floatingLabelText="Boundless Connect Password"
+                            hintText="Connect Password"
                             value={this.state.password}
                             onChange={this.handlePasswordChange}
                         />
+
                     </label>
                     <br/>
-                    <input type="submit" value="Submit" />
+                    <RaisedButton
+                        type="submit"
+                        label="Log in" 
+                        secondary={true}
+                        style={{
+                            backgroundColor: "#558B2F"
+                        }}
+                    />
                 </form>
-                <div className="status">
-                    Status: {this.state.message}
-                </div>
                 <div className="roles">
                     {roleList.length > 0 &&
                         <div>
-                            <span>Roles:</span>
-                            <ul>
+                            <Subheader>
+                                Roles for {this.state.username}
+                            </Subheader>
+                            <List>
                                 {roleList}
-                            </ul>
+                            </List>
                         </div>
                     }
                 </div>
+                <Snackbar
+                    open={this.state.state === "started"}
+                    message={`Logging in as ${this.state.username}...`}
+                    autoHideDuration={4000}
+                />
+                <Snackbar
+                    open={this.state.state === "done"}
+                    message={`Logged in as ${this.state.username}`}
+                    autoHideDuration={4000}
+                />
             </div>
        );
     }
 }
-
-
-export default Login;

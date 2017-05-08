@@ -1,4 +1,12 @@
 import React, { Component } from "react";
+import TextField from 'material-ui/TextField';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
+import Snackbar from 'material-ui/Snackbar';
+import RaisedButton from 'material-ui/RaisedButton';
+import {List, ListItem} from 'material-ui/List';
+import Subheader from 'material-ui/Subheader';
+import { textFieldStyle } from './styles';
 
 
 function render_geocode(geocode, key) {
@@ -6,27 +14,36 @@ function render_geocode(geocode, key) {
         return undefined;
     }
 
-    return (<li key={key} className="geocode">
-        <div className="location">
-            ({geocode.x}, {geocode.y}) {geocode.address}
-        </div>
-        <div className="attributes">
-            <div className="attribute score">
-                <span className="key">score</span>
-                <span className="value">{geocode.score}</span>
-            </div>
-        </div>
-    </li>);
+    return (
+        <ListItem
+            disabled={true}
+            primaryText={geocode.address}
+            secondaryText={
+                <div>
+                <span>Location: ({geocode.x}, {geocode.y})</span>
+                <br/>
+                <span>Score: {geocode.score}</span>
+                </div>
+            }
+            secondaryTextLines={2}
+            key={key}
+            className="geocode"
+        >
+    </ListItem>);
 }
 
 
-class Geocoding extends Component {
+export default class Geocoding extends Component {
     constructor (props) {
         super(props);
         this.state = {
-            message: "let's geocode!",
+            errors: {
+                address: "",
+            },
+            query: undefined,
+            state: "waiting",
             provider: "mapbox",
-            address: "1600 pennsylvania ave., washington, dc",
+            address: "1600 pennsylvania ave SE, washington, dc",
             geocodes: [],
         };
         // Ensure handle* methods have the right `this`
@@ -35,8 +52,11 @@ class Geocoding extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleProviderChange(event) {
-        this.setState({provider: event.target.value});
+    handleProviderChange(event, bleh, blargh) {
+        var provider = event.target.value || blargh;
+        this.setState({
+            provider: provider
+        });
     }
 
     handleAddressChange(event) {
@@ -54,21 +74,26 @@ class Geocoding extends Component {
 
         if (!bcs) {
             this.setState({
+                state: "error",
                 message: "ensure the bcs prop is passed to this component."
             });
         }
         else if (!bcs.jwt) {
             this.setState({message: "log in first."});
         }
-        else if (!address) {
-            this.setState({message: "submit valid address."});
-        }
         else {
-            this.setState({message: "geocoding..."});
             let promise = bcs.geocoding.geocode(address, provider);
+            this.setState({
+                state: "started",
+                query: {
+                    "provider": provider,
+                    "address": address,
+                }
+            });
             promise.then((geocodes) => {
                 console.log("geocoding: success", geocodes);
                 this.setState({
+                    state: "done",
                     message: (
                         `successfully retrieved ${geocodes.length} geocode(s).` 
                     ),
@@ -83,50 +108,88 @@ class Geocoding extends Component {
                 this.setState({message: `geocoding error: ${error}.`});
             });
         }
-
     }
 
     render() {
+        var query_repr = (
+            this.state.geocodes.length > 0
+            ? `"${this.state.query.address}"`
+            : ""
+        );
         return (
-            <div>
-                <form onSubmit={this.handleSubmit}>
-                    <label>
-                        <div className="inputLabel">
-                            <span>Provider</span>
+            <div style={{
+                display: "flex",
+                flexDirection: "row",
+            }}>
+                <form onSubmit={this.handleSubmit} style={{
+                    display: "flex",
+                    flexDirection: "column",
+                }}>
+
+                    {this.props.message && 
+                        <div className="message">
+                           {this.props.message}
                         </div>
-                        <select
+                    }
+
+                    <label>
+                        <SelectField
+                            floatingLabelText="Provider"
                             value={this.state.provider}
                             onChange={this.handleProviderChange}
                         >
-                            <option value="mapbox">Mapbox</option>
-                            <option value="mapzen">Mapzen</option>
-                        </select>
+                            <MenuItem value="mapbox" primaryText="Mapbox" />
+                            <MenuItem value="mapzen" primaryText="Mapzen" />
+                        </SelectField>
                     </label>
+
                     <br/>
+
                     <label>
-                        <div className="inputLabel">
-                            <span>Address</span>
-                        </div>
-                        <input className="address" type="text"
+                        <TextField
+                            type="text"
+                            name="address"
+                            style={textFieldStyle}
+                            errorText={this.state.errors.address}
+                            floatingLabelText="Address"
+                            floatingLabelFixed={true}
+                            hintText="Address"
                             value={this.state.address}
                             onChange={this.handleAddressChange}
                         />
                     </label>
+
                     <br/>
-                    <input type="submit" value="Submit" />
+
+                    <RaisedButton
+                        secondary={true}
+                        type="submit"
+                        label="Geocode"
+                    />
                 </form>
-                <div className="status">
-                    Status: {this.state.message}
-                </div>
-                <div className="geocodes">
-                    <ul>
+
+                <Snackbar
+                    open={this.state.state === "started"}
+                    message={"Geocoding..."}
+                    autoHideDuration={4000}
+                />
+                <Snackbar
+                    open={this.state.state === "done"}
+                    message={`Retrieved ${this.state.geocodes.length} geocodes`}
+                    autoHideDuration={4000}
+                />
+
+            <div className="geocodes">
+                {query_repr && 
+                <Subheader>
+                    Geocodes for {query_repr}
+                </Subheader>
+                }
+                    <List>
                         {this.state.geocodes.map(render_geocode)}
-                    </ul>
+                    </List>
                 </div>
             </div>
         );
     }
 }
-
-
-export default Geocoding;

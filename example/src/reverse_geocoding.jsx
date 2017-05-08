@@ -1,32 +1,51 @@
 import React, { Component } from "react";
+import TextField from 'material-ui/TextField';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
+import Snackbar from 'material-ui/Snackbar';
+import RaisedButton from 'material-ui/RaisedButton';
+import {List, ListItem} from 'material-ui/List';
+import Subheader from 'material-ui/Subheader';
+import { textFieldStyle } from './styles';
 
 
-function render_geocode(geocode, key) {
+function renderGeocode(geocode, key) {
     if (!geocode) {
         return undefined;
     }
 
-    return (<li key={key} className="geocode">
-        <div className="location">
-            {geocode.address} ({geocode.x}, {geocode.y})
-        </div>
-        <div className="attributes">
-            <div className="attribute score">
-                <span className="key">score</span>
-                <span className="value">{geocode.score}</span>
-            </div>
-        </div>
-    </li>);
+    return (
+        <ListItem
+            disabled={true}
+            primaryText={<span>Location: ({geocode.x}, {geocode.y})</span>}
+            secondaryText={
+                <div>
+                    <span>Address: {geocode.address}</span>
+                    <br/>
+                    <span>Score: {geocode.score}</span>
+                </div>
+            }
+            secondaryTextLines={2}
+            key={key}
+            className="geocode"
+        >
+        </ListItem>
+    );
 }
 
 
-class ReverseGeocoding extends Component {
+export default class ReverseGeocoding extends Component {
     constructor (props) {
         super(props);
         this.state = {
-            message: "let's geocode! in reverse!",
+            errors: {
+                lat: "",
+                lon: "",
+            },
+            state: "waiting",
             lat: "0.0",
             lon: "0.0",
+            query: undefined,
             provider: "mapzen",
             geocodes: [],
         };
@@ -37,8 +56,11 @@ class ReverseGeocoding extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleProviderChange(event) {
-        this.setState({provider: event.target.value});
+    handleProviderChange(event, bleh, blargh) {
+        var provider = event.target.value || blargh;
+        this.setState({
+            provider: provider
+        });
     }
 
     handleLatChange(event) {
@@ -61,6 +83,7 @@ class ReverseGeocoding extends Component {
 
         if (!bcs) {
             this.setState({
+                state: "error",
                 message: "ensure the bcs prop is passed to this component."
             });
         }
@@ -68,12 +91,19 @@ class ReverseGeocoding extends Component {
             this.setState({message: "log in first."});
         }
         else {
-            this.setState({message: "geocoding..."});
             let promise = bcs.geocoding.reverse_geocode([lat, lon], provider);
-            console.log("promise", promise);
+            this.setState({
+                state: "started",
+                query: {
+                    "provider": provider,
+                    "lat": lat,
+                    "lon": lon,
+                }
+            });
             promise.then((geocodes) => {
                 console.log("geocoding: success", geocodes);
                 this.setState({
+                    state: "done",
                     message: (
                         `successfully retrieved ${geocodes.length} geocode(s).` 
                     ),
@@ -91,57 +121,100 @@ class ReverseGeocoding extends Component {
     }
 
     render() {
+        var query_repr = (
+            this.state.geocodes.length > 0
+            ? `(${this.state.query.lat}, ${this.state.query.lon})`
+            : ""
+        )
         return (
-            <div>
-                <form onSubmit={this.handleSubmit}>
+            <div style={{
+                display: "flex",
+                flexDirection: "row",
+            }}>
+                <form onSubmit={this.handleSubmit} style={{
+                    display: "flex",
+                    flexDirection: "column",
+                }}>
+
+                    {this.props.message && 
+                        <div className="message">
+                           {this.props.message}
+                        </div>
+                    }
 
                     <label>
-                        <div className="input_label_div">
-                            <span>Provider</span>
-                        </div>
-                        <select
+                        <SelectField
+                            floatingLabelText="Provider"
                             value={this.state.provider}
                             onChange={this.handleProviderChange}
                         >
-                            <option value="mapbox">Mapbox</option>
-                            <option value="mapzen">Mapzen</option>
-                        </select>
+                            <MenuItem value="mapbox" primaryText="Mapbox" />
+                            <MenuItem value="mapzen" primaryText="Mapzen" />
+                        </SelectField>
                     </label>
+
                     <br/>
+
                     <label>
-                        <div className="input_label_div">
-                            <span>Latitude</span>
-                        </div>
-                        <input type="text" className="decimal"
+                        <TextField
+                            type="text"
+                            name="lat"
+                            style={textFieldStyle}
+                            errorText={this.state.errors.lat}
+                            floatingLabelText="Latitude"
+                            floatingLabelFixed={true}
+                            hintText="Latitude"
                             value={this.state.lat}
                             onChange={this.handleLatChange}
                         />
                     </label>
-                    <br/>
+
                     <label>
-                        <div className="input_label_div">
-                            <span>Longitude</span>
-                        </div>
-                        <input type="text" className="decimal"
+                        <TextField
+                            type="text"
+                            name="lon"
+                            style={textFieldStyle}
+                            errorText={this.state.errors.lon}
+                            floatingLabelText="Longitude"
+                            floatingLabelFixed={true}
+                            hintText="Longitude"
                             value={this.state.lon}
                             onChange={this.handleLonChange}
                         />
                     </label>
                     <br/>
-                    <input type="submit" value="Submit" />
+
+                    <RaisedButton
+                        secondary={true}
+                        type="submit"
+                        label="Reverse Geocode"
+                    />
                 </form>
-                <div>
-                    Status: {this.state.message}
-                </div>
-                <div className="geocodes">
-                    <ul>
-                        {this.state.geocodes.map(render_geocode)}
-                    </ul>
+
+                <Snackbar
+                    open={this.state.state === "started"}
+                    message={"Reverse Geocoding..."}
+                    autoHideDuration={4000}
+                />
+                <Snackbar
+                    open={this.state.state === "done"}
+                    message={`Retrieved ${this.state.geocodes.length} reverse geocodes`}
+                    autoHideDuration={4000}
+                />
+
+            <div className="geocodes" style={{
+                whiteSpace: "nowrap",
+            }}>
+                {query_repr && 
+                <Subheader>
+                    Reverse geocodes for {query_repr}
+                </Subheader>
+                }
+                    <List>
+                        {this.state.geocodes.map(renderGeocode)}
+                    </List>
                 </div>
             </div>
-       );
+        );
     }
 }
-
-
-export default ReverseGeocoding;

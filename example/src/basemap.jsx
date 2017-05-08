@@ -1,16 +1,46 @@
 import React, { Component } from "react";
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
+import Snackbar from 'material-ui/Snackbar';
+import RaisedButton from 'material-ui/RaisedButton';
+import {List, ListItem} from 'material-ui/List';
+import Subheader from 'material-ui/Subheader';
 
+
+// Canonical capitalizations for UI
+var pretty_provider_names = {
+    "planet": "Planet",
+    "mapbox": "Mapbox",
+    "mapzen": "Mapzen",
+    "boundless": "Boundless",
+    "digitalglobe": "Digital Globe",
+};
 
 function renderBasemap(basemap, key) {
     if (!basemap) {
         return undefined;
     }
-    return (<li key={key} className="basemap">
-        <h3>{basemap.title}</h3>
-        {basemap.description}
-        <br/>
-        ({basemap.standard}, {basemap.tile_format}, {basemap.endpoint})
-    </li>);
+    return (
+        <ListItem
+            disabled={true}
+            primaryText={
+                <span>{basemap.title}</span>
+            }
+            secondaryText={
+                <div>
+                    <span>
+                        {basemap.description}
+                    </span>
+                    <br/>
+                    <span>({basemap.standard}, {basemap.tile_format}, {basemap.endpoint})
+                    </span>
+                </div>
+            }
+            secondaryTextLines={2}
+            key={key}
+            className="basemap"
+        />
+    );
 }
 
 
@@ -18,7 +48,9 @@ export class Basemap extends Component {
     constructor (props) {
         super(props);
         this.state = {
-            message: "let's basemap!",
+            errors: {
+            },
+            state: "waiting",
             providers: {},
             provider: "all",
             basemaps: [],
@@ -27,9 +59,10 @@ export class Basemap extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleProviderChange(event) {
+    handleProviderChange(event, bleh, blargh) {
+        var provider = event.target.value || blargh;
         this.setState({
-            provider: event.target.value
+            provider: provider
         });
     }
 
@@ -38,7 +71,6 @@ export class Basemap extends Component {
         event.preventDefault();
 
         console.log("basemap: handleSubmit", this.state, this.props);
-
         let bcs = this.props.bcs;
 
         if (!bcs) {
@@ -50,14 +82,14 @@ export class Basemap extends Component {
         //     this.setState({message: "log in first."});
         // }
         else {
-            this.setState({message: "basemapping..."});
             let promise = bcs.basemaps.basemaps();
+            this.setState({
+                state: "started",
+            });
             promise.then((basemaps) => {
                 console.log("basemaps: success", basemaps);
                 this.setState({
-                    message: (
-                        `successfully retrieved ${basemaps.length} basemap(s).` 
-                    ),
+                    state: "done",
                     basemaps: basemaps
                 });
 
@@ -85,16 +117,18 @@ export class Basemap extends Component {
     render() {
 
         function createProviderItems(providers) {
-            let provider_options = [
-                <option key="all" value="All">All</option>
-            ];
-            let provider_keys = Object.keys(providers);
-            for (let key of provider_keys) {
+            providers["all"] = "all";
+
+            let provider_options = Object.keys(providers).map((key) => {
                 let value = providers[key];
-                let item = <option key={key} value={key}>{value}</option>;
-                provider_options.push(item);
-            }
-            console.log("provider_options", provider_options);
+                let pretty = pretty_provider_names[value] || value;
+                // let item = <option key={key} value={key}>{value}</option>;
+                return <MenuItem
+                    key={key}
+                    value={key}
+                    primaryText={pretty}
+                />;
+            });
             return provider_options;
         }
 
@@ -113,32 +147,71 @@ export class Basemap extends Component {
             return true;
         }
         let basemaps = this.state.basemaps.filter(currentFilter.bind(this));
-        let basemapItems = basemaps.map(renderBasemap);
 
         return (
-            <div>
-                <form onSubmit={this.handleSubmit}>
-                    <input type="submit" value="Submit" />
-                </form>
-                <div className="status">
-                    Status: {this.state.message}
-                </div>
-                <div className="basemapFilter">
-                    <label>
-                        <div className="inputLabel">
-                            <span>Provider</span>
+            <div style={{
+                display: "flex",
+                flexDirection: "row",
+            }}>
+
+                <form onSubmit={this.handleSubmit} style={{
+                    display: "flex",
+                    flexDirection: "column",
+                }}>
+
+                    {this.props.message && 
+                        <div className="message">
+                           {this.props.message}
                         </div>
-                        <select
-                            value={this.state.provider}
-                            onChange={this.handleProviderChange}
-                        >
-                            {providerItems}
-                        </select>
-                    </label>
-                </div>
+                    }
+
+                    <RaisedButton 
+                        secondary={true}
+                        type="submit"
+                        label="List Basemaps"
+                    />
+                </form>
+
+                <Snackbar
+                    open={this.state.state === "started"}
+                    message={"Finding basemaps..."}
+                    autoHideDuration={4000}
+                />
+
+                <Snackbar
+                    open={this.state.state === "done"}
+                    message={`Found ${this.state.basemaps.length} basemaps`}
+                    autoHideDuration={4000}
+                />
+
                 <div className="basemaps">
-                    <ul>{basemapItems}
-                    </ul>
+                    <span>
+                        {this.state.basemaps.length > 0 &&
+                                <Subheader style={{
+                                    display: "flex",
+                                    flexDirection: "row",
+                                }}>
+                                    <div style={{
+                                        marginTop: "1.1em",
+                                    }}>
+                                    Basemaps from provider:&nbsp;
+                                    </div>
+                                    <SelectField
+                                        style={{
+                                            marginTop: "1.1em",
+                                            fontSize: "14px",
+                                        }}
+                                        value={this.state.provider}
+                                        onChange={this.handleProviderChange}
+                                    >
+                                        {providerItems}
+                                    </SelectField>
+                                </Subheader>
+                        }
+                    </span>
+                    <List>
+                        {basemaps.map(renderBasemap)}
+                    </List>
                 </div>
             </div>
         );

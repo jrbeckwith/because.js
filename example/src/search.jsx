@@ -1,4 +1,12 @@
 import React, { Component } from "react";
+import TextField from 'material-ui/TextField';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
+import Snackbar from 'material-ui/Snackbar';
+import RaisedButton from 'material-ui/RaisedButton';
+import {List, ListItem} from 'material-ui/List';
+import Subheader from 'material-ui/Subheader';
+import { textFieldStyle } from './styles';
 
 
 function renderResult(result, key) {
@@ -6,35 +14,49 @@ function renderResult(result, key) {
         return undefined;
     }
 
-    return (<li key={key} className="result">
-        <a href={result.url}>{result.title}</a>
-        <div>
-            <span>
-                {result.description}
-            </span>
-        </div>
-        <div className="attributes">
-            <div className="attribute category">
-                <span className="key">category</span>
-                <span className="value">{result.category}</span>
-            </div>
-            <div className="attribute role">
-                <span className="key">role</span>
-                <span className="value">{result.role}</span>
-            </div>
-        </div>
-    </li>);
+    return (
+        <ListItem
+            disabled={true}
+            primaryText={
+                <a
+                    href={result.url}
+                    style={{
+                        color: "#f68c4f",
+                    }}
+                >{result.title}
+                    </a>
+            }
+            secondaryText={
+                <div>
+                    <span>
+                        {result.description}
+                    </span>
+                    <br/>
+                    <span>Category: {result.category}</span>
+                    <span>Role: {result.role}</span>
+                </div>
+            }
+            secondaryTextLines={2}
+            key={key}
+            className="result"
+        >
+        </ListItem>
+    );
 }
 
 
-export class Search extends Component {
+export default class Search extends Component {
     constructor (props) {
         super(props);
         this.state = {
-            message: "let's search!",
+	    errors: {
+                text: "",
+            },
+            query: undefined,
+            state: "waiting",
             category: "ALL",
             categories: {
-                "ALL": "Any Category",
+                "ALL": "Any",
             },
             text: "geoserver",
             results: [],
@@ -43,15 +65,17 @@ export class Search extends Component {
         this.handleTextChange = this.handleTextChange.bind(this);
         this.handleCategoryChange = this.handleCategoryChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.refreshCategories = this.refreshCategories.bind(this);
+        this.updateCategories = this.updateCategories.bind(this);
     }
 
     handleTextChange(event) {
         this.setState({text: event.target.value});
     }
 
-    handleCategoryChange(event) {
-        this.setState({category: event.target.value});
+    handleCategoryChange(event, bleh, blargh) {
+        this.setState({
+            category: blargh
+        });
     }
 
     handleSubmit(event) {
@@ -65,6 +89,7 @@ export class Search extends Component {
 
         if (!bcs) {
             this.setState({
+                state: "error",
                 message: "ensure the bcs prop is passed to this component."
             });
         }
@@ -72,15 +97,20 @@ export class Search extends Component {
         // else if (!bcs.jwt) {
         //     this.setState({message: "log in first."});
         // }
-        else if (!text) {
-            this.setState({message: "submit some text to search for."});
-        }
+        //}
         else {
-            this.setState({message: "searching..."});
             let promise = bcs.search.search(text, [category]);
+            this.setState({
+                state: "started",
+                query: {
+                    "category": category,
+                    "text": text,
+                }
+            });
             promise.then((results) => {
                 console.log("search: success", results);
                 this.setState({
+                    state: "done",
                     message: (
                         `successfully retrieved ${results.length} result(s).` 
                     ),
@@ -98,7 +128,7 @@ export class Search extends Component {
 
     }
 
-    refreshCategories() {
+    updateCategories() {
         let bcs = this.props.bcs;
         let promise = bcs.search.get_categories();
         promise.then((result) => {
@@ -109,68 +139,117 @@ export class Search extends Component {
                     one[record.key] = record.description;
                 }
             }
-            one["ALL"] = "Any Category";
+            one["ALL"] = "Any";
             this.setState({
-                category: "ALL",
                 categories: one,
             });
         });
     }
 
     render() {
-
+        var query_repr = "";
+        if (this.state.query && this.state.results.length > 0) {
+            let category = this.state.categories[this.state.query.category];
+            query_repr = `"${this.state.query.text}" in category ${category}`;
+        }             
         function createCategoryItems(categories) {
             let category_options = [];
             let category_keys = Object.keys(categories);
             for (let key of category_keys) {
                 let value = categories[key];
-                let item = <option key={key} value={key}>{value}</option>;
+                let item = (
+                    <MenuItem
+                        key={key}
+                        value={key}
+                        primaryText={value} />
+                );
                 category_options.push(item);
             }
-            console.log("category_options", category_options);
             return category_options;
         }
         let categoryItems = createCategoryItems(this.state.categories);
 
         return (
-            <div>
-                <form onSubmit={this.handleSubmit}>
-                    <label>
-                        <div className="inputLabel">
-                            <span>Text</span>
+            <div style={{
+                display: "flex",
+                flexDirection: "row",
+            }}>
+                <form onSubmit={this.handleSubmit} style={{
+                    display: "flex",
+                    flexDirection: "column",
+                }}>
+
+                    {this.props.message && 
+                        <div className="message">
+                           {this.props.message}
                         </div>
-                        <input className="text" type="text"
+                    }
+
+                    <label>
+                        <TextField
+                            type="text"
+                            name="address"
+                            style={textFieldStyle}
+                            errorText={this.state.errors.text}
+                            floatingLabelText="Text"
+                            floatingLabelFixed={true}
+                            hintText="Text"
                             value={this.state.text}
                             onChange={this.handleTextChange}
                         />
                     </label>
+
                     <br/>
+
                     <label>
-                        <div className="inputLabel">
-                            <span>Category</span>
-                        </div>
-                        <select
+                        <SelectField
+                            floatingLabelText="Category"
                             value={this.state.category}
                             onChange={this.handleCategoryChange}
                         >
-                            {categoryItems}
-                        </select>
+			    {categoryItems}
+                        </SelectField>
                     </label>
+
                     <br/>
-                    <input type="submit" value="Submit" />
+
+                    <RaisedButton
+                        secondary={true} 
+                        type="submit" label="Search"
+                    />
+
+                    <RaisedButton
+                        style={{
+                            marginTop: "1em",
+                        }}
+                        primary={true}
+                        onClick={this.updateCategories}
+                        label="Update Categories"
+                    />
                 </form>
-                <button onClick={this.refreshCategories}>
-                    Refresh Categories
-                </button>
-                <div className="status">
-                    Status: {this.state.message}
-                </div>
+
+                <Snackbar
+                    open={this.state.state === "started"}
+                    message={"Searching..."}
+                    autoHideDuration={4000}
+                />
+                <Snackbar
+                    open={this.state.state === "done"}
+                    message={`Retrieved ${this.state.results.length} search results`}
+                    autoHideDuration={4000}
+                />
+         
                 <div className="results">
-                    <ul>
+                    {query_repr && 
+                            <Subheader>
+                                Search results for {query_repr}
+                            </Subheader>
+                    }		
+                    <List>
                         {this.state.results.map(renderResult)}
-                    </ul>
+                    </List>
                 </div>
             </div>
-       );
+        );
     }
 }
