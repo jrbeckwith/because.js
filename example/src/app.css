@@ -1,10 +1,15 @@
 body {
 }
 
+.tabContent {
+    padding: 1em;
+}
+
 label div.inputLabel {
     margin-right: 0.5em;
     width: 5em;
-    float: left; }
+    float: left; 
+}
 
 code {
     margin-left: 0.2em;
@@ -17,8 +22,13 @@ div.attribute, div.attributes {
 }
 
 div.attributes {
-    float: right;
+    margin-left: 1em;
     clear: right;
+    color: gray;
+}
+
+div.status {
+   color: gray; 
 }
 
 .attribute.distance {
@@ -29,7 +39,11 @@ div.attributes {
     width: 10em;
 }
 
-.roles {
+form {
+    width: 20%;
+    margin-right: 1em;
+    padding-right: 1em;
+    border-right: 1px solid #eee;
 }
 
 input {
