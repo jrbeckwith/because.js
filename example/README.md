@@ -3,17 +3,45 @@ How to run
 
 Step by step, if you are at the root of the repo:
 1. `cd example`
-2. `npm i`
-3. (Wait a while for about 5348 dependencies to install in `node_modules/`)
+2. `npm install ..`
+2. `npm install`
+3. (Wait a while for > 5348 dependencies to install in `node_modules/`)
 4. `npm start`
 
-Note that this installs because.js from `..`. 
-
-It means that if you change because.js, you might have to reinstall.
+Note that this installs because.js from `..`. It is only copied once.
+So if you make edits to because.js, these won't be reflected until you
+reinstall because.js. If you want faster updates for your development workflow,
+see the next section.
 
 Also, the react server thingy run by `npm start` may have to be killed and
 restarted if it's caching things that were changed. Yes, I know this needs a
 better setup, but on the other hand it's just an example.
+
+
+Local development workflow
+--------------------------
+
+This uses `npm link` to make `example` use the `because.js` from the root, then
+it runs the webpack watcher to keep `because.js` built for the example to use,
+then it uses example's `npm start` to do the normal react app watchy stuff.
+
+(`yarn link` is not working properly yet.)
+
+This assumes there is no `node_modules` or an empty `node_modules` under
+`./example`. Otherwise, things won't work properly.
+
+In this case, start from the repo root (NOT from `./example`).
+
+1. `npm link`
+   ("unmet dependency" warnings are normal and can probably all be ignored
+     here)
+2. `cd example`
+3. `npm link becausejs`
+   (Do this BEFORE npm install)
+4. `npm install`
+5. `npm start`
+5. (in another terminal, or in the background if you prefer) 
+   `cd ..; make watch`
 
 
 Create React App Stuff
