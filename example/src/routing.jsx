@@ -48,7 +48,7 @@ function render_step(step, key) {
         className="step"
     >
         <span className="instructions">{step.instructions}</span>
-        <div className="attributes">
+        <div>
             {step.distance ?
                 <span>
                 {render_distance_mi(step.distance)}
