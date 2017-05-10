@@ -290,7 +290,7 @@ export default class Routing extends Component {
                 </label>
                 <br/>
                 <RaisedButton
-                    secondary={true}
+                    primary={true}
                     type="submit"
                     label="Get Route" 
                 />

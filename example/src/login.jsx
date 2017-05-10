@@ -163,7 +163,7 @@ export default class Login extends Component {
                     <RaisedButton
                         type="submit"
                         label="Log in" 
-                        secondary={true}
+                        primary={true}
                         style={{
                             backgroundColor: "#558B2F"
                         }}

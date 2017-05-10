@@ -162,7 +162,7 @@ export default class Geocoding extends Component {
                     <br/>
 
                     <RaisedButton
-                        secondary={true}
+                        primary={true}
                         type="submit"
                         label="Geocode"
                     />

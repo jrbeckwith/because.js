@@ -166,7 +166,7 @@ export class Basemap extends Component {
                     }
 
                     <RaisedButton 
-                        secondary={true}
+                        primary={true}
                         type="submit"
                         label="List Basemaps"
                     />

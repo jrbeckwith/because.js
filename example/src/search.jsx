@@ -214,7 +214,7 @@ export default class Search extends Component {
                     <br/>
 
                     <RaisedButton
-                        secondary={true} 
+                        primary={true}
                         type="submit" label="Search"
                     />
 

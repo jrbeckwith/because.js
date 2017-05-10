@@ -185,7 +185,7 @@ export default class ReverseGeocoding extends Component {
                     <br/>
 
                     <RaisedButton
-                        secondary={true}
+                        primary={true}
                         type="submit"
                         label="Reverse Geocode"
                     />
