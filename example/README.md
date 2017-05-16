@@ -44,6 +44,25 @@ In this case, start from the repo root (NOT from `./example`).
    `cd ..; make watch`
 
 
+Demo Build
+----------
+
+This build pipeline is the one provided by `create-react-app` and has some
+bugs in it, but it should work with the following steps.
+
+1. Clean up, e.g.: `rm -rf node_modules`
+2. Install becausejs: `npm install ..`
+3. Install fbjs manually to prevent `react-scripts build` from barfing: `npm
+   install fbjs`
+4. `npm run build`
+   (Do NOT bother running `npm build`, that does nothing and fails silently.)
+5. Output is in `build/` and can be uploaded from there as-is.
+6. Your web server (or S3, whatever) needs to have been configured to serve
+   `index.html` at `/`
+7. The generated filenames have cache-busting random strings so you
+   probably want to clean out the old files periodically or at every deploy
+
+
 Create React App Stuff
 ----------------------
 
