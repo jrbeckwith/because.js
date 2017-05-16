@@ -9,12 +9,14 @@
 export class BecauseError implements Error {
     readonly name: string = "BecauseError";
     readonly message: string;
+    readonly text: string;
 
     /**
      * @param message       As Error message.
      */
-    constructor (message: string) {
+    constructor (message: string, text?: string) {
         this.message = message;
+        this.text = text || message;
     }
 }
 
