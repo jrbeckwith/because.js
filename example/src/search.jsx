@@ -72,9 +72,9 @@ export default class Search extends Component {
         this.setState({text: event.target.value});
     }
 
-    handleCategoryChange(event, bleh, blargh) {
+    handleCategoryChange(event, index, selected) {
         this.setState({
-            category: blargh
+            category: selected
         });
     }
 

@@ -129,8 +129,8 @@ export default class Routing extends Component {
         this.refreshRoutings = this.refreshRoutings.bind(this);
     }
 
-    handleProviderChange(event, bleh, blargh) {
-        var provider = event.target.value || blargh;
+    handleProviderChange(event, index, selected) {
+        var provider = event.target.value || selected;
         this.setState({
             provider: provider
         });

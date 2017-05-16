@@ -52,8 +52,8 @@ export default class Geocoding extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleProviderChange(event, bleh, blargh) {
-        var provider = event.target.value || blargh;
+    handleProviderChange(event, index, selected) {
+        var provider = event.target.value || selected;
         this.setState({
             provider: provider
         });
