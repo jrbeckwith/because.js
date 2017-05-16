@@ -184,6 +184,12 @@ export class Basemap extends Component {
                     autoHideDuration={4000}
                 />
 
+                <Snackbar
+                    open={this.state.state === "error"}
+                    message={"Error finding basemaps"}
+                    autoHideDuration={4000}
+                />
+
                 <div className="basemaps">
                     <span>
                         {this.state.basemaps.length > 0 &&

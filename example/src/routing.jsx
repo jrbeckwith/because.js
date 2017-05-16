@@ -307,6 +307,12 @@ export default class Routing extends Component {
                 autoHideDuration={4000}
             />
 
+            <Snackbar
+                open={this.state.state === "error"}
+                message={"Error retrieving route"}
+                autoHideDuration={4000}
+            />
+
             <div>
                 {query_repr && 
                 <Subheader>

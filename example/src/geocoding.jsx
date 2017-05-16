@@ -180,9 +180,16 @@ export default class Geocoding extends Component {
                     message={"Geocoding..."}
                     autoHideDuration={4000}
                 />
+
                 <Snackbar
                     open={this.state.state === "done"}
                     message={`Retrieved ${this.state.geocodes.length} geocodes`}
+                    autoHideDuration={4000}
+                />
+
+                <Snackbar
+                    open={this.state.state === "error"}
+                    message={"Error geocoding"}
                     autoHideDuration={4000}
                 />
 

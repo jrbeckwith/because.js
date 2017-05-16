@@ -181,16 +181,25 @@ export default class Login extends Component {
                         </div>
                     }
                 </div>
+
                 <Snackbar
                     open={this.state.state === "started"}
                     message={`Logging in as ${this.state.username}...`}
                     autoHideDuration={4000}
                 />
+
                 <Snackbar
                     open={this.state.state === "done"}
                     message={`Logged in as ${this.state.username}`}
                     autoHideDuration={4000}
                 />
+
+                <Snackbar
+                    open={this.state.state === "error"}
+                    message={`Error logging in: ${this.state.error.message}`}
+                    autoHideDuration={4000}
+                />
+
             </div>
        );
     }

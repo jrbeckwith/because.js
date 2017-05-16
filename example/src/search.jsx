@@ -244,6 +244,12 @@ export default class Search extends Component {
                     message={`Retrieved ${this.state.results.length} search results`}
                     autoHideDuration={4000}
                 />
+
+                <Snackbar
+                    open={this.state.state === "error"}
+                    message={"Error searching"}
+                    autoHideDuration={4000}
+                />
          
                 <div className="results">
                     {query_repr && 

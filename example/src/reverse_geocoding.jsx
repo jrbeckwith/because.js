@@ -216,6 +216,12 @@ export default class ReverseGeocoding extends Component {
                     autoHideDuration={4000}
                 />
 
+                <Snackbar
+                    open={this.state.state === "error"}
+                    message={"Error reverse geocoding"}
+                    autoHideDuration={4000}
+                />
+
             <div className="geocodes" style={{
                 whiteSpace: "nowrap",
             }}>
