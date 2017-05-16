@@ -265,7 +265,6 @@ export default class Routing extends Component {
                         style={textFieldStyle}
                         errorText={this.state.errors.start}
                         floatingLabelText="Starting Address"
-                        floatingLabelFixed={true}
                         hintText="Starting Address"
                         value={this.state.start}
                         onChange={this.handleStartChange}
@@ -281,7 +280,6 @@ export default class Routing extends Component {
                         style={textFieldStyle}
                         errorText={this.state.errors.end}
                         floatingLabelText="End Address"
-                        floatingLabelFixed={true}
                         hintText="End Address"
                         value={this.state.end}
                         onChange={this.handleEndChange}

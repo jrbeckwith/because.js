@@ -198,7 +198,6 @@ export default class Search extends Component {
                             style={textFieldStyle}
                             errorText={this.state.errors.text}
                             floatingLabelText="Text"
-                            floatingLabelFixed={true}
                             hintText="Text"
                             value={this.state.text}
                             onChange={this.handleTextChange}

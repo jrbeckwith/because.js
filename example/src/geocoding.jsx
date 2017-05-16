@@ -159,7 +159,6 @@ export default class Geocoding extends Component {
                             style={textFieldStyle}
                             errorText={this.state.errors.address}
                             floatingLabelText="Address"
-                            floatingLabelFixed={true}
                             hintText="Address"
                             value={this.state.address}
                             onChange={this.handleAddressChange}

@@ -176,7 +176,6 @@ export default class ReverseGeocoding extends Component {
                             style={textFieldStyle}
                             errorText={this.state.errors.lat}
                             floatingLabelText="Latitude"
-                            floatingLabelFixed={true}
                             hintText="Latitude"
                             value={this.state.lat}
                             onChange={this.handleLatChange}
@@ -190,7 +189,6 @@ export default class ReverseGeocoding extends Component {
                             style={textFieldStyle}
                             errorText={this.state.errors.lon}
                             floatingLabelText="Longitude"
-                            floatingLabelFixed={true}
                             hintText="Longitude"
                             value={this.state.lon}
                             onChange={this.handleLonChange}
