@@ -64,11 +64,25 @@ export default class ReverseGeocoding extends Component {
     }
 
     handleLatChange(event) {
-        this.setState({lat: event.target.value});
+        var lat = event.target.value;
+        this.setState({
+            lat: lat,
+            errors: {
+                lat: lat ? "" : "latitude required",
+                lon: this.state.errors.lon,
+            },
+        });
     }
 
     handleLonChange(event) {
-        this.setState({lon: event.target.value});
+        var lon = event.target.value;
+        this.setState({
+            lon: lon,
+            errors: {
+                lat: this.state.errors.lat,
+                lon: lon ? "" : "longitude required",
+            },
+        });
     }
 
     handleSubmit(event) {

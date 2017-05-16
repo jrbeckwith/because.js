@@ -141,8 +141,8 @@ export default class Routing extends Component {
         this.setState({
             start: start,
             errors: {
-                start: start ? "" : "start required",
-                end: "",
+                start: start ? "" : "start address required",
+                end: this.state.errors.end,
             },
         });
     }
@@ -152,8 +152,8 @@ export default class Routing extends Component {
         this.setState({
             end: end,
             errors: {
-                end: end ? "" : "end required",
-                start: "",
+                start: this.state.errors.start,
+                end: end ? "" : "end address required",
             },
         });
     }

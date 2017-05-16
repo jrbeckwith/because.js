@@ -60,7 +60,14 @@ export default class Geocoding extends Component {
     }
 
     handleAddressChange(event) {
-        this.setState({address: event.target.value});
+        var address = event.target.value;
+        this.setState({
+            address: address,
+            errors: {
+                address: address ? "" : "address required",
+            }
+        });
+
     }
 
     handleSubmit(event) {

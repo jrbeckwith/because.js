@@ -69,7 +69,13 @@ export default class Search extends Component {
     }
 
     handleTextChange(event) {
-        this.setState({text: event.target.value});
+        var text = event.target.value;
+        this.setState({
+            text: text,
+            errors: {
+                text: text ? "" : "text required",
+            }
+        });
     }
 
     handleCategoryChange(event, index, selected) {
