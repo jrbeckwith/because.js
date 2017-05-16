@@ -35,6 +35,7 @@ export default class Login extends Component {
                 "username": "",
                 "password": "",
             },
+            query: {},
         };
         // Ensure handle* methods have the right `this`
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -93,6 +94,9 @@ export default class Login extends Component {
             this.setState({
                 error: {},
                 state: "started",
+                query: {
+                    username: username
+                },
             });
             let promise = bcs.login(username, password);
             promise
@@ -195,7 +199,7 @@ export default class Login extends Component {
                     {roleList.length > 0 &&
                         <div>
                             <Subheader>
-                                Roles for {this.state.username}
+                                Roles for {this.state.query.username}
                             </Subheader>
                             <List>
                                 {roleList}
@@ -206,13 +210,13 @@ export default class Login extends Component {
 
                 <Snackbar
                     open={this.state.state === "started"}
-                    message={`Logging in as ${this.state.username}...`}
+                    message={`Logging in as ${this.state.query.username}...`}
                     autoHideDuration={4000}
                 />
 
                 <Snackbar
                     open={this.state.state === "done"}
-                    message={`Logged in as ${this.state.username}`}
+                    message={`Logged in as ${this.state.query.username}`}
                     onRequestClose={this.handleRequestClose}
                     autoHideDuration={4000}
                 />
