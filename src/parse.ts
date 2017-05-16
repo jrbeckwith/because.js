@@ -4,11 +4,16 @@ import { Response } from "./response";
 
 class ParseError extends BecauseError {
     readonly name: string = "ParseError";
-    response: Response;
 
-    constructor (message: string, response: Response) {
-        super(message);
+    constructor (
+        message: string,
+        public response: Response,
+        public code?: number,
+        text?: string,
+    ) {
+        super(message, text || message);
         this.response = response;
+        this.code = code;
     }
 }
 
@@ -45,7 +50,12 @@ export function parse_response<T extends MayHaveError>(response: Response): T {
     if (data.errorCode || data.errorMessage) {
         const code = data.errorCode;
         const message = data.errorMessage;
-        throw new Error(`error body in response: ${code}: ${message}`);
+        throw new ParseError(
+            `error body in response: code ${code}: ${message}`,
+            response,
+            code,
+            message,
+        );
     }
     return data;
 }
