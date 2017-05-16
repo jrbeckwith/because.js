@@ -165,7 +165,6 @@ export default class Login extends Component {
                             style={textFieldStyle}
                             errorText={this.state.errors.username}
                             floatingLabelText="Boundless Connect Username"
-                            hintText="Connect Username"
                             value={this.state.username}
                             onChange={this.handleUsernameChange}
                         />
@@ -179,7 +178,6 @@ export default class Login extends Component {
                             style={textFieldStyle}
                             errorText={this.state.errors.password}
                             floatingLabelText="Boundless Connect Password"
-                            hintText="Connect Password"
                             value={this.state.password}
                             onChange={this.handlePasswordChange}
                         />
