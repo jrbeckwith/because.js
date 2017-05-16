@@ -174,7 +174,7 @@ class App extends Component {
                         </p>
                         <p>
                         While this demo doesn't work quite right yet, the
-                        BCS search service and the code in
+                        BCS search service and the code in&nbsp;
                         <code>because.js</code> are working just fine.
                         </p>
                         </div>
