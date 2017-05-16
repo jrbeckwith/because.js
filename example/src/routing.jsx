@@ -108,7 +108,6 @@ export default class Routing extends Component {
         super(props);
         this.state = {
             state: "waiting",
-            message: "let's route!",
             route: "",
             provider: "mapzen",
             start: "roma",
@@ -121,8 +120,6 @@ export default class Routing extends Component {
                 "end": "",
             },
             query: undefined,
-            // start: "1530 davis rd, lawrence, ks",
-            // end: "1600 pennsylvania ave., washington, dc",
         };
         // Ensure handle* methods have the right `this`
         this.handleProviderChange = this.handleProviderChange.bind(this);
