@@ -54,6 +54,7 @@ export default class ReverseGeocoding extends Component {
         this.handleLatChange = this.handleLatChange.bind(this);
         this.handleLonChange = this.handleLonChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleRequestClose = this.handleRequestClose.bind(this);
     }
 
     handleProviderChange(event, index, selected) {
@@ -82,6 +83,12 @@ export default class ReverseGeocoding extends Component {
                 lat: this.state.errors.lat,
                 lon: lon ? "" : "longitude required",
             },
+        });
+    }
+
+    handleRequestClose() {
+        this.setState({
+            state: "waiting"
         });
     }
 
@@ -218,12 +225,14 @@ export default class ReverseGeocoding extends Component {
                 <Snackbar
                     open={this.state.state === "done"}
                     message={`Retrieved ${this.state.geocodes.length} reverse geocodes`}
+                    onRequestClose={this.handleRequestClose}
                     autoHideDuration={4000}
                 />
 
                 <Snackbar
                     open={this.state.state === "error"}
                     message={"Error reverse geocoding"}
+                    onRequestClose={this.handleRequestClose}
                     autoHideDuration={4000}
                 />
 

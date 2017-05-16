@@ -50,6 +50,7 @@ export default class Geocoding extends Component {
         this.handleProviderChange = this.handleProviderChange.bind(this);
         this.handleAddressChange = this.handleAddressChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleRequestClose = this.handleRequestClose.bind(this);
     }
 
     handleProviderChange(event, index, selected) {
@@ -68,6 +69,12 @@ export default class Geocoding extends Component {
             }
         });
 
+    }
+
+    handleRequestClose() {
+        this.setState({
+            state: "waiting"
+        });
     }
 
     handleSubmit(event) {
@@ -189,12 +196,14 @@ export default class Geocoding extends Component {
                 <Snackbar
                     open={this.state.state === "done"}
                     message={`Retrieved ${this.state.geocodes.length} geocodes`}
+                    onRequestClose={this.handleRequestClose}
                     autoHideDuration={4000}
                 />
 
                 <Snackbar
                     open={this.state.state === "error"}
                     message={"Error geocoding"}
+                    onRequestClose={this.handleRequestClose}
                     autoHideDuration={4000}
                 />
 

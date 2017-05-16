@@ -65,6 +65,7 @@ export default class Search extends Component {
         this.handleTextChange = this.handleTextChange.bind(this);
         this.handleCategoryChange = this.handleCategoryChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleRequestClose = this.handleRequestClose.bind(this);
         this.updateCategories = this.updateCategories.bind(this);
     }
 
@@ -81,6 +82,12 @@ export default class Search extends Component {
     handleCategoryChange(event, index, selected) {
         this.setState({
             category: selected
+        });
+    }
+
+    handleRequestClose() {
+        this.setState({
+            state: "waiting"
         });
     }
 
@@ -241,12 +248,14 @@ export default class Search extends Component {
                 <Snackbar
                     open={this.state.state === "done"}
                     message={`Retrieved ${this.state.results.length} search results`}
+                    onRequestClose={this.handleRequestClose}
                     autoHideDuration={4000}
                 />
 
                 <Snackbar
                     open={this.state.state === "error"}
                     message={"Error searching"}
+                    onRequestClose={this.handleRequestClose}
                     autoHideDuration={4000}
                 />
          

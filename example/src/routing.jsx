@@ -126,6 +126,7 @@ export default class Routing extends Component {
         this.handleStartChange = this.handleStartChange.bind(this);
         this.handleEndChange = this.handleEndChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleRequestClose = this.handleRequestClose.bind(this);
         this.refreshRoutings = this.refreshRoutings.bind(this);
     }
 
@@ -209,6 +210,12 @@ export default class Routing extends Component {
                 this.setState({message: `route error: ${error}.`});
             });
         }
+    }
+
+    handleRequestClose() {
+        this.setState({
+            state: "waiting"
+        });
     }
 
     refreshRoutings() {
@@ -309,12 +316,14 @@ export default class Routing extends Component {
             <Snackbar
                 open={this.state.state === "done"}
                 message={"Retrieved route"}
+                onRequestClose={this.handleRequestClose}
                 autoHideDuration={4000}
             />
 
             <Snackbar
                 open={this.state.state === "error"}
                 message={"Error retrieving route"}
+                onRequestClose={this.handleRequestClose}
                 autoHideDuration={4000}
             />
 

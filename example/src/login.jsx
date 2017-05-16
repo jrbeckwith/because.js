@@ -37,6 +37,13 @@ export default class Login extends Component {
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleRequestClose = this.handleRequestClose.bind(this);
+    }
+
+    handleRequestClose() {
+        this.setState({
+            state: "waiting"
+        });
     }
 
     handleUsernameChange(event) {
@@ -190,12 +197,14 @@ export default class Login extends Component {
                 <Snackbar
                     open={this.state.state === "done"}
                     message={`Logged in as ${this.state.username}`}
+                    onRequestClose={this.handleRequestClose}
                     autoHideDuration={4000}
                 />
 
                 <Snackbar
                     open={this.state.state === "error"}
                     message={`Error logging in: ${this.state.error.message}`}
+                    onRequestClose={this.handleRequestClose}
                     autoHideDuration={4000}
                 />
 
