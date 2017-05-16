@@ -176,6 +176,12 @@ export default class Geocoding extends Component {
                 </form>
 
                 <Snackbar
+                    open={!this.props.bcs.jwt}
+                    message={"Please log in first"}
+                    autoHideDuration={4000}
+                />
+
+                <Snackbar
                     open={this.state.state === "started"}
                     message={"Geocoding..."}
                     autoHideDuration={4000}

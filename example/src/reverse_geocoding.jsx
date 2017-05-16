@@ -206,10 +206,17 @@ export default class ReverseGeocoding extends Component {
                 </form>
 
                 <Snackbar
+                    open={!this.props.bcs.jwt}
+                    message={"Please log in first"}
+                    autoHideDuration={4000}
+                />
+
+                <Snackbar
                     open={this.state.state === "started"}
                     message={"Reverse Geocoding..."}
                     autoHideDuration={4000}
                 />
+
                 <Snackbar
                     open={this.state.state === "done"}
                     message={`Retrieved ${this.state.geocodes.length} reverse geocodes`}
