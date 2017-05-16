@@ -21,7 +21,7 @@ export const endpoints = {
         (args) => {
             return new Query({
                 "q": (args.text || "").toString(),
-                "cat": (args.categories || "ALL").toString(),
+                "cat": (args.cat || "ALL").toString(),
                 "c": (args.results_per_page || 20).toString(),
                 "si": (args.starting_page || 0).toString(),
             });
@@ -35,7 +35,7 @@ export const endpoints = {
         (args) => {
             return new Query({
                 "q": (args.text || "").toString(),
-                "cat": (args.categories || "ALL").toString(),
+                "cat": (args.cat || "ALL").toString(),
                 "c": (args.results_per_page || 20).toString(),
                 "si": (args.starting_page || 0).toString(),
             });
