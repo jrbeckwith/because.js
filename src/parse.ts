@@ -3,6 +3,7 @@ import { Response } from "./response";
 
 
 class ParseError extends BecauseError {
+    readonly name: string = "ParseError";
     response: Response;
 
     constructor (message: string, response: Response) {
