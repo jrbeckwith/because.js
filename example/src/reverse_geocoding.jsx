@@ -38,6 +38,9 @@ export default class ReverseGeocoding extends Component {
     constructor (props) {
         super(props);
         this.state = {
+            error: {
+                message: "",
+            },
             errors: {
                 lat: "",
                 lon: "",
@@ -109,7 +112,20 @@ export default class ReverseGeocoding extends Component {
             });
         }
         else if (!bcs.jwt) {
-            this.setState({message: "log in first."});
+            this.setState({
+                state: "error",
+                error: {
+                    message: "log in first."
+                }
+            });
+        }
+        else if ((!lat && lat !== 0.0) || (!lon && lon !== 0.0)) {
+            this.setState({
+                state: "error",
+                error: {
+                    message: "need a latitude and longitude."
+                }
+            });
         }
         else {
             let promise = bcs.geocoding.reverse_geocode([lat, lon], provider);
@@ -135,8 +151,13 @@ export default class ReverseGeocoding extends Component {
                 window.reverse_geocodes = geocodes;
             })
             .catch((error) => {
-                console.log("geocoding: failure", error);
-                this.setState({message: `geocoding error: ${error}.`});
+                console.log("reverse geocoding: failure", error);
+                window.error = error;
+                this.setState({
+                    geocodes: [],
+                    state: "error",
+                    error: error
+                });
             });
         }
     }
@@ -211,12 +232,6 @@ export default class ReverseGeocoding extends Component {
                 </form>
 
                 <Snackbar
-                    open={!this.props.bcs.jwt}
-                    message={"Please log in first"}
-                    autoHideDuration={4000}
-                />
-
-                <Snackbar
                     open={this.state.state === "started"}
                     message={"Reverse Geocoding..."}
                     autoHideDuration={4000}
@@ -231,7 +246,7 @@ export default class ReverseGeocoding extends Component {
 
                 <Snackbar
                     open={this.state.state === "error"}
-                    message={"Error reverse geocoding"}
+                    message={`Error reverse geocoding: ${this.state.error.message}`}
                     onRequestClose={this.handleRequestClose}
                     autoHideDuration={4000}
                 />

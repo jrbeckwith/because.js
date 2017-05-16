@@ -28,10 +28,13 @@ export default class Login extends Component {
             jwt: "",
             username: "",
             password: "",
+            error: {
+                message: "",
+            },
             errors: {
                 "username": "",
                 "password": "",
-            }
+            },
         };
         // Ensure handle* methods have the right `this`
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -74,14 +77,21 @@ export default class Login extends Component {
 
         console.log("login: handleSubmit", this.state);
 
+        // Do not issue any request unless overall validation passes
         let username = this.state.username;
         let password = this.state.password;
         if (!username || !password) {
-            this.setState({message: "submit valid username and password."});
+            this.setState({
+                state: "error",
+                error: {
+                    message: "need a valid username and password to log in."
+                }
+            });
         }
         else {
             let bcs = this.props.bcs;
             this.setState({
+                error: {},
                 state: "started",
             });
             let promise = bcs.login(username, password);
@@ -96,8 +106,12 @@ export default class Login extends Component {
                 window.jwt = jwt;
             })
             .catch((error) => {
-                this.setState({message: `login error: ${error}.`});
                 console.log("login: failure", error);
+                window.error = error;
+                this.setState({
+                    state: "error",
+                    error: error
+                });
             });
         }
 
@@ -128,10 +142,12 @@ export default class Login extends Component {
                 display: "flex",
                 flexDirection: "row",
             }}>
+
                 <form onSubmit={this.handleSubmit} style={{
                     display: "flex",
                     flexDirection: "column",
                 }}>
+
                     {this.props.message && 
                         <div className="message">
                            {this.props.message}

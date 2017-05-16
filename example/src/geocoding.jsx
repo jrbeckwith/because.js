@@ -37,6 +37,9 @@ export default class Geocoding extends Component {
     constructor (props) {
         super(props);
         this.state = {
+            error: {
+                message: "",
+            },
             errors: {
                 address: "",
             },
@@ -89,11 +92,26 @@ export default class Geocoding extends Component {
         if (!bcs) {
             this.setState({
                 state: "error",
-                message: "ensure the bcs prop is passed to this component."
+                error: {
+                    message: "ensure the bcs prop is passed to this component."
+                }
             });
         }
         else if (!bcs.jwt) {
-            this.setState({message: "log in first."});
+            this.setState({
+                state: "error",
+                error: {
+                    message: "log in first."
+                }
+            });
+        }
+        else if (!address) {
+            this.setState({
+                state: "error",
+                error: {
+                    message: "need an address."
+                }
+            });
         }
         else {
             let promise = bcs.geocoding.geocode(address, provider);
@@ -119,7 +137,12 @@ export default class Geocoding extends Component {
             })
             .catch((error) => {
                 console.log("geocoding: failure", error);
-                this.setState({message: `geocoding error: ${error}.`});
+                window.error = error;
+                this.setState({
+                    geocodes: [],
+                    state: "error",
+                    error: error
+                });
             });
         }
     }
@@ -182,12 +205,6 @@ export default class Geocoding extends Component {
                 </form>
 
                 <Snackbar
-                    open={!this.props.bcs.jwt}
-                    message={"Please log in first"}
-                    autoHideDuration={4000}
-                />
-
-                <Snackbar
                     open={this.state.state === "started"}
                     message={"Geocoding..."}
                     autoHideDuration={4000}
@@ -202,7 +219,7 @@ export default class Geocoding extends Component {
 
                 <Snackbar
                     open={this.state.state === "error"}
-                    message={"Error geocoding"}
+                    message={`Error geocoding: ${this.state.error.message}`}
                     onRequestClose={this.handleRequestClose}
                     autoHideDuration={4000}
                 />

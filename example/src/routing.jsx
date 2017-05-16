@@ -113,6 +113,9 @@ export default class Routing extends Component {
             provider: "mapzen",
             start: "roma",
             end: "milano",
+            error: {
+                text: "",
+            },
             errors: {
                 "start": "",
                 "end": "",
@@ -172,21 +175,32 @@ export default class Routing extends Component {
 
         if (!bcs) {
             this.setState({
-                message: "ensure the bcs prop is passed to this component."
+                state: "error",
+                error: {
+                    text: "ensure the bcs prop is passed to this component."
+                }
             });
         }
         else if (!bcs.jwt) {
-            this.setState({message: "log in first."});
+            this.setState({
+                state: "error",
+                error: {
+                    text: "please log in first."
+                }
+            });
         }
-        else if (!start || !end) {
-            this.setState({message: "submit valid start and end."});
-        }
-        else if (!provider) {
-            this.setState({message: "submit valid provider."});
+        else if (!provider || !start || !end) {
+            this.setState({
+                state: "error",
+                error: {
+                    text: "submit valid provider, start, and end."
+                }
+            });
         }
         else {
             let waypoints = [start, end];
             let promise = bcs.routing.route(waypoints, provider);
+
             this.setState({
                 state: "started",
                 query: {
@@ -195,6 +209,7 @@ export default class Routing extends Component {
                     end: end,
                 }
             });
+
             promise.then((route) => {
                 console.log("route: success", route);
                 this.setState({
@@ -207,8 +222,14 @@ export default class Routing extends Component {
             })
             .catch((error) => {
                 console.log("route: failure", error);
-                this.setState({message: `route error: ${error}.`});
+                window.error = error;
+                this.setState({
+                    route: undefined,
+                    state: "error",
+                    error: error
+                });
             });
+
         }
     }
 
@@ -302,12 +323,6 @@ export default class Routing extends Component {
             </form>
 
             <Snackbar
-                open={!this.props.bcs.jwt}
-                message={"Please log in first"}
-                autoHideDuration={4000}
-            />
-
-            <Snackbar
                 open={this.state.state === "started"}
                 message={"Routing..."}
                 autoHideDuration={4000}
@@ -322,7 +337,7 @@ export default class Routing extends Component {
 
             <Snackbar
                 open={this.state.state === "error"}
-                message={"Error retrieving route"}
+                message={`Error retrieving route: ${this.state.error.text}`}
                 onRequestClose={this.handleRequestClose}
                 autoHideDuration={4000}
             />

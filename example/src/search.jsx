@@ -49,6 +49,9 @@ export default class Search extends Component {
     constructor (props) {
         super(props);
         this.state = {
+            error:  {
+                message: "",
+            },
 	    errors: {
                 text: "",
             },
@@ -103,14 +106,29 @@ export default class Search extends Component {
         if (!bcs) {
             this.setState({
                 state: "error",
-                message: "ensure the bcs prop is passed to this component."
+                error: {
+                    message: "ensure the bcs prop is passed to this component."
+                }
             });
         }
-        // This is not required for now, but may be in the future.
-        // else if (!bcs.jwt) {
-        //     this.setState({message: "log in first."});
+         // This is not required for now, but may be in the future.
+         // else if (!bcs.jwt) {
+         //     this.setState({
+         //         state: "error",
+         //         error: {
+         //             message: "log in first."
+         //         }
+         //     });
+         // }
         // }
-        //}
+        else if (!text) {
+            this.setState({
+                state: "error",
+                error: {
+                    message: "need text to search for."
+                }
+            });
+        }
         else {
             let promise = bcs.search.search(text, [category]);
             this.setState({
@@ -135,7 +153,12 @@ export default class Search extends Component {
             })
             .catch((error) => {
                 console.log("search: failure", error);
-                this.setState({message: `search error: ${error}.`});
+                window.error = error;
+                this.setState({
+                    results: undefined,
+                    state: "error",
+                    error: error
+                });
             });
         }
 
@@ -254,7 +277,7 @@ export default class Search extends Component {
 
                 <Snackbar
                     open={this.state.state === "error"}
-                    message={"Error searching"}
+                    message={`Error searching: ${this.state.error.message}`}
                     onRequestClose={this.handleRequestClose}
                     autoHideDuration={4000}
                 />
