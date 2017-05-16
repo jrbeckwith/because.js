@@ -44,14 +44,15 @@ export class ServiceError extends Error {
 export class Service {
     protected table: EndpointTable;
     protected endpoints: EndpointData;
-    private _headers: Headers;
+    readonly headers: Headers;
+    readonly query: Query;
     protected log: Log;
 
     constructor (endpoints?: EndpointData, headers?: Headers) {
         endpoints = endpoints || this.endpoints || {};
         // TODO copy
         this.table = new EndpointTable(endpoints);
-        this._headers = headers || new Headers();
+        this.headers = headers || new Headers();
     }
 
     private add_endpoints(endpoints: EndpointData) {
@@ -65,50 +66,53 @@ export class Service {
     }
 
     endpoint(name: string): Endpoint {
-        return this.table.get(name);
-    }
-
-    uri(endpoint_name: string, args: Args): URI {
-        const endpoint = this.endpoint(endpoint_name);
-        return endpoint.uri(args);
-    }
-
-    url(base: URL, endpoint_name: string, args?: Args): URL {
-        const endpoint = this.endpoint(endpoint_name);
-        if (!endpoint) {
+        const result = this.table.get(name);
+        if (!result) {
             const keys = this.table.keys().join(", ") || "no endpoints!";
             throw new Error(
-                `no endpoint named ${endpoint_name}.
+                `no endpoint named ${name}.
                 available endpoints for this service: ${keys}`,
             );
-        }
-        return endpoint.url(base, args) as URL;
-    }
-
-    headers(endpoint_name: string, headers?: Headers): Headers {
-        const endpoint = this.endpoint(endpoint_name);
-        const result: Headers = this._headers.copy();
-        for (const pair of endpoint.headers.pairs()) {
-            const [key, value] = pair;
-            result.set(key, value);
-        }
-        if (headers) {
-            for (const pair of headers.pairs()) {
-                const [key, value] = pair;
-                result.set(key, value);
-            }
         }
         return result;
     }
 
-    // seems useless with these weird signatures
-    // frontend(client: Client, base: URL): ServiceFrontend {
-    //     return new ServiceFrontend(
-    //         this,
-    //         client,
-    //         base,
-    //     );
+    // headers(endpoint_name: string, headers?: Headers): Headers {
+    //     const endpoint = this.endpoint(endpoint_name);
+    //     const result: Headers = this._headers.copy();
+    //     for (const pair of endpoint.headers.pairs()) {
+    //         const [key, value] = pair;
+    //         result.set(key, value);
+    //     }
+    //     if (headers) {
+    //         for (const pair of headers.pairs()) {
+    //             const [key, value] = pair;
+    //             result.set(key, value);
+    //         }
+    //     }
+    //     return result;
     // }
+
+    request(
+        endpoint_name: string,
+        method: Method,
+        base: URL,
+        args?: Args,
+    ): Request {
+        const endpoint = this.endpoint(endpoint_name);
+        const url = endpoint.url(base, args);
+        const query = this.query.updated(endpoint.query(args));
+        const headers = this.headers.updated(endpoint.headers(args));
+        const body = endpoint.body(args);
+        return new Request(
+            method,
+            url,
+            query,
+            body,
+            headers,
+        );
+    }
+
 }
 
 
