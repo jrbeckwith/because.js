@@ -1,3 +1,4 @@
+import { BecauseError } from "./errors";
 import { Data, pairs } from "./data";
 import { MutableTable } from "./table";
 import { Headers } from "./headers";
@@ -34,7 +35,7 @@ class EndpointTable extends MutableTable<Endpoint> {
 }
 
 
-export class ServiceError extends Error {
+export class ServiceError extends BecauseError {
 }
 
 
@@ -69,7 +70,7 @@ export class Service {
         const result = this.table.get(name);
         if (!result) {
             const keys = this.table.keys().join(", ") || "no endpoints!";
-            throw new Error(
+            throw new ServiceError(
                 `no endpoint named ${name}.
                 available endpoints for this service: ${keys}`,
             );
