@@ -54,8 +54,23 @@ see the below section on "How to build."
 
 
 ## Example Code
-How to build
-------------
+
+If you want to find some example code to look at, you can find an extended
+usage example containing some demos under `example/`.
+
+See `example/README.md` for instructions on how to run the example.
+
+This example code uses ES2015, React, and material-ui, but all this is just to
+provide an example. As far as just using the library, you can use ES5 or ES2015
+or TypeScript, and you can use any frontend frameworks or libraries you need.
+
+
+## How to build
+
+To build because.js, you'll first need to [install Node and
+npm](https://docs.npmjs.com/getting-started/installing-node) if you don't have
+them already. You should also [install
+Yarn](https://yarnpkg.com/lang/en/docs/install/) if you don't have that.
 
 All of the project's build tasks are automated with GNU `make`.
 
@@ -67,32 +82,19 @@ To build a single bundle including all of the capabilities of because.js, run:
 
     make dist/because.js
 
-To build because.js, you'll first need to [install Node and
-npm](https://docs.npmjs.com/getting-started/installing-node) if you don't have
-them already. You should also [install
-Yarn](https://yarnpkg.com/lang/en/docs/install/) if you don't have that.
-This will create the JS bundle `dist/because.js` and the accompanying sourcemap
-`dist/because.js.map`. Only `dist/because.js` is needed to use the library, but
-it can be useful for debugging to have the sourcemap available alongside.
+This should create the JS bundle `dist/because.js` and the accompanying
+sourcemap `dist/because.js.map`. Only `dist/because.js` is needed to use the
+library, but it is useful for debugging to have the sourcemap available
+alongside the bundle.
 
-`dist/because.js` is a [UMD module.](https://github.com/umdjs/umd) If you don't
-know or care what that means, you can just include it in the normal `<script>`
-way. This will define a global variable `because`.
+The file `dist/because.js` is a [UMD module.](https://github.com/umdjs/umd) If
+you don't know or care what that means, just know that you can just include it
+in the normal `<script>` way and this will define a global variable `because`.
+(If you don't want a global, then use a module loader.)
 
-There are multiple ways to use because.js (e.g. as CommonJS or ES2015 modules)
-but the bundle is the simplest, in the sense that it does not require an
-additional build step or loader to get a result in the browser.
-
-
-
-If you want to find some example code to look at, you can find an extended
-usage example containing some demos under `example/`.
-
-See `example/README.md` for simple instructions on how to run the example.
-
-This example code uses React and ES2015, but that's just for illustration
-purposes. It doesn't matter at all whether you use React or anything like that;
-because.js will work the same in any case.
+There are multiple ways to use `because.js` (e.g. as CommonJS or ES2015
+modules) but the bundle is the simplest, in the sense that it does not require
+an additional build step or loader to get a result in the browser.
 
 
 ## Build tools
