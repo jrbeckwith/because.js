@@ -14,8 +14,7 @@ export class Host {
         // Validate that the URL looks vaguely sane as an absolute URL.
         // This helps protect everything downstream.
         const regex = /^(https?):\/\/(.+)$/;
-        const match = url.match(regex);
-        if (!match) {
+        if (!url.match(regex)) {
             throw new InvalidHost(
                 `can't create Host with malformed URL: ${url}`,
             );
