@@ -5,9 +5,6 @@
 
 /** This line does nothing but make typedoc render the module comment. */
 
-import { BecauseError } from "./errors";
-
-
 /**
  * Simple type wrapper to help avoid mixing up usernames with other data stored
  * in strings.
