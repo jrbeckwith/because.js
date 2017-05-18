@@ -31,6 +31,8 @@ Connect.](https://connect.boundlessgeo.com/)
 If you're interested in because.js, you would probably be even more interested
 in [the Boundless Web SDK](https://github.com/boundlessgeo/sdk).
 
+If you want to consume the BCS services from Python, you may be interested in
+[Because for Python](https://github.com/harts-boundless/because).
 
 
 ## Installing
