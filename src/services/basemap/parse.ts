@@ -1,10 +1,12 @@
+import { BecauseError } from "../../errors";
 import { URL } from "../../http";
 import { Response } from "../../response";
 import { parse_response, parse_array } from "../../parse";
 import { Basemap, BasemapData, Standard, TileFormat } from "./basemap";
 
 
-class ParseError extends Error {}
+class BasemapParseError extends BecauseError {
+}
 
 
 export function parse_basemaps(response: Response): Basemap[] {

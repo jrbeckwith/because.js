@@ -1,3 +1,4 @@
+import { BecauseError } from "../../errors";
 import { Response } from "../../response";
 import { parse_response, parse_array } from "../../parse";
 import { Point } from "../../location";
@@ -5,7 +6,8 @@ import { URL } from "../../http";
 import { Route, RouteData, Leg, Step } from "./route";
 
 
-class ParseError extends Error {}
+class RoutingParseError extends BecauseError {
+}
 
 
 // These records provide endpoints which require (x,y) for origin and dest.

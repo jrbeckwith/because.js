@@ -1,9 +1,11 @@
+import { BecauseError } from "../../errors";
 import { Response } from "../../response";
 import { parse_response } from "../../parse";
 import { JWT, LazyJWT } from "./jwt";
 
 
-class ParseError extends Error {}
+class TokenParseError extends BecauseError {
+}
 
 
 // https://github.com/boundlessgeo/bcs/blob/master/bcs-token-service

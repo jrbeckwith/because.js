@@ -1,9 +1,11 @@
+import { BecauseError } from "../../errors";
 import { Response } from "../../response";
 import { parse_response, parse_array } from "../../parse";
 import { Geocode, GeocodesData } from "./geocode";
 
 
-class ParseError extends Error {}
+class GeocodingParseError extends BecauseError {
+}
 
 
 export function parse_geocodes(response: Response): Geocode[] {
