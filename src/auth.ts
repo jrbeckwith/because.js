@@ -21,11 +21,3 @@ export class Username extends String {
  */
 export class Password extends String {
 }
-
-/**
- * Simple type for passing around a username and password together.
- */
-export class Credentials {
-    public username: Username;
-    public password: Password;
-}
