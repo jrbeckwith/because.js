@@ -1,9 +1,7 @@
-because.js
-==========
+# because.js
 
 
-Overview
---------
+## Overview
 
 because.js is a Javascript client library that helps programmers get
 interesting data from BCS HTTP services: coordinates for street addresses
@@ -25,8 +23,8 @@ If you're interested in because.js, you would probably be even more interested
 in [the Boundless Web SDK](https://github.com/boundlessgeo/sdk).
 
 
-Installing
------------
+
+## Installing
 
 These instructions assume you already have signed up with [Boundless
 Connect.](https://connect.boundlessgeo.com/)
@@ -48,6 +46,7 @@ fresh bundle reflecting the latest state of the original code in `src/` then
 see the section on "Building" below.
 
 
+## Example Code
 How to build
 ------------
 
@@ -74,8 +73,6 @@ but the bundle is the simplest, in the sense that it does not require an
 additional build step or loader to get a result in the browser.
 
 
-Example Code
-------------
 
 If you want to find some example code to look at, you can find an extended
 usage example containing some demos under `example/`.
@@ -87,8 +84,7 @@ purposes. It doesn't matter at all whether you use React or anything like that;
 because.js will work the same in any case.
 
 
-Build tools
------------
+## Build tools
 
 This section is for those who are interested in how this project is built.
 If you just want to use because.js, you can safely ignore this section.
@@ -128,8 +124,7 @@ Build dependencies are managed by `yarn`, which is kind of an alternative to
 `npm`.
 
 
-Running Tests
--------------
+## Running Tests
 
 Automated tests are discovered and run by [mocha](https://mochajs.org/) with
 the help of [ts-mocha](https://www.npmjs.com/package/ts-mocha) to eliminate
@@ -145,8 +140,7 @@ Test coverage is measured using
 interface, [nyc](https://www.npmjs.com/package/nyc).
 
 
-Running Style Checks
---------------------
+## Running Style Checks
 
 Code smells and style problems are detected in the Typescript source code using
 [tslint](https://palantir.github.io/tslint/). This is a little more rigorous
@@ -165,8 +159,7 @@ which adds rules that require type checking, and therefore take a little more
 time and require a little more configuration.
 
 
-Building docs
--------------
+## Building Docs
 
 API reference docs are built using [Typedoc](http://typedoc.org/).
 
@@ -180,8 +173,7 @@ base `config/tsconfig.json`. Typedoc can be finicky about the locations of
 configuration files, so be careful about making changes.
 
 
-Watch
------
+## Watch
 
 Run `make watch` to start a process that watches the source tree for changes
 and triggers rebuilds of `dist/because.js` (via wepack). This is useful if you
