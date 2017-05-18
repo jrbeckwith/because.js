@@ -99,11 +99,12 @@ an additional build step or loader to get a result in the browser.
 
 ## Build tools
 
-This section is for those who are interested in how this project is built.
-If you just want to use because.js, you can safely ignore this section.
+This section is for those who are interested in the internal details of how the
+project is built. If you just want to use `because.js`, you can safely ignore
+this section.
 
 As already mentioned, the entry point and overall orchestration of build tasks
-is done with GNU `make`. If you aren't already familiar, the essence of `make`
+is done with GNU `make`. For those who are unfamiliar, the essence of `make`
 is that you edit `Makefile` to define rules for making files. Each rule
 has a list of other files that must exist as prerequisites, and some shell
 commands that are run to actually make that file. `make` then checks to see
@@ -116,7 +117,7 @@ The project code located under `src/` is written in
 a language very similar to Javascript (ES2015), except that it has type
 annotations, and a few other minor features. The type checking particularly
 helps control the propagation of funky values like undefined, null or NaN.
-Crucially for our purposes, Typescript compiles to normal Javascript and is
+Importantly for our purposes, Typescript compiles to normal Javascript and is
 generally pretty close to the semantics of Javascript.
 
 Typescript code is both typechecked and compiled down to Javascript code using
@@ -127,14 +128,15 @@ under `src/`, turn them into ES5 code packaged as CommonJS modules, and output
 these as `.js` files into `lib/`.
 
 For some capabilities, like promises, `tsc` cannot generate downlevel code
-(e.g. ES5) without the help of a polyfill. So we use a few of those.
+(e.g. ES5) without the help of a polyfill. So we use a few polyfills,
+like `es6-promise`.
 
 Other aspects like concatenation/bundling/minification are handled by
 [webpack](https://webpack.github.io/) together with the loader plugin for
 webpack named [ts-loader](https://github.com/TypeStrong/ts-loader).
 
-Build dependencies are managed by `yarn`, which is kind of an alternative to
-`npm`.
+Build dependencies are managed by `yarn`, which is a package management tool
+similar to `npm`.
 
 
 ## Running Tests
