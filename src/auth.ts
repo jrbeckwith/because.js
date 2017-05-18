@@ -29,9 +29,3 @@ export class Credentials {
     public username: Username;
     public password: Password;
 }
-
-/**
- * Error class that can be thrown when there was a problem logging in.
- */
-export class LoginError extends BecauseError {
-}

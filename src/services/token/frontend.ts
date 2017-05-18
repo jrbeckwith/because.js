@@ -1,11 +1,18 @@
 import { Client } from "../../client";
 import { Host } from "../../host";
 import { Query } from "../../query";
-import { Username, Password, LoginError } from "../../auth";
+import { Username, Password } from "../../auth";
 import { ServiceFrontend } from "../../service_frontend";
 import { TokenService } from "./service";
 import { response_to_jwt } from "./parse";
 import { Frontend } from "../../frontend";
+
+
+/**
+ * Error class that can be thrown when there was a problem logging in.
+ */
+export class LoginError extends BecauseError {
+}
 
 
 export class TokenFrontend extends ServiceFrontend {

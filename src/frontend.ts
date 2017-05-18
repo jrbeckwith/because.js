@@ -8,7 +8,7 @@ import { InvalidObject } from "./errors";
 // HTTP request/response processing
 import { Host } from "./host";
 import { Method, URI, URL, Body } from "./http";
-import { Username, Password, LoginError } from "./auth";
+import { Username, Password } from "./auth";
 import { Request } from "./request";
 import { Query } from "./query";
 import { Headers } from "./headers";
