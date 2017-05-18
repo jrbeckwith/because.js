@@ -12,14 +12,6 @@ import { Response } from "./response";
 import { Progress } from "./progress";
 
 
-interface Resolve {
-    (response: Response): void;
-}
-
-interface Reject {
-    (reason: Error): void;
-}
-
 interface OnFulfill <T> {
     (response: Response): T;
 }
