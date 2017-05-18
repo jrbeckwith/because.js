@@ -3,17 +3,26 @@
 
 ## Overview
 
-because.js is a Javascript client library that helps programmers get
-interesting data from BCS HTTP services: coordinates for street addresses
-(geocoding) or turn-by-turn directions (routing), information on available
-basemaps, and more.
+`because.js` is a Javascript client library that helps programmers get
+interesting data from the [BCS HTTP
+services](https://github.com/boundlessgeo/bcs): coordinates for street
+addresses (geocoding) turn-by-turn directions (routing), discovery and metadata
+for basemaps available through Boundless, and more.
 
-because.js wraps the BCS HTTP services for more convenient use from Javascript.
-It abstracts away most of the details like authentication, how HTTP requests
-are constructed and sent, and how HTTP responses are parsed. Instead of
-worrying about these details, a programmer using because.js provides a
-more human-level specification of what data is wanted, and gets results back as
-convenient Javascript objects.
+`because.js` wraps these HTTP services for convenient use from Javascript. It
+abstracts away many of the details of authentication, how HTTP requests are
+constructed and sent, and how HTTP responses are parsed. Instead of
+re-implementing all these details in every new project and for each additional
+service, a programmer building on this library provides a higher-level
+specification of what data is wanted, and gets the results back as convenient
+Javascript objects.
+
+Besides making it faster and easier to get started, using a client library has
+benefits for maintainability. Whenever improvements are needed, they can be
+made in the library, for the shared benefit of all the projects that use it.
+When the upstream services change, the library can change to accommodate this,
+instead of each project individually somehow discovering and making the
+necessary adjustments.
 
 To use because.js and the BCS services, you first need credentials, which you
 can get by signing up at [Boundless
