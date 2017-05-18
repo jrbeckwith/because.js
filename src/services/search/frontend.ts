@@ -24,6 +24,8 @@ export class SearchFrontend extends ServiceFrontend {
         results_per_page: number = 20,
         starting_page: number = 0,
     ) {
+        // this doesn't need a login (yet?)
+        // await this.need_login();
         const endpoint = this.service.endpoint("search");
         const cat = categories.join(",");
         const request = endpoint.request(this.host.url, {
@@ -37,6 +39,8 @@ export class SearchFrontend extends ServiceFrontend {
     }
 
     async search_data() {
+        // this doesn't need a login (yet?)
+        // await this.need_login();
         const endpoint = this.service.endpoint("search_data");
         const request = endpoint.request(this.host.url, {});
         const response = await this.send(request);
@@ -51,6 +55,8 @@ export class SearchFrontend extends ServiceFrontend {
     }
 
     async search_in_category(category: string, q: string) {
+        // this doesn't need a login (yet?)
+        // await this.need_login();
         const endpoint = this.service.endpoint("search_in_category");
         const request = endpoint.request(this.host.url, {
             "category": category,

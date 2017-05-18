@@ -17,7 +17,7 @@ export class BasemapFrontend extends ServiceFrontend {
      * Get a list of basemaps.
      */
     async basemaps() {
-        // TODO: does this need login?
+        // This service doesn't need a login (yet?)
         // await this.need_login();
 
         const endpoint = this.service.endpoint("basemaps");
@@ -45,6 +45,7 @@ export class BasemapFrontend extends ServiceFrontend {
     }
 
     async manage() {
+        // await this.need_login();
         const endpoint = this.service.endpoint("manage");
         const request = endpoint.request(this.host.url);
         const response = await this.send(request);

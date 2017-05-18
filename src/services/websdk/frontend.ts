@@ -14,6 +14,7 @@ export class WebSDKFrontend extends ServiceFrontend {
     }
 
     async something() {
+        // await this.need_login();
         const endpoint = this.service.endpoint("metadata");
         const request = endpoint.request(this.host.url);
         const response = await this.send(request);

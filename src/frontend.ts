@@ -224,20 +224,4 @@ export class Frontend {
         return transfer;
     }
 
-    /**
-     * Assert that we have a token to log in with.
-     *
-     * Methods on this class can simplify their implementation by awaiting this
-     * to ensure they do not issue any requests without having a token to send.
-     *
-     * In the future this may be changed to automatically accomplish login if
-     * there is a way to do that.
-     */
-    private async need_login() {
-        if (!this.jwt || !this.jwt.token) {
-            throw new Error("not logged in");
-        }
-        return this.jwt;
-    }
-
 }

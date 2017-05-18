@@ -18,6 +18,7 @@ export class RoutingFrontend extends ServiceFrontend {
     }
 
     async get_routings() {
+        // await this.need_login();
         const endpoint = this.service.endpoint("metadata");
         const request = endpoint.request(this.host.url, {});
         const response = await this.send(request);
@@ -36,6 +37,7 @@ export class RoutingFrontend extends ServiceFrontend {
      * @param service       The name of a service. Default "mapbox".
      */
     async route(locations: Location[], provider?: "mapbox" | "mapzen") {
+        await this.need_login();
         provider = provider || "mapbox";
         if (locations.length < 2) {
             throw new Error("need at least two locations to route");

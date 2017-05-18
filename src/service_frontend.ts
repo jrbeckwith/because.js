@@ -77,6 +77,22 @@ export class ServiceFrontend {
         return this._frontend.send(request);
     }
 
+    /**
+     * Assert that we have a token to log in with.
+     *
+     * Methods on this class can simplify their implementation by awaiting this
+     * to ensure they do not issue any requests without having a token to send.
+     *
+     * In the future this may be changed to automatically accomplish login if
+     * there is a way to do that.
+     */
+    protected async need_login() {
+        const jwt = this._frontend ? this._frontend.jwt : undefined;
+        if (!jwt || !jwt.token) {
+            throw new Error("not logged in");
+        }
+        return jwt;
+    }
 }
 
 

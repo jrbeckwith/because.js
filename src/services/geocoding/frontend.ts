@@ -26,8 +26,7 @@ export class GeocodingFrontend extends ServiceFrontend {
         // vestigial: "boundless" as in bcs-geocoding-boundless role
         provider?: "mapzen" | "mapbox",
     ) {
-        // TODO
-        // await this.need_login();
+        await this.need_login();
         provider = provider || "mapbox";
         if (!address) {
             throw new Error("need an address to geocode");
@@ -48,8 +47,7 @@ export class GeocodingFrontend extends ServiceFrontend {
      * Get a list of possible addresses for a location.
      */
     async reverse_geocode(coordinates: Coordinates, provider?: string) {
-        // TODO
-        // await this.need_login();
+        await this.need_login();
         if (!coordinates) {
             throw new Error("need coordinates to reverse geocode");
         }

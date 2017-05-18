@@ -49,6 +49,7 @@ export class TokenFrontend extends ServiceFrontend {
      * (We usually already have the roles...)
      */
     async get_roles() {
+        await this.need_login();
         const endpoint = this.service.endpoint("get_roles");
         const request = endpoint.request(this.host.url, {});
         const response = await this.send(request);
