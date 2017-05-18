@@ -40,11 +40,6 @@ If you want to consume the BCS services from Python, you may be interested in
 These instructions assume you already have signed up with [Boundless
 Connect.](https://connect.boundlessgeo.com/)
 
-You'll need to [install Node and
-npm](https://docs.npmjs.com/getting-started/installing-node) if you don't have
-them already. You should also [install
-Yarn](https://yarnpkg.com/lang/en/docs/install/) if you don't have that.
-
 The source code for because.js is managed using git, and published on GitHub.
 To download the code, use git to clone the repository from GitHub:
 
@@ -71,6 +66,10 @@ To build a single bundle including all of the capabilities of because.js, run:
 
     make dist/because.js
 
+To build because.js, you'll first need to [install Node and
+npm](https://docs.npmjs.com/getting-started/installing-node) if you don't have
+them already. You should also [install
+Yarn](https://yarnpkg.com/lang/en/docs/install/) if you don't have that.
 This will create the JS bundle `dist/because.js` and the accompanying sourcemap
 `dist/because.js.map`. Only `dist/because.js` is needed to use the library, but
 it can be useful for debugging to have the sourcemap available alongside.
