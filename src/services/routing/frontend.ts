@@ -8,6 +8,8 @@ import { Route } from "./route";
 import { Location, Point, is_coordinates } from "../../location";
 
 
+type RoutingProvider = "mapbox" | "mapzen";
+
 
 export class RoutingFrontend extends ServiceFrontend {
     service: RoutingService;
@@ -36,7 +38,7 @@ export class RoutingFrontend extends ServiceFrontend {
      * @param locations     A list of locations - addresses or points.
      * @param service       The name of a service. Default "mapbox".
      */
-    async route(locations: Location[], provider?: "mapbox" | "mapzen") {
+    async route(locations: Location[], provider?: RoutingProvider) {
         await this.need_login();
         provider = provider || "mapbox";
         if (locations.length < 2) {
