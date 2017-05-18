@@ -56,16 +56,6 @@ export class Service {
         this.headers = headers || new Headers();
     }
 
-    private add_endpoints(endpoints: EndpointData) {
-        // TODO: use some update() thingy here?
-        // Table isn't mutable... blegh
-        for (const pair of pairs(endpoints)) {
-            const [key, value] = pair;
-            this.table.set(key, value);
-            // this.data[pair[0]] = pair[1];
-        }
-    }
-
     endpoint(name: string): Endpoint {
         const result = this.table.get(name);
         if (!result) {

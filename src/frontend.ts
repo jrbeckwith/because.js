@@ -27,9 +27,6 @@ import { BasemapFrontend } from "./services/basemap/frontend";
 import { GeocodingFrontend } from "./services/geocoding/frontend";
 import { SearchFrontend } from "./services/search/frontend";
 
-class Provider extends String {
-}
-
 
 /**
  * Base for top-level facade objects to give API users a friendly entry point.
@@ -130,7 +127,7 @@ export class Frontend {
 
     private add_service_frontends(classes: {[name: string]: FrontendClass}) {
         for (const pair of pairs(classes)) {
-            const name: string = pair[0];
+            // const name: string = pair[0];
             const cls: FrontendClass = pair[1];
             const frontend = new cls(this, this.host);
             this.add_service_frontend(frontend);
