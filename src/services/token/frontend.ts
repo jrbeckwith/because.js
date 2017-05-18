@@ -1,3 +1,4 @@
+import { BecauseError } from "../../errors";
 import { Client } from "../../client";
 import { Host } from "../../host";
 import { Query } from "../../query";
