@@ -1,6 +1,18 @@
+import { BecauseError } from "./errors";
 import { Request } from "./request";
 import { Response } from "./response";
 import { Headers } from "./headers";
+
+
+class XHRError extends BecauseError {
+    event: Event;
+
+    // TODO: translate event information into something presented
+    constructor (message: string, ev: Event, text?: string) {
+        super(message, text || message);
+        this.event = ev;
+    }
+}
 
 
 /**
@@ -21,18 +33,6 @@ function xhr_to_response(xhr: XMLHttpRequest): Response {
         xhr.responseText,
     );
     return response;
-}
-
-
-class XHRError extends Error {
-    event: Event;
-
-    // TODO: translate event information into something presented
-    constructor (message: string, ev: Event) {
-        super();
-        this.message = message;
-        this.event = ev;
-    }
 }
 
 
@@ -85,7 +85,10 @@ async function xhr_to_promise(xhr: XMLHttpRequest) {
                 flags.done = true;
 
                 // Export an Error describing the failure
-                const error = new XHRError("XHR failed", ev);
+                const error = new XHRError(
+                    "XHR failed",
+                    ev,
+                );
                 reject(error);
             }
         };
