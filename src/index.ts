@@ -24,9 +24,15 @@ import { SearchFrontend } from "./services/search/frontend";
  * Top-level frontend implementation for Node.
  */
 export class Because extends Frontend {
-    constructor (env: string, debug?: boolean) {
-        const url = hosts[env || "test"];
-        const client = new Client();
+    constructor (env?: string, debug?: boolean) {
+        env = env || "test";
+        const host: Host = hosts[env];
+        if (!host) {
+            throw new Error(`unknown environment '${env}'`);
+        }
+        if (!host.url) {
+            throw new Error(`bad host for '${env}'`);
+        }
         const classes: {[name: string]: FrontendClass} = {
             "tokens": TokenFrontend,
             "routing": RoutingFrontend,
@@ -34,6 +40,6 @@ export class Because extends Frontend {
             "basemap": BasemapFrontend,
             "search": SearchFrontend,
         };
-        super(classes, new Client(), url, debug);
+        super(classes, new Client(), host, debug);
     }
 }
