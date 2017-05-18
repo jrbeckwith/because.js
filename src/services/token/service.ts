@@ -1,4 +1,4 @@
-import { Service, Endpoint } from "../../service";
+import { Service } from "../../service";
 import { endpoints } from "./endpoints";
 
 

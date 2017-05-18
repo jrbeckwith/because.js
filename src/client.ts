@@ -21,7 +21,6 @@
 
 import { Request } from "./request";
 import {
-    TransferBase,
     TransferConstructor,
     Transfer,
 } from "./transfer";

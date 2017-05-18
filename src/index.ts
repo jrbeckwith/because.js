@@ -7,16 +7,9 @@
 
 /** This line does nothing but make typedoc render the module comment. */
 
-import { Request } from "./request";
-import { Response } from "./response";
-import { Headers } from "./headers";
-import { Query } from "./query";
-
-import { Transfer, TransferBase } from "./transfer";
-// TODO: import the node client here, right?
-import { NodeClient as Client } from "./flavors/node_es5";
 import { Frontend } from "./frontend";
-import { hosts } from "./hosts";
+import { Host, hosts } from "./hosts";
+import { NodeClient as Client } from "./flavors/node_es5";
 
 // The Because class "ships" with everything loaded on it
 import { FrontendClass } from "./service_frontend";

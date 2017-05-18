@@ -7,8 +7,8 @@
 
 /** This line does nothing but make typedoc render the module comment. */
 
-import { Data, map, copy } from "./data";
-import { Table, MutableTable } from "./table";
+import { Data, map } from "./data";
+import { MutableTable } from "./table";
 
 /**
  * Interchange type for HTTP request or response header data.

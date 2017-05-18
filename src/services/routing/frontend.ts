@@ -5,8 +5,8 @@ import { ServiceFrontend } from "../../service_frontend";
 import { parse_routings } from "./parse";
 import { RoutingService } from "./service";
 import { Route } from "./route";
+import { Location, Point, is_coordinates } from "../../location";
 
-import { Location, Point, Coordinates, is_coordinates } from "../../location";
 
 
 export class RoutingFrontend extends ServiceFrontend {

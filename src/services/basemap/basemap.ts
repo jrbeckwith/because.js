@@ -1,5 +1,3 @@
-import { Response } from "../../response";
-import { parse_array } from "../../parse";
 import { URL } from "../../http";
 
 

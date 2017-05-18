@@ -9,11 +9,9 @@
 
 /** This line does nothing but make typedoc render the module comment. */
 
-import { Request } from "./request";
-import { Headers } from "./headers";
-import { Query } from "./query";
 import { Frontend } from "./frontend";
 import { Host, hosts } from "./hosts";
+import { BrowserClient as Client } from "./flavors/browser_es5";
 
 // The Because class "ships" with everything loaded on it
 import { FrontendClass } from "./service_frontend";
@@ -22,11 +20,6 @@ import { RoutingFrontend } from "./services/routing/frontend";
 import { BasemapFrontend } from "./services/basemap/frontend";
 import { GeocodingFrontend } from "./services/geocoding/frontend";
 import { SearchFrontend } from "./services/search/frontend";
-
-import {
-    BrowserClient as Client,
-    BrowserTransfer as Transfer,
-} from "./flavors/browser_es5";
 
 
 /**

@@ -7,7 +7,7 @@
 import { InvalidObject } from "./errors";
 import { Query } from "./query";
 import { Headers, HeaderData } from "./headers";
-import { Method, URI, URL, Body } from "./http";
+import { Method, URL, Body } from "./http";
 
 
 // TODO: maybe do a RequestData and have Request unpack from that, then I can
