@@ -1,6 +1,4 @@
 import { URL } from "../../http";
-import { Response } from "../../response";
-import { parse_response } from "../../parse";
 import { Point, Coordinates } from "../../location";
 
 

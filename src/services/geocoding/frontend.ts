@@ -1,7 +1,6 @@
 import { Log } from "../../log";
 import { Frontend } from "../../frontend";
 import { Host } from "../../host";
-import { Query } from "../../query";
 import { Address, Coordinates } from "../../location";
 import { ServiceFrontend } from "../../service_frontend";
 import { GeocodingService } from "./service";

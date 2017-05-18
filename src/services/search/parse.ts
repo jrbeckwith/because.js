@@ -1,5 +1,4 @@
 import { Response } from "../../response";
-import { ParseError } from "../../errors";
 import {
     parse_response,
     parse_array,

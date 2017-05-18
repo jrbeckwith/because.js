@@ -1,7 +1,5 @@
 import { BecauseError } from "../../errors";
-import { Client } from "../../client";
 import { Host } from "../../host";
-import { Query } from "../../query";
 import { Username, Password } from "../../auth";
 import { ServiceFrontend } from "../../service_frontend";
 import { TokenService } from "./service";

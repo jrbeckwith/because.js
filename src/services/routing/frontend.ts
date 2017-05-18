@@ -1,6 +1,5 @@
 import { Frontend } from "../../frontend";
 import { Host } from "../../host";
-import { Query } from "../../query";
 import { ServiceFrontend } from "../../service_frontend";
 import { parse_routings } from "./parse";
 import { RoutingService } from "./service";
