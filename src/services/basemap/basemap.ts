@@ -1,25 +1,26 @@
 import { URL } from "../../http";
 
 
+export type BasemapProvider = string;
+export type Standard = "XYZ" ;
+export type TileFormat = "PNG" ;
+
+
 export class BasemapData {
     name: string;
     attribution: string;
-    provider: string;
+    provider: BasemapProvider;
     description: string;
     endpoint: string;
     accessList: string[];
     styleUrl: string;
-    standard: string;
-    tileFormat: string;
+    standard: Standard;
+    tileFormat: TileFormat;
     thumbnail: undefined;
 
     errorCode: number;
     errorMessage: string;
 }
-
-
-export type Standard = "XYZ" ;
-export type TileFormat = "PNG" ;
 
 
 /**
@@ -33,7 +34,7 @@ export class Basemap {
         public standard: Standard,
         public tile_format: TileFormat,
         public title: string,
-        public provider: string,
+        public provider: BasemapProvider,
         public attribution: string,
         public access_list: string[],
         public description: string,
