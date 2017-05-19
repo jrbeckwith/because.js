@@ -6,10 +6,9 @@ import { Log } from "./log";
 import { Frontend } from "./frontend";
 
 /**
- * Frontend for a specific service.
+ * Bind together a Frontend and a Service running against a specific Host.
  *
- * This contains per-service logic that would otherwise be in Frontend.
- * Code that needs to share state across services goes in Frontend
+ * Code that needs to share state across services should go in Frontend
  * instead.
  */
 export class ServiceFrontend {
@@ -40,11 +39,8 @@ export class ServiceFrontend {
     /**
      * Assert that we have a token to log in with.
      *
-     * Methods on this class can simplify their implementation by awaiting this
+     * Methods on this class or a subclass can await the result of this method
      * to ensure they do not issue any requests without having a token to send.
-     *
-     * In the future this may be changed to automatically accomplish login if
-     * there is a way to do that.
      */
     protected async need_login() {
         const jwt = this._frontend ? this._frontend.jwt : undefined;
