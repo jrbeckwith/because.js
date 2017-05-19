@@ -68,22 +68,6 @@ export class Service {
         return result;
     }
 
-    // headers(endpoint_name: string, headers?: Headers): Headers {
-    //     const endpoint = this.endpoint(endpoint_name);
-    //     const result: Headers = this._headers.copy();
-    //     for (const pair of endpoint.headers.pairs()) {
-    //         const [key, value] = pair;
-    //         result.set(key, value);
-    //     }
-    //     if (headers) {
-    //         for (const pair of headers.pairs()) {
-    //             const [key, value] = pair;
-    //             result.set(key, value);
-    //         }
-    //     }
-    //     return result;
-    // }
-
     request(
         endpoint_name: string,
         method: Method,

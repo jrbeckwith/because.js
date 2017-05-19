@@ -32,41 +32,6 @@ export class ServiceFrontend {
         this.log = new Log("ServiceFrontend");
     }
 
-    // TODO: instead of query, take args
-    // these can be validated abstractly
-
-    request(
-        method: Method,
-        endpoint: URI,
-        query?: Query,
-        body?: Body,
-        // headers?: Headers,
-    ): Request {
-        // TODO: check method validity
-
-        // TODO: check uri validity, can't be absolute
-
-        // TODO: check query validity
-
-        const url = this.service.url(this.host.url, endpoint as string);
-        const headers = this.service.headers(endpoint as string);
-        const request = new Request(
-            method,
-            url as string,
-            query,
-            body as string,
-            headers,
-        );
-        return request;
-    }
-
-    // request(endpoint: Endpoint, method: Method, args?: {}) {
-    //     return new Request(
-    //         <string> method,
-    //         <string> endpoint.url(this.base, args || {}),
-    //     );
-    // }
-
     send(request: Request): Transfer {
         this.log.debug("send", {"request": request});
         return this._frontend.send(request);
@@ -88,16 +53,6 @@ export class ServiceFrontend {
         }
         return jwt;
     }
-}
-
-
-export interface ServiceFrontendConstructor {
-
-    new (
-        service: Service,
-        client: Client,
-        host: Host,
-    ): ServiceFrontend;
 }
 
 
