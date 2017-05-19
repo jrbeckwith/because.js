@@ -1,5 +1,5 @@
 import { BecauseError } from "./errors";
-import { Data, pairs } from "./data";
+import { Data } from "./data";
 import { MutableTable } from "./table";
 import { Headers } from "./headers";
 import { Log } from "./log";

@@ -1,16 +1,9 @@
-import { URI } from "./http";
-import { Response } from "./response";
-import { Headers } from "./headers";
 import { Service } from "./service";
-import { Client } from "./client";
 import { Transfer } from "./transfer";
 import { Host } from "./host";
-import { Method, Body } from "./http";
 import { Request } from "./request";
-import { Query } from "./query";
 import { Log } from "./log";
 import { Frontend } from "./frontend";
-import { Args } from "./service";
 
 /**
  * Frontend for a specific service.
