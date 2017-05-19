@@ -52,8 +52,171 @@ This bundle may be a little out of date. If you want to make sure you have a
 fresh bundle reflecting the latest state of the original code in `src/` then
 see the below section on "How to build."
 
+## Usage Examples
 
-## Example Code
+### Getting a Because object
+
+The easy way to use the library starts by creating an object which is an
+instance of `Because`. In normal situations where you want to use the
+production deployment of the BCS APIs, you could just do something like this:
+
+```
+let bcs = new Because();
+```
+
+If you want to use the API deployed in the test environment (recommended for
+developers inside Boundless), you can specify that here:
+
+```
+let bcs = new Because("test");
+```
+
+If you want to use the API deployed in the dev environment (not recommended for
+anyone other than developers on BCS itself)
+
+```
+let bcs = new Because("dev");
+```
+
+To turn on "debug mode" (usually not needed unless you're developing the
+library itself), you can pass true as the second argument:
+
+```
+let bcs = new Because("dev", true);
+```
+
+### Login
+
+Once you have an instance of `Because`, several services like routing and
+geocoding require a token to work. The `Because` object will automatically
+fetch, cache and send that token if you use the `login` method.
+
+Like all of the methods that perform I/O operations in this library, `login`
+returns a promise object, which has the standard Promises/A+ interface.
+
+Here's a simple example of how you could create and use a promise from ES5:
+
+```
+var promise = bcs.login(username, password);
+promise.then((jwt) => {
+    console.log("logged in with jwt", jwt);
+});
+```
+
+or, if we want to dispense with the intermediate variable:
+
+```
+bcs.login(username, password).then((jwt) => {
+    console.log("logged in with jwt", jwt);
+});
+```
+
+If you want to catch errors in the same ES5 style:
+
+```
+bcs.login(username, password).then((jwt) => {
+    console.log("logged in with jwt", jwt);
+}).catch((error) => {
+    console.log("got an error", error);
+});
+```
+
+Since the interface returns a promise, you can also use ES2017 async/await:
+
+```
+async myLogin(username, password) {
+    try {
+        let jwt = await bcs.login(username, password);
+        console.log("logged in with jwt", jwt);
+    }
+    catch (error) {
+        console.log("got an error", error);
+    }
+}
+```
+
+In any case, once login is finished, you can access a list of roles for the
+logged in user. 
+
+This is automatically sent at every login, so it doesn't incur any additional
+HTTP requests. It is also saved automatically as a property on the `Because`
+instance. 
+
+```
+bcs.login(username, password).then((jwt) => {
+    console.log("logged in with jwt roles", bcs.jwt.roles);
+    console.log("same as", jwt.roles);
+});
+```
+
+Typical uses for this role list would include changing the GUI to reflect which
+options might be available or disabled for the logged-in user.
+
+
+### Routing
+
+
+```
+let start = "6100 Pennsylvania Ave, Washington, DC";
+let mid = [38.862092, -76.959320];
+let end = "3100 Pennsylvania Ave, Washington, DC";
+let waypoints = [start, mid, end];
+let provider = "mapbox";
+let route = await bcs.routing.route(waypoints, provider);
+```
+
+If you are using ES5, you would use the promise's .then() method instead of
+`await`.
+
+
+### Geocoding
+
+```
+let address = "6100 Pennsylvania Ave, Washington, DC";
+let provider = "mapbox";
+let geocodes = await bcs.geocoding.geocode(address, provider);
+```
+
+If you are using ES5, you would use the promise's .then() method instead of
+`await`.
+
+### Reverse Geocoding
+
+```
+let lat = 0.0;
+let lon = 0.0;
+let loc = [lat, lon];
+let provider = "mapbox";
+let geocodes = await bcs.geocoding.reverse_geocode(loc, provider);
+```
+
+If you are using ES5, you would use the promise's .then() method instead of
+`await`.
+
+### Basemaps Discovery
+
+```
+let basemaps = await bcs.basemaps.basemaps();
+```
+
+If you are using ES5, you would use the promise's .then() method instead of
+`await`.
+
+### Search
+
+```
+let text = "geoserver";
+let results = await bcs.search.search(text);
+```
+
+You can also pass a list of categories (special strings) as the second
+argument, to specify what categories to search in.
+
+If you are using ES5, you would use the promise's .then() method instead of
+`await`.
+
+
+## Example Project
 
 If you want to find some example code to look at, you can find an extended
 usage example containing some demos under `example/`.
