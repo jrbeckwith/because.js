@@ -9,10 +9,10 @@ export {
 
 
 export const urls: {[env: string]: URL} = {
-    "dev": "https://api.dev.boundlessgeo.io/v1",
-    "test": "https://api.test.boundlessgeo.io/v1",
-    "prod": "https://api.boundlessgeo.io/v1",
-    "local": "http://localhost:8000/v1",
+    "dev": "https://saasy.boundlessgeo.io",
+    "test": "https://saasy.boundlessgeo.io",
+    "prod": "https://saasy.boundlessgeo.io",
+    "local": "http://localhost:8000",
 };
 
 
