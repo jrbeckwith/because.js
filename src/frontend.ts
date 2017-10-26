@@ -87,7 +87,6 @@ export class Frontend {
      * Particular instances of Frontend may override this.
      */
     default_headers = new Headers({
-        "User-Agent": "Because",
         "Accept": "application/json",
         "X-Api-Version": "0.1",
     });
